@@ -27,54 +27,54 @@ namespace PiAlarm::model {
     std::chrono::seconds Time::secondsSince(const Time& other) const {
         const int thisSec = toSeconds();
         const int otherSec = other.toSeconds();
-    int diff = thisSec - otherSec;
-    if (diff < 0)
-        diff += 24 * 3600;
-    return std::chrono::seconds(diff);
-}
+        int diff = thisSec - otherSec;
+        if (diff < 0)
+            diff += 24 * 3600;
+        return std::chrono::seconds(diff);
+    }
 
-int Time::toSeconds() const {
-    return hour_ * 3600 + minute_ * 60 + second_;
-}
+    int Time::toSeconds() const {
+        return hour_ * 3600 + minute_ * 60 + second_;
+    }
 
-std::string Time::toString() const {
-    std::ostringstream oss;
-    oss << std::setfill('0') << std::setw(2) << hour_ << ":"
-        << std::setw(2) << minute_ << ":"
-        << std::setw(2) << second_;
-    return oss.str();
-}
+    std::string Time::toString() const {
+        std::ostringstream oss;
+        oss << std::setfill('0') << std::setw(2) << hour_ << ":"
+            << std::setw(2) << minute_ << ":"
+            << std::setw(2) << second_;
+        return oss.str();
+    }
 
-bool Time::operator==(const Time& other) const {
-    return hour_ == other.hour_ &&
-           minute_ == other.minute_ &&
-           second_ == other.second_;
-}
+    bool Time::operator==(const Time& other) const {
+        return hour_ == other.hour_ &&
+               minute_ == other.minute_ &&
+               second_ == other.second_;
+    }
 
-bool Time::operator!=(const Time& other) const {
-    return !(*this == other);
-}
+    bool Time::operator!=(const Time& other) const {
+        return !(*this == other);
+    }
 
-bool Time::operator<(const Time& other) const {
-    if (hour_ != other.hour_) return hour_ < other.hour_;
-    if (minute_ != other.minute_) return minute_ < other.minute_;
-    return second_ < other.second_;
-}
+    bool Time::operator<(const Time& other) const {
+        if (hour_ != other.hour_) return hour_ < other.hour_;
+        if (minute_ != other.minute_) return minute_ < other.minute_;
+        return second_ < other.second_;
+    }
 
-bool Time::operator<=(const Time& other) const {
-    return *this < other || *this == other;
-}
+    bool Time::operator<=(const Time& other) const {
+        return *this < other || *this == other;
+    }
 
-bool Time::operator>(const Time& other) const {
-    return !(*this <= other);
-}
+    bool Time::operator>(const Time& other) const {
+        return !(*this <= other);
+    }
 
-bool Time::operator>=(const Time& other) const {
-    return !(*this < other);
-}
+    bool Time::operator>=(const Time& other) const {
+        return !(*this < other);
+    }
 
-std::ostream& operator<<(std::ostream& os, const Time& time) {
-    return os << time.toString();
-}
+    std::ostream& operator<<(std::ostream& os, const Time& time) {
+        return os << time.toString();
+    }
 
 } // namespace PiAlarm::model

@@ -8,7 +8,7 @@ namespace PiAlarm::model {
 
     /**
      * @class Time
-     * Class representing a time of day.
+     * @brief Class representing a time of day.
      *
      * This class encapsulates the concept of time, allowing for easy manipulation and comparison
      * of time values. It provides methods to convert time to seconds, format it as a string,
@@ -49,17 +49,20 @@ namespace PiAlarm::model {
          * Gives the hour of the time.
          * @return Hour (0-23).
          */
-        inline int hour() const { return hour_; }
+        [[nodiscard]]
+        const int& hour() const { return hour_; }
         /**
          * Gives the minute of the time.
          * @return Minute (0-59).
          */
-        inline int minute() const { return minute_; }
+        [[nodiscard]]
+        const int& minute() const { return minute_; }
         /**
          * Gives the second of the time.
          * @return Second (0-59).
          */
-        inline int second() const { return second_; }
+        [[nodiscard]]
+        const int& second() const { return second_; }
 
         /**
          * Returns the time as a string in the format "HH:MM:SS".
