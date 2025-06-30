@@ -1,0 +1,119 @@
+# Ignore all files without extensions (cpp compiled)
+*
+!*.*
+!*/
+!Doxyfile
+
+# Backup / temp files
+*~
+*.bak
+*.autosave
+*.orig
+*.rej
+*.swp
+.*.swp
+
+# Compiled object files and binaries
+*.o
+*.obj
+*.exe
+*.dll
+*.so
+*.so.*
+*.app
+*.out
+
+# Build folders
+release/
+debug/
+build*/
+cmake*/
+CMakeFiles/
+cmake_install.cmake
+CMakeCache.txt
+
+# Qt Creator and CMake user files
+*.user
+*.user.*
+*.pro.user*
+CMakeLists.txt.user*
+
+# Qt generated files
+moc_*.cpp
+qrc_*.cpp
+ui_*.h
+
+# Qt specific cache/stash
+.qmake.cache
+.qmake.stash
+
+# Qt project files
+.pri
+
+# Makefiles
+Makefile*
+Makefile.*
+
+# Documentation folder
+doc/
+
+# HTML files
+*.htm
+*.html
+
+# Core dumps and debug files
+core
+*.core
+*.debug
+
+# Resource files
+*.rc
+*.res
+*_resource.rc
+
+# Tags and index files
+tags
+
+# System files
+.DS_Store
+.directory
+Thumbs.db
+ehthumbs.db
+
+# IDE and editor folders/files
+.idea/
+*.iml
+
+# Visual Studio generated files
+*.ib_pdb_index
+*.idb
+*.ilk
+*.pdb
+*.sln
+*.suo
+*.vcproj
+*vcproj.*.*.user
+*.ncb
+*.sdf
+*.opensdf
+*.vcxproj
+*vcxproj.*
+
+# MinGW generated folders
+*.Debug
+*.Release
+
+# Python bytecode
+*.pyc
+
+# Miscellaneous
+*.qm
+*.prl
+.#*
+*.*#
+
+# XEmacs temp files
+*.flc
+
+# Core directory exception
+!core/
