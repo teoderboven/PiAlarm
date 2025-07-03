@@ -3,13 +3,15 @@
 
 /**
  * @namespace PiAlarm::common
- * Contains common interfaces and utilities for the PiAlarm application.
+ * @brief Namespace for common components in the PiAlarm application.
+ *
+ * This namespace contains common components and utilities used across the PiAlarm application.
  */
 namespace PiAlarm::common {
 
     /**
      * @interface Observer
-     * Interface for the observer in the Observer design pattern.
+     * @brief Interface for the observer in the Observer design pattern.
      *
      * This interface defines the methods that any observer must implement
      * to receive updates from the subject it is observing.

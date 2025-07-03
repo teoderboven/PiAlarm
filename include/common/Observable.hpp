@@ -8,7 +8,7 @@ namespace PiAlarm::common {
 
     /**
      * @class Observable
-     * Implements the observable part of the Observer design pattern.
+     * @brief the observable part of the Observer design pattern.
      *
      * This class maintains a list of observers and provides methods to add,
      * remove, and notify them of changes.
