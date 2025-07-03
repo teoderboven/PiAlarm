@@ -79,7 +79,7 @@ namespace PiAlarm::model {
          * @note Always checks if the weather data is valid before using this value.
          */
         [[nodiscard]]
-        const float& temp() const {
+        const float& getTemperature() const {
             return temperature_;
         }
 
@@ -89,7 +89,7 @@ namespace PiAlarm::model {
          * @note Always checks if the weather data is valid before using this value.
          */
         [[nodiscard]]
-        const float& hum() const {
+        const float& getHumidity() const {
             return humidity_;
         }
 
