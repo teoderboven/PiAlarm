@@ -27,6 +27,14 @@ namespace PiAlarm::model {
         int toSeconds() const;
 
     public:
+
+        /**
+         * Returns the current system time as a Time object.
+         * This method retrieves the current local time and constructs a Time object from it.
+         * @return A Time object representing the current local time.
+         */
+        static Time now();
+
         /**
          * Constructs a Time object with the specified hour, minute, and second.
          * @param hour Hour of the time (0-23).

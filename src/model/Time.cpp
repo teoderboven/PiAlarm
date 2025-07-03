@@ -6,6 +6,13 @@
 
 namespace PiAlarm::model {
 
+    Time Time::now() {
+        auto now = std::chrono::system_clock::now();
+        auto time = std::chrono::system_clock::to_time_t(now);
+        std::tm* tm = std::localtime(&time);
+        return Time(tm->tm_hour, tm->tm_min, tm->tm_sec);
+    }
+
     Time::Time(const int& hour, const int& minute, const int& second)
         : hour_{0}, minute_{0}, second_{0} {
         setTime(hour, minute, second);
