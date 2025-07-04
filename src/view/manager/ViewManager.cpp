@@ -38,6 +38,7 @@ namespace PiAlarm::view {
         if (activeView->isDirty()) {
             activeView->refresh();
             activeView->render(display);
+            activeView->clearDirty();
         }
     }
 

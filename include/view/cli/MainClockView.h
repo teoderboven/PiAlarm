@@ -1,9 +1,9 @@
 #ifndef MAINCLOCKVIEW_H
 #define MAINCLOCKVIEW_H
 
+#include "view/cli/BaseCliView.h"
 #include "model/ClockData.hpp"
 #include "model/WeatherData.hpp"
-#include "view/IView.h"
 
 /**
  * @namespace PiAlarm::view::cli
@@ -19,7 +19,7 @@ namespace PiAlarm::view::cli {
      *
      * This class is responsible for displaying the current time, alarm time, and temperature.
      */
-    class MainClockView final : public IView {
+    class MainClockView final : public BaseCliView {
         model::ClockData& clockData_;     ///< Reference to the clock data model
         model::WeatherData& weatherData_; ///< Reference to the weather data model
 
@@ -30,8 +30,6 @@ namespace PiAlarm::view::cli {
         float temperature_;       ///< Current temperature
         float humidity_;          ///< Current humidity
         bool weatherValid_;       ///< Flag indicating if the weather data is valid
-
-        bool dirty_; ///< Flag indicating if the view is dirty (needs to be refreshed)
 
     public:
 
@@ -45,8 +43,6 @@ namespace PiAlarm::view::cli {
         // Inherited from IView
         void refresh() override;
         void render(DisplayType& display) override;
-        inline bool isDirty() const override;
-        inline void clearDirty() override;
 
     private:
         /**
@@ -72,11 +68,6 @@ namespace PiAlarm::view::cli {
          * @return Formatted humidity as a string.
          */
         inline std::string formattedHumidity() const;
-
-        /**
-         * Clears the display.
-         */
-        inline void clearDisplay(DisplayType& display) const;
 
     };
 

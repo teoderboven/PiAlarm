@@ -4,8 +4,11 @@
 namespace PiAlarm::view::cli {
 
     MainClockView::MainClockView(model::ClockData &clockData, model::WeatherData &weatherData)
-        : clockData_{clockData}, weatherData_{weatherData}, dirty_{true}
-    {}
+        : BaseCliView{true}, clockData_{clockData}, weatherData_{weatherData}
+    {
+        clockData_.addObserver(this);
+        weatherData_.addObserver(this);
+    }
 
     void MainClockView::refresh() {
         currentTime_ = clockData_.getCurrentTime();
@@ -49,18 +52,6 @@ namespace PiAlarm::view::cli {
         std::ostringstream oss;
         oss << std::fixed << std::setprecision(0) << humidity_ << "%";
         return oss.str();
-    }
-
-    bool MainClockView::isDirty() const {
-        return dirty_;
-    }
-
-    void MainClockView::clearDirty() {
-        dirty_ = false;
-    }
-
-    void MainClockView::clearDisplay(DisplayType& display) const {
-        display << "\033[2J\033[H";
     }
 
 } // namespace PiAlarm::view::cli
