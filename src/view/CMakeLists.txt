@@ -1,0 +1,4 @@
+project(PiAlarm_view)
+
+# Include subdirectory for views implementation and manager
+add_subdirectory(manager)
