@@ -36,4 +36,5 @@ add_executable(${PROJECT_NAME}
 target_link_libraries(${PROJECT_NAME} PRIVATE
         PiAlarm_model
         PiAlarm_view_manager
+        PiAlarm_view_cli
 )
