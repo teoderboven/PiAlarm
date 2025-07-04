@@ -45,15 +45,6 @@ namespace PiAlarm::model {
         explicit Time(const int& hour = 0, const int& minute = 0, const int& second = 0);
 
         /**
-         * Sets the time to the specified hour, minute, and second.
-         * @param hour Hour of the time (0-23).
-         * @param minute Minute of the time (0-59).
-         * @param second Second of the time (0-59).
-         * @throws std::out_of_range if any parameter is out of its valid range.
-         */
-        void setTime(const int& hour, const int& minute, const int& second);
-
-        /**
          * Gives the hour of the time.
          * @return Hour (0-23).
          */

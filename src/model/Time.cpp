@@ -14,21 +14,14 @@ namespace PiAlarm::model {
     }
 
     Time::Time(const int& hour, const int& minute, const int& second)
-        : hour_{0}, minute_{0}, second_{0} {
-        setTime(hour, minute, second);
-    }
-
-    void Time::setTime(const int& hour, const int& minute, const int& second) {
+        : hour_{hour}, minute_{minute}, second_{second}
+    {
         if (hour < 0 || hour > 23)
             throw std::out_of_range(std::format("Hour must be between 0 and 23, got {}", hour));
         if (minute < 0 || minute > 59)
             throw std::out_of_range(std::format("Minute must be between 0 and 59, got {}", minute));
         if (second < 0 || second > 59)
             throw std::out_of_range(std::format("Second must be between 0 and 59, got {}", second));
-
-        hour_ = hour;
-        minute_ = minute;
-        second_ = second;
     }
 
     std::chrono::seconds Time::secondsSince(const Time& other) const {
