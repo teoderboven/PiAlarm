@@ -17,7 +17,7 @@ namespace PiAlarm::view::cli {
     }
 
     void MainClockView::render(DisplayType &display) {
-        clearDisplay();
+        clearDisplay(display);
 
         display << "Heure actuelle : " << formattedCurrentTime() << std::endl
                 << "Réveil à       : " << formattedAlarmTime() << std::endl
@@ -59,12 +59,8 @@ namespace PiAlarm::view::cli {
         dirty_ = false;
     }
 
-    void MainClockView::clearDisplay() const {
-        #ifdef _WIN32
-            system("cls");
-        #else
-            system("clear");
-        #endif
+    void MainClockView::clearDisplay(DisplayType& display) const {
+        display << "\033[2J\033[H";
     }
 
 } // namespace PiAlarm::view::cli

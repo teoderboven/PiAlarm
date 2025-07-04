@@ -76,7 +76,7 @@ namespace PiAlarm::view::cli {
         /**
          * Clears the display.
          */
-        inline void clearDisplay() const;
+        inline void clearDisplay(DisplayType& display) const;
 
     };
 
