@@ -45,13 +45,13 @@ namespace PiAlarm::view::cli {
             display << "\033[2J\033[H"; // ANSI escape codes to clear the screen and move cursor to home position
         }
 
-        /// Inherited from IView
-        /// Still needs to be implemented by derived classes.
+        // Inherited from IView
+        // Still needs to be implemented by derived classes.
         virtual void refresh() override = 0;
         virtual void render(DisplayType& display) override = 0;
 
-        /// Inherited from IView
-        /// Is implemented here to avoid code duplication in derived classes.
+        // Inherited from IView
+        // Is implemented here to avoid code duplication in derived classes.
         inline bool isDirty() const override {
             return dirty_.load();
         }
@@ -60,7 +60,7 @@ namespace PiAlarm::view::cli {
             dirty_.store(false);
         }
 
-        /// Inherited from Observer
+        // Inherited from Observer
         inline void update() override {
             dirty_.store(true); // The model has changed, the view needs to be refreshed
         }
