@@ -1,6 +1,8 @@
 #ifndef CLOCKDATA_HPP
 #define CLOCKDATA_HPP
 
+#include <mutex>
+
 #include "model/Time.h"
 #include "common/Observable.hpp"
 
@@ -20,6 +22,9 @@ namespace PiAlarm::model {
         Time currentTime_;
         Time alarmTime_;
         bool alarmEnabled_ = false;
+
+        // mutable to allow usage of mutex_ in const methods
+        mutable std::mutex mutex_; ///< Protects access to data (multithreading)
 
     public:
         /**
@@ -65,29 +70,43 @@ namespace PiAlarm::model {
          * @return A reference to the current time.
          */
         [[nodiscard]]
-        const Time& getCurrentTime() const {
-            return currentTime_;
-        }
+        inline const Time& getCurrentTime() const;
 
         /**
          * Gets the alarm time.
          * @return A reference to the alarm time.
          */
         [[nodiscard]]
-        const Time& getAlarmTime() const {
-            return alarmTime_;
-        }
+        inline const Time& getAlarmTime() const;
 
         /**
          * Checks if the alarm is enabled.
          * @return A reference to the alarm enabled status.
          */
         [[nodiscard]]
-        bool isAlarmEnabled() const {
-            return alarmEnabled_;
-        }
+        inline bool isAlarmEnabled() const;
 
     };
+
+    // inline methods implementations
+
+    inline const Time& ClockData::getCurrentTime() const {
+        std::lock_guard lock{mutex_};
+
+        return currentTime_;
+    }
+
+    inline const Time& ClockData::getAlarmTime() const {
+        std::lock_guard lock{mutex_};
+
+        return alarmTime_;
+    }
+
+    inline bool ClockData::isAlarmEnabled() const {
+        std::lock_guard lock{mutex_};
+
+        return alarmEnabled_;
+    }
 
 } // namespace PiAlarm::model
 

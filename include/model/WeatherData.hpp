@@ -1,6 +1,8 @@
 #ifndef WEATHERDATA_HPP
 #define WEATHERDATA_HPP
 
+#include <mutex>
+
 #include "common/Observable.hpp"
 
 namespace PiAlarm::model {
@@ -15,6 +17,9 @@ namespace PiAlarm::model {
         float temperature_;
         float humidity_;
         bool valid_ = false;
+
+        // mutable to allow usage of mutex_ in const methods
+        mutable std::mutex mutex_; ///< Protects access to data (multithreading)
 
     public:
         /**
@@ -63,9 +68,7 @@ namespace PiAlarm::model {
          * @note Always checks if the weather data is valid before using this value.
          */
         [[nodiscard]]
-        const float& getTemperature() const {
-            return temperature_;
-        }
+        inline const float& getTemperature() const;
 
         /**
          * Gets the current humidity.
@@ -73,9 +76,7 @@ namespace PiAlarm::model {
          * @note Always checks if the weather data is valid before using this value.
          */
         [[nodiscard]]
-        const float& getHumidity() const {
-            return humidity_;
-        }
+        inline const float& getHumidity() const;
 
         /**
          * Checks if the weather data is valid.
@@ -83,11 +84,29 @@ namespace PiAlarm::model {
          * @return True if the weather data is valid, false otherwise.
          */
         [[nodiscard]]
-        bool isValid() const {
-            return valid_;
-        }
+        inline bool isValid() const;
 
     };
+
+    // inline methods implementations
+
+    inline const float& WeatherData::getTemperature() const {
+        std::lock_guard lock{mutex_};
+
+        return temperature_;
+    }
+
+    inline const float& WeatherData::getHumidity() const {
+        std::lock_guard lock{mutex_};
+
+        return humidity_;
+    }
+
+    inline bool WeatherData::isValid() const {
+        std::lock_guard lock{mutex_};
+
+        return valid_;
+    }
 
 } // namespace PiAlarm::model
 
