@@ -6,7 +6,9 @@ set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(SOURCES
-    Time.cpp
+        Time.cpp
+        ClockData.cpp
+        WeatherData.cpp
 )
 
 add_library(${PROJECT_NAME} STATIC

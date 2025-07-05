@@ -16,7 +16,7 @@ namespace PiAlarm::model {
      *
      * This class extends the Observable class to notify observers of changes in the clock data.
      */
-    class ClockData : public common::Observable{
+    class ClockData final : public common::Observable{
         Time currentTime_;
         Time alarmTime_;
         bool alarmEnabled_ = false;
@@ -33,47 +33,32 @@ namespace PiAlarm::model {
          * @param alarm The alarm time to set.
          * @param enabled True if the alarm is enabled, false otherwise.
          */
-        ClockData(const Time& current, const Time& alarm, bool enabled)
-        : currentTime_{current}, alarmTime_{alarm}, alarmEnabled_{enabled}
-        {}
+        ClockData(const Time& current, const Time& alarm, bool enabled);
 
         /**
          * Sets the current time and notifies observers of the change.
          * @param time The new current time to set.
          */
-        void setCurrentTime(const Time& time) {
-            currentTime_ = time;
-            notifyObservers();
-        }
+        void setCurrentTime(const Time& time);
 
         /**
          * Sets the alarm time and notifies observers of the change.
          * @param time The new alarm time to set.
          */
-        void setAlarmTime(const Time& time) {
-            alarmTime_ = time;
-            notifyObservers();
-        }
+        void setAlarmTime(const Time& time);
 
         /**
          * Enables or disables the alarm and notifies observers of the change.
          * @param enabled True to enable the alarm, false to disable it.
          */
-        void setAlarmEnabled(bool enabled) {
-            alarmEnabled_ = enabled;
-            notifyObservers();
-        }
+        void setAlarmEnabled(bool enabled);
 
         /**
          * Sets both the alarm time and its enabled status, notifying observers of the change.
          * @param alarm The new alarm time to set.
          * @param enabled True to enable the alarm, false to disable it.
          */
-        void setAlarm(const Time& alarm, bool enabled) {
-            alarmTime_ = alarm;
-            alarmEnabled_ = enabled;
-            notifyObservers();
-        }
+        void setAlarm(const Time& alarm, bool enabled);
 
         /**
          * Gets the current time.
