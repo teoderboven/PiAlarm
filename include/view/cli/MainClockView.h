@@ -20,8 +20,8 @@ namespace PiAlarm::view::cli {
      * This class is responsible for displaying the current time, alarm time, and temperature.
      */
     class MainClockView final : public BaseCliView {
-        model::ClockData& clockData_;     ///< Reference to the clock data model
-        model::WeatherData& weatherData_; ///< Reference to the weather data model
+        const model::ClockData& clockData_;     ///< Reference to the clock data model
+        const model::WeatherData& weatherData_; ///< Reference to the weather data model
 
         // Current state variables
         model::Time currentTime_; ///< Current time
@@ -38,7 +38,7 @@ namespace PiAlarm::view::cli {
          * @param clockData Reference to the clock data model.
          * @param weatherData Reference to the weather data model.
          */
-        MainClockView(model::ClockData& clockData, model::WeatherData& weatherData);
+        MainClockView(const model::ClockData& clockData, const model::WeatherData& weatherData);
 
         // Inherited from IView
         void refresh() override;

@@ -27,7 +27,7 @@ namespace PiAlarm::view::cli {
          * Initializes the dirty state to true by default.
          * @param isDirty Initial dirty state of the view.
          */
-        BaseCliView(bool isDirty = true)
+        explicit BaseCliView(bool isDirty = true)
             : dirty_(isDirty)
         {}
 

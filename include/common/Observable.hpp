@@ -14,7 +14,8 @@ namespace PiAlarm::common {
      * remove, and notify them of changes.
      */
     class Observable {
-        std::vector<Observer*> observers;
+        // 'observers' is mutable to allow adding/removing observers from const methods without altering the observable state.
+        mutable std::vector<Observer*> observers;
 
     public:
 
@@ -28,7 +29,7 @@ namespace PiAlarm::common {
          * Adds an observer to the list of observers.
          * @param observer The observer to add.
          */
-        void addObserver(Observer* observer) {
+        void addObserver(Observer* observer) const {
             observers.push_back(observer);
         }
 
@@ -36,7 +37,7 @@ namespace PiAlarm::common {
          * Removes an observer from the list of observers.
          * @param observer The observer to remove.
          */
-        void removeObserver(Observer* observer) {
+        void removeObserver(Observer* observer) const {
             std::erase(observers, observer);
         }
 

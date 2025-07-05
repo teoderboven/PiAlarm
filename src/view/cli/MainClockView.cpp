@@ -3,7 +3,7 @@
 
 namespace PiAlarm::view::cli {
 
-    MainClockView::MainClockView(model::ClockData &clockData, model::WeatherData &weatherData)
+    MainClockView::MainClockView(const model::ClockData &clockData, const model::WeatherData &weatherData)
         : BaseCliView{true}, clockData_{clockData}, weatherData_{weatherData}
     {
         clockData_.addObserver(this);
