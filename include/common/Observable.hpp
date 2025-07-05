@@ -8,14 +8,14 @@ namespace PiAlarm::common {
 
     /**
      * @class Observable
-     * @brief the observable part of the Observer design pattern.
+     * @brief The observable part of the Observer design pattern.
      *
      * This class maintains a list of observers and provides methods to add,
      * remove, and notify them of changes.
      */
     class Observable {
         // 'observers' is mutable to allow adding/removing observers from const methods without altering the observable state.
-        mutable std::vector<Observer*> observers;
+        mutable std::vector<Observer*> observers; ///< The list of observers
 
     public:
 
