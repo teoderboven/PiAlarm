@@ -41,9 +41,7 @@ namespace PiAlarm::view::cli {
          * Clears the display by sending ANSI escape codes.
          * @param display The display to clear.
          */
-        inline void clearDisplay(DisplayType& display) const {
-            display << "\033[2J\033[H"; // ANSI escape codes to clear the screen and move cursor to home position
-        }
+        inline void clearDisplay(DisplayType& display) const;
 
         // Inherited from IView
         // Still needs to be implemented by derived classes.
@@ -52,20 +50,35 @@ namespace PiAlarm::view::cli {
 
         // Inherited from IView
         // Is implemented here to avoid code duplication in derived classes.
-        inline bool isDirty() const override {
-            return dirty_.load();
-        }
 
-        inline void clearDirty() override {
-            dirty_.store(false);
-        }
+        [[nodiscard]]
+        inline bool isDirty() const override;
+
+        inline void clearDirty() override;
 
         // Inherited from Observer
-        inline void update() override {
-            dirty_.store(true); // The model has changed, the view needs to be refreshed
-        }
+        inline void update() override;
 
     };
+
+    // inline methods implementation
+
+    inline void BaseCliView::clearDisplay(DisplayType& display) const {
+        display << "\033[2J\033[H"; // ANSI escape codes to clear the screen and move cursor to home position
+    }
+
+    inline bool BaseCliView::isDirty() const {
+        return dirty_.load();
+    }
+
+    inline void BaseCliView::clearDirty() {
+        dirty_.store(false);
+    }
+
+    // Inherited from Observer
+    inline void BaseCliView::update() {
+        dirty_.store(true); // The model has changed, the view needs to be refreshed
+    }
 
 } // namespace PiAlarm::view::cli
 
