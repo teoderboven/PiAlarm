@@ -7,32 +7,60 @@ namespace PiAlarm::model {
     {}
 
     void ClockData::setCurrentTime(const Time& time) {
-        std::lock_guard lock{mutex_};
+        bool shouldNotify {false};
 
-        currentTime_ = time;
-        notifyObservers();
+        {
+            std::lock_guard lock{mutex_};
+            if (currentTime_ != time) {
+                currentTime_ = time;
+                shouldNotify = true;
+            }
+        }
+
+        if (shouldNotify) notifyObservers();
     }
 
     void ClockData::setAlarmTime(const Time& time) {
-        std::lock_guard lock{mutex_};
+        bool shouldNotify {false};
 
-        alarmTime_ = time;
-        notifyObservers();
+        {
+            std::lock_guard lock{mutex_};
+            if (alarmTime_ != time) {
+                alarmTime_ = time;
+                shouldNotify = true;
+            }
+        }
+
+        if (shouldNotify) notifyObservers();
     }
 
     void ClockData::setAlarmEnabled(bool enabled) {
-        std::lock_guard lock{mutex_};
+        bool shouldNotify {false};
 
-        alarmEnabled_ = enabled;
-        notifyObservers();
+        {
+            std::lock_guard lock{mutex_};
+            if (alarmEnabled_ != enabled) {
+                alarmEnabled_ = enabled;
+                shouldNotify = true;
+            }
+        }
+
+        if (shouldNotify) notifyObservers();
     }
 
     void ClockData::setAlarm(const Time& alarm, bool enabled) {
-        std::lock_guard lock{mutex_};
+        bool shouldNotify {false};
 
-        alarmTime_ = alarm;
-        alarmEnabled_ = enabled;
-        notifyObservers();
+        {
+            std::lock_guard lock{mutex_};
+            if (alarmTime_ != alarm || alarmEnabled_ != enabled) {
+                alarmTime_ = alarm;
+                alarmEnabled_ = enabled;
+                shouldNotify = true;
+            }
+        }
+
+        if (shouldNotify) notifyObservers();
     }
 
 } // namespace PiAlarm::model
