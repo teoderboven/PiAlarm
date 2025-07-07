@@ -7,6 +7,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(SOURCES
         BaseService.cpp
+        TimeUpdateService.cpp
 )
 
 add_library(${PROJECT_NAME} STATIC
