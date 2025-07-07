@@ -27,6 +27,7 @@ elseif(DISPLAY_CONSOLE)
 endif()
 
 add_subdirectory(model)
+add_subdirectory(service)
 add_subdirectory(view)
 
 add_executable(${PROJECT_NAME}
@@ -35,6 +36,7 @@ add_executable(${PROJECT_NAME}
 
 target_link_libraries(${PROJECT_NAME} PRIVATE
         PiAlarm_model
+        PiAlarm_service
         PiAlarm_view_manager
         PiAlarm_view_cli
 )
