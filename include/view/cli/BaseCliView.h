@@ -75,7 +75,6 @@ namespace PiAlarm::view::cli {
         dirty_.store(false);
     }
 
-    // Inherited from Observer
     inline void BaseCliView::update() {
         dirty_.store(true); // The model has changed, the view needs to be refreshed
     }
