@@ -21,7 +21,16 @@ namespace PiAlarm::view {
         std::vector<std::unique_ptr<IView>> views_; ///< Owned views
         int currentViewIndex_ = -1; ///< Index of the active view (-1 if none)
 
+        DisplayType& display_; ///< Reference to the display for rendering
+
     public:
+
+        /**
+         * Constructor for ViewManager.
+         * Initializes the manager with a reference to the display.
+         * @param display Reference to the display to use for rendering views.
+         */
+        ViewManager(DisplayType& display);
 
         /**
          * Adds a view to the manager.
@@ -48,9 +57,8 @@ namespace PiAlarm::view {
          * Performs the loop operation for the current view.
          * Calls update and render if the view is dirty.
          * If no active view is set, this method does nothing.
-         * @param display The display to be used for rendering.
          */
-        void loop(DisplayType& display);
+        void loop();
 
     };
 

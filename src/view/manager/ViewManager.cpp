@@ -3,6 +3,10 @@
 
 namespace PiAlarm::view {
 
+    ViewManager::ViewManager(DisplayType& display)
+        : display_{display}
+    {}
+
     void ViewManager::addView(std::unique_ptr<IView> view) {
         views_.push_back(std::move(view));
 
@@ -29,7 +33,7 @@ namespace PiAlarm::view {
         currentViewIndex_ = (currentViewIndex_ + size - 1) % size;
     }
 
-    void ViewManager::loop(DisplayType &display) {
+    void ViewManager::loop() {
         if (currentViewIndex_ < 0 || currentViewIndex_ >= static_cast<int>(views_.size())) {
             return; // No active view
         }
@@ -37,7 +41,7 @@ namespace PiAlarm::view {
         IView* activeView = views_[currentViewIndex_].get();
         if (activeView->isDirty()) {
             activeView->refresh();
-            activeView->render(display);
+            activeView->render(display_);
             activeView->clearDirty();
         }
     }
