@@ -1,3 +1,13 @@
+#include <thread>
+
+#include "display/DisplayConfig.hpp"
+#include "model/ClockData.hpp"
+#include "model/WeatherData.hpp"
+#include "view/manager/ViewManager.h"
+#include "view/cli/MainClockView.h"
+#include "service/TimeUpdateService.h"
+
+
 #ifdef _WIN32
 #include <windows.h>
 #endif
@@ -33,7 +43,35 @@ void setup_console() {
 
 using namespace PiAlarm;
 
+[[ noreturn ]]
 int main(int argc, char *argv[]) {
+#ifdef DISPLAY_CONSOLE
     setup_console();
+#endif
 
+    // Models
+    model::ClockData clockData;
+    model::WeatherData weatherData;
+
+    // Display
+#ifdef DISPLAY_SSD1322
+    // ...
+#elif defined(DISPLAY_CONSOLE)
+    DisplayType& display {std::cout};
+#endif
+
+    // Views
+    view::ViewManager viewManager{display};
+    viewManager.addView(std::make_unique<view::cli::MainClockView>(clockData, weatherData));
+
+    // Services
+    service::TimeUpdateService timeUpdateService(clockData);
+    timeUpdateService.start();
+
+    // Main application loop
+    while (true) {
+        viewManager.loop();
+
+        std::this_thread::sleep_for(std::chrono::milliseconds(333)); // Approx. 30 FPS
+    }
 }

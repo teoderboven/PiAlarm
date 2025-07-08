@@ -35,8 +35,17 @@ add_executable(${PROJECT_NAME}
 )
 
 target_link_libraries(${PROJECT_NAME} PRIVATE
-        PiAlarm_model
-        PiAlarm_service
         PiAlarm_view_manager
-        PiAlarm_view_cli
+        PiAlarm_service
+        PiAlarm_model
 )
+
+if(DISPLAY_SSD1322)
+    target_link_libraries(${PROJECT_NAME} PRIVATE
+            # ...
+    )
+else()
+    target_link_libraries(${PROJECT_NAME} PRIVATE
+            PiAlarm_view_cli
+    )
+endif ()
