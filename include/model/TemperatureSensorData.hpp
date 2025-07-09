@@ -1,5 +1,5 @@
-#ifndef WEATHERDATA_HPP
-#define WEATHERDATA_HPP
+#ifndef TEMPERATURESENSORDATA_HPP
+#define TEMPERATURESENSORDATA_HPP
 
 #include <mutex>
 
@@ -8,12 +8,12 @@
 namespace PiAlarm::model {
 
     /**
-     * @class WeatherData
-     * @brief Represents the data model for weather information, including temperature, humidity, and validity status.
+     * @class TemperatureSensorData
+     * @brief Represents the data from a temperature sensor, including temperature, humidity, and validity status.
      *
-     * This class extends the Observable class to notify observers of changes in the weather data.
+     * This class extends the Observable class to notify observers of changes in the temperature sensor data.
      */
-    class WeatherData final : public common::Observable {
+    class TemperatureSensorData final : public common::Observable {
         float temperature_;
         float humidity_;
         bool valid_ = false;
@@ -23,17 +23,17 @@ namespace PiAlarm::model {
 
     public:
         /**
-         * Default constructor for WeatherData.
+         * Default constructor for TemperatureSensorData.
          */
-        WeatherData() = default;
+        TemperatureSensorData() = default;
 
         /**
-         * Constructs a WeatherData object with specified temperature, humidity, and validity status.
+         * Constructs a TemperatureSensorData object with specified temperature, humidity, and validity status.
          * @param temp The temperature to set.
          * @param hum The humidity to set.
          * @param isValid True if the weather data is valid, false otherwise.
          */
-        WeatherData(const float& temp, const float& hum, bool isValid);
+        TemperatureSensorData(const float& temp, const float& hum, bool isValid);
 
         /**
          * Sets the temperature and notifies observers of the change.
@@ -60,7 +60,7 @@ namespace PiAlarm::model {
          * @param hum The new humidity to set.
          * @param isValid True if the weather data is valid, false otherwise.
          */
-        void updateWeather(const float& temp, const float& hum, bool isValid);
+        void setValues(const float& temp, const float& hum, bool isValid);
 
         /**
          * Gets the current temperature.
@@ -90,19 +90,19 @@ namespace PiAlarm::model {
 
     // inline methods implementations
 
-    inline const float& WeatherData::getTemperature() const {
+    inline const float& TemperatureSensorData::getTemperature() const {
         std::lock_guard lock{mutex_};
 
         return temperature_;
     }
 
-    inline const float& WeatherData::getHumidity() const {
+    inline const float& TemperatureSensorData::getHumidity() const {
         std::lock_guard lock{mutex_};
 
         return humidity_;
     }
 
-    inline bool WeatherData::isValid() const {
+    inline bool TemperatureSensorData::isValid() const {
         std::lock_guard lock{mutex_};
 
         return valid_;
@@ -110,4 +110,4 @@ namespace PiAlarm::model {
 
 } // namespace PiAlarm::model
 
-#endif //WEATHERDATA_HPP
+#endif //TEMPERATURESENSORDATA_HPP

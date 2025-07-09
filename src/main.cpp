@@ -3,7 +3,7 @@
 #include "display/DisplayConfig.hpp"
 #include "model/AlarmData.hpp"
 #include "model/ClockData.hpp"
-#include "model/WeatherData.hpp"
+#include "model/TemperatureSensorData.hpp"
 #include "view/manager/ViewManager.h"
 #include "view/cli/MainClockView.h"
 #include "service/TimeUpdateService.h"
@@ -51,9 +51,9 @@ int main(int argc, char *argv[]) {
 #endif
 
     // Models
-    model::AlarmData alarmData;
-    model::ClockData clockData;
-    model::WeatherData weatherData;
+    model::AlarmData alarm_data;
+    model::ClockData clock_data;
+    model::TemperatureSensorData temperatureSensor_data;
 
     // Display
 #ifdef DISPLAY_SSD1322
@@ -64,10 +64,10 @@ int main(int argc, char *argv[]) {
 
     // Views
     view::ViewManager viewManager{display};
-    viewManager.addView(std::make_unique<view::cli::MainClockView>(alarmData, clockData, weatherData));
+    viewManager.addView(std::make_unique<view::cli::MainClockView>(alarm_data, clock_data, temperatureSensor_data));
 
     // Services
-    service::TimeUpdateService timeUpdateService(clockData);
+    service::TimeUpdateService timeUpdateService(clock_data);
     timeUpdateService.start();
 
     // Main application loop

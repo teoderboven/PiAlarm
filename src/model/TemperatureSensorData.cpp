@@ -1,12 +1,12 @@
-#include "model/WeatherData.hpp"
+#include "model/TemperatureSensorData.hpp"
 
 namespace PiAlarm::model {
 
-    WeatherData::WeatherData(const float& temp, const float& hum, bool isValid)
+    TemperatureSensorData::TemperatureSensorData(const float& temp, const float& hum, bool isValid)
         : temperature_{temp}, humidity_{hum}, valid_{isValid}
     {}
 
-    void WeatherData::setTemperature(const float& temp) {
+    void TemperatureSensorData::setTemperature(const float& temp) {
         bool shouldNotify {false};
 
         {
@@ -20,7 +20,7 @@ namespace PiAlarm::model {
         if (shouldNotify) notifyObservers();
     }
 
-    void WeatherData::setHumidity(const float& hum) {
+    void TemperatureSensorData::setHumidity(const float& hum) {
         bool shouldNotify {false};
 
         {
@@ -34,7 +34,7 @@ namespace PiAlarm::model {
         if (shouldNotify) notifyObservers();
     }
 
-    void WeatherData::setValid(const bool& isValid) {
+    void TemperatureSensorData::setValid(const bool& isValid) {
         bool shouldNotify {false};
 
         {
@@ -48,7 +48,7 @@ namespace PiAlarm::model {
         if (shouldNotify) notifyObservers();
     }
 
-    void WeatherData::updateWeather(const float& temp, const float& hum, bool isValid) {
+    void TemperatureSensorData::setValues(const float& temp, const float& hum, bool isValid) {
         bool shouldNotify = false;
 
         {

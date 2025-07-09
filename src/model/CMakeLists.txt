@@ -9,7 +9,7 @@ set(SOURCES
         Time.cpp
         AlarmData.cpp
         ClockData.cpp
-        WeatherData.cpp
+        TemperatureSensorData.cpp
 )
 
 add_library(${PROJECT_NAME} STATIC

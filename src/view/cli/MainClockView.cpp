@@ -3,21 +3,21 @@
 
 namespace PiAlarm::view::cli {
 
-    MainClockView::MainClockView(const model::AlarmData& alarmData, const model::ClockData &clockData, const model::WeatherData &weatherData)
-        : BaseCliView{true}, alarmData_{alarmData}, clockData_{clockData}, weatherData_{weatherData}
+    MainClockView::MainClockView(const model::AlarmData& alarmData, const model::ClockData &clockData, const model::TemperatureSensorData& temperatureSensorData)
+        : BaseCliView{true}, alarmData_{alarmData}, clockData_{clockData}, temperatureSensorData_{temperatureSensorData}
     {
         alarmData_.addObserver(this);
         clockData_.addObserver(this);
-        weatherData_.addObserver(this);
+        temperatureSensorData_.addObserver(this);
     }
 
     void MainClockView::refresh() {
         currentTime_ = clockData_.getCurrentTime();
         alarmTime_ = alarmData_.getAlarmTime();
         alarmEnabled_ = alarmData_.isAlarmEnabled();
-        temperature_ = weatherData_.getTemperature();
-        humidity_ = weatherData_.getHumidity();
-        weatherValid_ = weatherData_.isValid();
+        temperature_ = temperatureSensorData_.getTemperature();
+        humidity_ = temperatureSensorData_.getHumidity();
+        sensorDataValid = temperatureSensorData_.isValid();
     }
 
     void MainClockView::render(DisplayType &display) {
@@ -38,7 +38,7 @@ namespace PiAlarm::view::cli {
     }
 
     std::string MainClockView::formattedTemperature() const {
-        if (!weatherValid_)
+        if (!sensorDataValid)
             return "--.-°C";
 
         std::ostringstream oss;
@@ -47,7 +47,7 @@ namespace PiAlarm::view::cli {
     }
 
     std::string MainClockView::formattedHumidity() const {
-        if (!weatherValid_)
+        if (!sensorDataValid)
             return "--%";
 
         std::ostringstream oss;

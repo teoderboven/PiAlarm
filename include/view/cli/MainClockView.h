@@ -4,7 +4,7 @@
 #include "view/cli/BaseCliView.h"
 #include "model/AlarmData.hpp"
 #include "model/ClockData.hpp"
-#include "model/WeatherData.hpp"
+#include "model/TemperatureSensorData.hpp"
 
 /**
  * @namespace PiAlarm::view::cli
@@ -21,9 +21,9 @@ namespace PiAlarm::view::cli {
      * This class is responsible for displaying the current time, alarm time, and temperature.
      */
     class MainClockView final : public BaseCliView {
-        const model::AlarmData& alarmData_;     ///< Reference to the alarm data model
-        const model::ClockData& clockData_;     ///< Reference to the clock data model
-        const model::WeatherData& weatherData_; ///< Reference to the weather data model
+        const model::AlarmData& alarmData_; ///< Reference to the alarm data model
+        const model::ClockData& clockData_; ///< Reference to the clock data model
+        const model::TemperatureSensorData& temperatureSensorData_; ///< Reference to the temperature sensor data model
 
         // Current state variables
         model::Time currentTime_; ///< Current time
@@ -31,7 +31,7 @@ namespace PiAlarm::view::cli {
         bool alarmEnabled_;       ///< Flag indicating if the alarm is enabled
         float temperature_;       ///< Current temperature
         float humidity_;          ///< Current humidity
-        bool weatherValid_;       ///< Flag indicating if the weather data is valid
+        bool sensorDataValid;     ///< Flag indicating if the temperature sensor data is valid
 
     public:
 
@@ -39,9 +39,9 @@ namespace PiAlarm::view::cli {
          * @brief Constructor for MainClockView.
          * @param alarmData Reference to the alarm data model.
          * @param clockData Reference to the clock data model.
-         * @param weatherData Reference to the weather data model.
+         * @param temperatureSensorData Reference to the temperature sensor data model.
          */
-        MainClockView(const model::AlarmData& alarmData, const model::ClockData& clockData, const model::WeatherData& weatherData);
+        MainClockView(const model::AlarmData& alarmData, const model::ClockData& clockData, const model::TemperatureSensorData& temperatureSensorData);
 
         // Inherited from IView
         void refresh() override;
