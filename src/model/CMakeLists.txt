@@ -7,6 +7,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(SOURCES
         Time.cpp
+        AlarmData.cpp
         ClockData.cpp
         WeatherData.cpp
 )

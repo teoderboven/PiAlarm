@@ -1,6 +1,7 @@
 #include <thread>
 
 #include "display/DisplayConfig.hpp"
+#include "model/AlarmData.hpp"
 #include "model/ClockData.hpp"
 #include "model/WeatherData.hpp"
 #include "view/manager/ViewManager.h"
@@ -50,6 +51,7 @@ int main(int argc, char *argv[]) {
 #endif
 
     // Models
+    model::AlarmData alarmData;
     model::ClockData clockData;
     model::WeatherData weatherData;
 
@@ -62,7 +64,7 @@ int main(int argc, char *argv[]) {
 
     // Views
     view::ViewManager viewManager{display};
-    viewManager.addView(std::make_unique<view::cli::MainClockView>(clockData, weatherData));
+    viewManager.addView(std::make_unique<view::cli::MainClockView>(alarmData, clockData, weatherData));
 
     // Services
     service::TimeUpdateService timeUpdateService(clockData);

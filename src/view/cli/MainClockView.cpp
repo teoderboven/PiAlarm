@@ -3,17 +3,18 @@
 
 namespace PiAlarm::view::cli {
 
-    MainClockView::MainClockView(const model::ClockData &clockData, const model::WeatherData &weatherData)
-        : BaseCliView{true}, clockData_{clockData}, weatherData_{weatherData}
+    MainClockView::MainClockView(const model::AlarmData& alarmData, const model::ClockData &clockData, const model::WeatherData &weatherData)
+        : BaseCliView{true}, alarmData_{alarmData}, clockData_{clockData}, weatherData_{weatherData}
     {
+        alarmData_.addObserver(this);
         clockData_.addObserver(this);
         weatherData_.addObserver(this);
     }
 
     void MainClockView::refresh() {
         currentTime_ = clockData_.getCurrentTime();
-        alarmTime_ = clockData_.getAlarmTime();
-        alarmEnabled_ = clockData_.isAlarmEnabled();
+        alarmTime_ = alarmData_.getAlarmTime();
+        alarmEnabled_ = alarmData_.isAlarmEnabled();
         temperature_ = weatherData_.getTemperature();
         humidity_ = weatherData_.getHumidity();
         weatherValid_ = weatherData_.isValid();
@@ -47,7 +48,7 @@ namespace PiAlarm::view::cli {
 
     std::string MainClockView::formattedHumidity() const {
         if (!weatherValid_)
-            return "--.-%";
+            return "--%";
 
         std::ostringstream oss;
         oss << std::fixed << std::setprecision(0) << humidity_ << "%";
