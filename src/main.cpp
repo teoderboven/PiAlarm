@@ -6,6 +6,7 @@
 #include "model/AlarmData.hpp"
 #include "model/ClockData.hpp"
 #include "model/TemperatureSensorData.hpp"
+#include "controller/AlarmController.h"
 #include "view/manager/ViewManager.h"
 #include "view/cli/MainClockView.h"
 #include "service/TimeUpdateService.h"
@@ -24,6 +25,9 @@ int main(int argc, char *argv[]) {
     model::AlarmData alarm_data;
     model::ClockData clock_data;
     model::TemperatureSensorData temperatureSensor_data;
+
+    // Controllers
+    controller::AlarmController alarmController{alarm_data};
 
     // Display
 #ifdef DISPLAY_SSD1322

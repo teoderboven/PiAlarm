@@ -30,6 +30,7 @@ endif()
 
 add_subdirectory(model)
 add_subdirectory(service)
+add_subdirectory(controller)
 add_subdirectory(view)
 
 add_executable(${PROJECT_NAME}
@@ -39,6 +40,7 @@ add_executable(${PROJECT_NAME}
 # link project libraries
 target_link_libraries(${PROJECT_NAME} PRIVATE
         PiAlarm_view_manager
+        PiAlarm_controller
         PiAlarm_service
         PiAlarm_model
 )
