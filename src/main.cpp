@@ -1,6 +1,7 @@
 #include <thread>
 
 #include "utils/consoleUtils.h"
+#include "utils/LogUtils.h"
 #include "display/DisplayConfig.hpp"
 #include "model/AlarmData.hpp"
 #include "model/ClockData.hpp"
@@ -16,6 +17,8 @@ int main(int argc, char *argv[]) {
 #ifdef DISPLAY_CONSOLE
     setup_console();
 #endif
+
+    configureLogging(LOG_LEVEL);
 
     // Models
     model::AlarmData alarm_data;

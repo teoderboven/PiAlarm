@@ -4,5 +4,8 @@ project(PiAlarm)
 
 include_directories(include)
 
+# Include project dependencies
+include(cmake/Dependencies.cmake)
+
 # Include subdirectories for source
 add_subdirectory(src)

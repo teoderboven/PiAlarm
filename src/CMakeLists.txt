@@ -12,6 +12,8 @@ set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -static-libstdc++ -stati
 
 option(DISPLAY_SSD1322 "Use SSD1322 display" OFF)
 option(DISPLAY_CONSOLE "Use console display" OFF)
+set(LOG_LEVEL "info" CACHE STRING "Log level (trace, debug, info, warn, error, critical)")
+
 
 if(DISPLAY_SSD1322 AND DISPLAY_CONSOLE)
     message(FATAL_ERROR "You cannot enable both DISPLAY_SSD1322 and DISPLAY_CONSOLE.")
@@ -34,6 +36,7 @@ add_executable(${PROJECT_NAME}
         main.cpp
 )
 
+# link project libraries
 target_link_libraries(${PROJECT_NAME} PRIVATE
         PiAlarm_view_manager
         PiAlarm_service
@@ -49,3 +52,10 @@ else()
             PiAlarm_view_cli
     )
 endif ()
+
+
+target_compile_definitions(${PROJECT_NAME} PRIVATE LOG_LEVEL="${LOG_LEVEL}")
+
+if(CMAKE_BUILD_TYPE STREQUAL "Release")
+    target_compile_definitions(${PROJECT_NAME} PRIVATE BUILD_RELEASE=1)
+endif()

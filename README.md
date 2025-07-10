@@ -10,9 +10,11 @@ Réveil matin intelligent sur Raspberry Pi
 ## Options de configuration de la compilation
 
 Ce projet utilise des options CMake pour sélectionner, au moment de la compilation,
-le type d’affichage cible. Une seule option d’affichage peut être activée par build.
+le type d’affichage cible et le niveau de log.
 
-### Options disponibles
+> **Note:** Une seule option d’affichage peut être activée par build.
+
+### Options d'affichage disponibles
 
 - `DISPLAY_SSD1322` (par défaut : OFF)
     
@@ -27,14 +29,32 @@ le type d’affichage cible. Une seule option d’affichage peut être activée 
 
 Une seule de ces options doit être activée. Activer les deux ou aucune provoquera une erreur à la compilation.
 
+### Option de niveau de log
+
+`LOG_LEVEL` (par défaut : `info`)
+
+Définit le niveau de verbosité du logger `spdlog`.
+Cette option est transmise au code via une macro de compilation.
+
+Le fichier de log se trouvera dans le dossier `/logs`.
+
+#### Niveaux disponibles :
+
+- `trace`
+- `debug`
+- `info` (valeur par défaut)
+- `warn`
+- `error`
+- `critical`
+
 ### Activer une option
 
 Via la ligne de commande CMake, active simplement l’option souhaitée :
 
 ```bash
-cmake -DDISPLAY_SSD1322=ON
-# ou
-cmake -DDISPLAY_CONSOLE=ON
+# exemples
+cmake -DDISPLAY_SSD1322=ON -DLOG_LEVEL=info
+cmake -DDISPLAY_CONSOLE=ON -DLOG_LEVEL=debug
 ```
 
 ## Documentation
