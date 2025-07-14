@@ -1,4 +1,5 @@
 #include "provider/WeatherApiClient.h"
+#include "utils/WeatherUtils.hpp"
 
 namespace PiAlarm::provider {
 
@@ -77,7 +78,7 @@ namespace PiAlarm::provider {
             .currentTemperature = current["tmp"].get<float>(),
             .currentHumidity = current["humidity"].get<float>(),
             .currentPressure = current["pressure"].get<float>(),
-            .currentCondition = current["condition_key"].get<std::string>()
+            .currentCondition = utils::weatherConditionFromKey(current["condition_key"].get<std::string>())
         };
 
         return dto;

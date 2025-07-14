@@ -8,6 +8,8 @@
 #include <cpr/cpr.h>
 #include <nlohmann/json.hpp>
 
+#include "common/WeatherCondition.h"
+
 
 #define WEATHER_API_BASE_URL "https://www.prevision-meteo.ch/services/json/"
 
@@ -27,11 +29,10 @@ namespace PiAlarm::provider {
      * This structure holds the weather data retrieved from an external API.
      */
     struct WeatherDTO {
-        float currentTemperature;
-        float currentHumidity;
-        float currentPressure;
-        std::string currentCondition;
-
+        float currentTemperature;                    ///< Current temperature
+        float currentHumidity;                       ///< Current humidity
+        float currentPressure;                       ///< Current atmospheric pressure
+        common::WeatherCondition currentCondition;   ///< Current weather condition
     };
 
     /**
@@ -40,12 +41,12 @@ namespace PiAlarm::provider {
      *
      * This enumeration defines the various error types that can occur when interacting with the weather API.
      */
-    enum class WeatherErrorType : char {
-        NetworkFailure,
-        HttpError,
-        JsonParseError,
-        Timeout,
-        Unknown
+    enum class WeatherErrorType : int8_t {
+        NetworkFailure,  ///< Error due to network issues
+        HttpError,       ///< Error due to HTTP response issues (e.g., 404, 500)
+        JsonParseError,  ///< Error due to JSON parsing issues
+        Timeout,         ///< Error due to request timeout
+        Unknown          ///< An unknown error occurred
     };
 
     /**
@@ -55,8 +56,8 @@ namespace PiAlarm::provider {
      * This structure contains the type of error and a message describing it.
      */
     struct WeatherError {
-        WeatherErrorType type;
-        std::string message;
+        WeatherErrorType type;  ///< Type of the error @see WeatherErrorType
+        std::string message;    ///< Description of the error
     };
 
     /**
