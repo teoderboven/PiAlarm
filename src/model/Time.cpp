@@ -1,4 +1,3 @@
-#include <format>
 #include <sstream>
 #include <iomanip>
 #include <stdexcept>
@@ -16,12 +15,21 @@ namespace PiAlarm::model {
     Time::Time(const int& hour, const int& minute, const int& second)
         : hour_{hour}, minute_{minute}, second_{second}
     {
-        if (hour < 0 || hour > 23)
-            throw std::out_of_range(std::format("Hour must be between 0 and 23, got {}", hour));
-        if (minute < 0 || minute > 59)
-            throw std::out_of_range(std::format("Minute must be between 0 and 59, got {}", minute));
-        if (second < 0 || second > 59)
-            throw std::out_of_range(std::format("Second must be between 0 and 59, got {}", second));
+        if (hour < 0 || hour > 23) {
+            std::ostringstream oss;
+            oss << "Hour must be between 0 and 23, got " << hour;
+            throw std::out_of_range(oss.str());
+        }
+        if (minute < 0 || minute > 59) {
+            std::ostringstream oss;
+            oss << "Minute must be between 0 and 59, got " << minute;
+            throw std::out_of_range(oss.str());
+        }
+        if (second < 0 || second > 59) {
+            std::ostringstream oss;
+            oss << "Second must be between 0 and 59, got " << second;
+            throw std::out_of_range(oss.str());
+        }
     }
 
     std::chrono::seconds Time::secondsSince(const Time& other) const {
