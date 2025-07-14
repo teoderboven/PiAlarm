@@ -2,17 +2,17 @@
 
 namespace PiAlarm::model {
 
-    TemperatureSensorData::TemperatureSensorData(const float& temp, const float& hum, bool isValid)
-        : temperature_{temp}, humidity_{hum}, valid_{isValid}
+    TemperatureSensorData::TemperatureSensorData(const float& temperature, const float& humidity, bool valid)
+        : temperature_{temperature}, humidity_{humidity}, valid_{valid}
     {}
 
-    void TemperatureSensorData::setTemperature(const float& temp) {
+    void TemperatureSensorData::setTemperature(const float& temperature) {
         bool shouldNotify {false};
 
         {
             std::lock_guard lock{mutex_};
-            if (temperature_ != temp) {
-                temperature_ = temp;
+            if (temperature_ != temperature) {
+                temperature_ = temperature;
                 shouldNotify = true;
             }
         }
@@ -20,13 +20,13 @@ namespace PiAlarm::model {
         if (shouldNotify) notifyObservers();
     }
 
-    void TemperatureSensorData::setHumidity(const float& hum) {
+    void TemperatureSensorData::setHumidity(const float& humidity) {
         bool shouldNotify {false};
 
         {
             std::lock_guard lock{mutex_};
-            if (humidity_ != hum) {
-                humidity_ = hum;
+            if (humidity_ != humidity) {
+                humidity_ = humidity;
                 shouldNotify = true;
             }
         }
@@ -34,13 +34,13 @@ namespace PiAlarm::model {
         if (shouldNotify) notifyObservers();
     }
 
-    void TemperatureSensorData::setValid(const bool& isValid) {
+    void TemperatureSensorData::setValid(bool valid) {
         bool shouldNotify {false};
 
         {
             std::lock_guard lock{mutex_};
-            if (valid_ != isValid) {
-                valid_ = isValid;
+            if (valid_ != valid) {
+                valid_ = valid;
                 shouldNotify = true;
             }
         }
@@ -48,26 +48,26 @@ namespace PiAlarm::model {
         if (shouldNotify) notifyObservers();
     }
 
-    void TemperatureSensorData::setValues(const float& temp, const float& hum, bool isValid) {
+    void TemperatureSensorData::setValues(const float& temperature, const float& humidity, bool valid) {
         bool shouldNotify = false;
 
         {
             std::lock_guard lock{mutex_};
 
-            const bool tempChanged = (temperature_ != temp);
-            const bool humChanged = (humidity_ != hum);
-            const bool validChanged = (valid_ != isValid);
+            const bool tempChanged = (temperature_ != temperature);
+            const bool humChanged = (humidity_ != humidity);
+            const bool validChanged = (valid_ != valid);
 
             const bool anyChange = tempChanged || humChanged || validChanged;
 
             // Only update if at least one state is valid
             // Prevents updating when both old and new states are invalid
-            const bool anyValid = valid_ || isValid;
+            const bool anyValid = valid_ || valid;
 
             if (anyChange && anyValid) {
-                temperature_ = temp;
-                humidity_ = hum;
-                valid_ = isValid;
+                temperature_ = temperature;
+                humidity_ = humidity;
+                valid_ = valid;
                 shouldNotify = true;
             }
         }

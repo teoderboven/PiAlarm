@@ -29,38 +29,38 @@ namespace PiAlarm::model {
 
         /**
          * Constructs a TemperatureSensorData object with specified temperature, humidity, and validity status.
-         * @param temp The temperature to set.
-         * @param hum The humidity to set.
-         * @param isValid True if the weather data is valid, false otherwise.
+         * @param temperature The temperature to set.
+         * @param humidity The humidity to set.
+         * @param valid True if the weather data is valid, false otherwise.
          */
-        TemperatureSensorData(const float& temp, const float& hum, bool isValid);
+        TemperatureSensorData(const float& temperature, const float& humidity, bool valid);
 
         /**
          * Sets the temperature and notifies observers of the change.
-         * @param temp The new temperature to set.
+         * @param temperature The new temperature to set.
          */
-        void setTemperature(const float& temp);
+        void setTemperature(const float& temperature);
 
         /**
          * Sets the humidity and notifies observers of the change.
-         * @param hum The new humidity to set.
+         * @param humidity The new humidity to set.
          */
-        void setHumidity(const float& hum);
+        void setHumidity(const float& humidity);
 
         /**
          * Sets the validity status of the weather data and notifies observers of the change.
-         * @param isValid True if the weather data is valid, false otherwise.
+         * @param valid True if the weather data is valid, false otherwise.
          */
-        void setValid(const bool& isValid);
+        void setValid(bool valid);
 
         /**
          * Updates the weather data with new temperature, humidity, and validity status,
          * and notifies observers of the change.
-         * @param temp The new temperature to set.
-         * @param hum The new humidity to set.
-         * @param isValid True if the weather data is valid, false otherwise.
+         * @param temperature The new temperature to set.
+         * @param humidity The new humidity to set.
+         * @param valid True if the weather data is valid, false otherwise. Defaults to true.
          */
-        void setValues(const float& temp, const float& hum, bool isValid);
+        void setValues(const float& temperature, const float& humidity, bool valid = true);
 
         /**
          * Gets the current temperature.
