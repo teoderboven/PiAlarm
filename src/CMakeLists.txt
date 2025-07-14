@@ -29,6 +29,7 @@ elseif(DISPLAY_CONSOLE)
 endif()
 
 add_subdirectory(model)
+add_subdirectory(provider)
 add_subdirectory(service)
 add_subdirectory(controller)
 add_subdirectory(view)
@@ -42,6 +43,7 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
         PiAlarm_view_manager
         PiAlarm_controller
         PiAlarm_service
+        PiAlarm_provider
         PiAlarm_model
 )
 
