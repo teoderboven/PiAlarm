@@ -16,7 +16,7 @@ using namespace PiAlarm;
 [[ noreturn ]]
 int main(int argc, char *argv[]) {
 #ifdef DISPLAY_CONSOLE
-    setup_console();
+    utils::setup_console();
 #endif
 
     configureLogging(LOG_LEVEL);

@@ -13,6 +13,10 @@
  * and to translate these conditions into localized strings based on the provided language code.
  */
 
+/**
+ * @namespace PiAlarm::utils
+ * @brief Namespace for utility functions in the PiAlarm application.
+ */
 namespace PiAlarm::utils {
 
     ///////////////////
