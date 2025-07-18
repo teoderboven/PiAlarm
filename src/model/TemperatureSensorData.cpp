@@ -7,49 +7,25 @@ namespace PiAlarm::model {
     {}
 
     void TemperatureSensorData::setTemperature(const float& temperature) {
-        bool shouldNotify {false};
+        bool valueChanged = setIfDifferent(temperature_, temperature);
 
-        {
-            std::lock_guard lock{mutex_};
-            if (temperature_ != temperature) {
-                temperature_ = temperature;
-                shouldNotify = true;
-            }
-        }
-
-        if (shouldNotify) notifyObservers();
+        if (valueChanged) notifyObservers();
     }
 
     void TemperatureSensorData::setHumidity(const float& humidity) {
-        bool shouldNotify {false};
+        bool valueChanged = setIfDifferent(humidity_, humidity);
 
-        {
-            std::lock_guard lock{mutex_};
-            if (humidity_ != humidity) {
-                humidity_ = humidity;
-                shouldNotify = true;
-            }
-        }
-
-        if (shouldNotify) notifyObservers();
+        if (valueChanged) notifyObservers();
     }
 
     void TemperatureSensorData::setValid(bool valid) {
-        bool shouldNotify {false};
+        bool valueChanged = setIfDifferent(valid_, valid);
 
-        {
-            std::lock_guard lock{mutex_};
-            if (valid_ != valid) {
-                valid_ = valid;
-                shouldNotify = true;
-            }
-        }
-
-        if (shouldNotify) notifyObservers();
+        if (valueChanged) notifyObservers();
     }
 
     void TemperatureSensorData::setValues(const float& temperature, const float& humidity, bool valid) {
-        bool shouldNotify = false;
+        bool valueChanged = false;
 
         {
             std::lock_guard lock{mutex_};
@@ -68,11 +44,11 @@ namespace PiAlarm::model {
                 temperature_ = temperature;
                 humidity_ = humidity;
                 valid_ = valid;
-                shouldNotify = true;
+                valueChanged = true;
             }
         }
 
-        if (shouldNotify) notifyObservers();
+        if (valueChanged) notifyObservers();
     }
 
 } // namespace PiAlarm::model

@@ -3,6 +3,7 @@
 
 #include <mutex>
 
+#include "model/BaseModelData.hpp"
 #include "model/Time.h"
 #include "common/Observable.hpp"
 
@@ -14,12 +15,9 @@ namespace PiAlarm::model {
      *
      * This class extends the Observable class to notify observers of changes in the clock data.
      */
-    class AlarmData final : public common::Observable{
+    class AlarmData final : public BaseModelData,  public common::Observable{
         Time alarmTime_;
         bool alarmEnabled_ = false;
-
-        // mutable to allow usage of mutex_ in const methods
-        mutable std::mutex mutex_; ///< Protects access to data (multithreading)
 
     public:
 

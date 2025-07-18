@@ -7,17 +7,9 @@ namespace PiAlarm::model {
     {}
 
     void ClockData::setCurrentTime(const Time& time) {
-        bool shouldNotify {false};
+        bool valueChanged = setIfDifferent(currentTime_, time);
 
-        {
-            std::lock_guard lock{mutex_};
-            if (currentTime_ != time) {
-                currentTime_ = time;
-                shouldNotify = true;
-            }
-        }
-
-        if (shouldNotify) notifyObservers();
+        if (valueChanged) notifyObservers();
     }
 
 } // namespace PiAlarm::model

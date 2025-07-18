@@ -3,6 +3,7 @@
 
 #include <mutex>
 
+#include "model/BaseModelData.hpp"
 #include "common/Observable.hpp"
 
 namespace PiAlarm::model {
@@ -13,13 +14,10 @@ namespace PiAlarm::model {
      *
      * This class extends the Observable class to notify observers of changes in the temperature sensor data.
      */
-    class TemperatureSensorData final : public common::Observable {
+    class TemperatureSensorData final : public BaseModelData, public common::Observable {
         float temperature_;
         float humidity_;
         bool valid_ = false;
-
-        // mutable to allow usage of mutex_ in const methods
-        mutable std::mutex mutex_; ///< Protects access to data (multithreading)
 
     public:
         /**
