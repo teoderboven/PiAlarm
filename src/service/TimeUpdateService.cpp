@@ -6,7 +6,7 @@
 namespace PiAlarm::service {
 
     TimeUpdateService::TimeUpdateService(model::ClockData &clockData)
-        : BaseService("TimeUpdate"), clockData_{clockData}
+        : BaseService("TimeUpdateService"), clockData_{clockData}
     {}
 
     void TimeUpdateService::update() {

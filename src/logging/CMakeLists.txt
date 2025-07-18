@@ -1,22 +1,21 @@
 cmake_minimum_required(VERSION 3.27)
 
-project(PiAlarm_service LANGUAGES CXX)
+project(PiAlarm_logging LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(SOURCES
-        BaseService.cpp
-        TimeUpdateService.cpp
+        HasLogger.cpp
 )
 
 add_library(${PROJECT_NAME} STATIC
         ${SOURCES}
 )
 
-# link log library
+# link external library
 target_link_libraries(${PROJECT_NAME} PUBLIC
-        PiAlarm_logging
+        spdlog::spdlog
 )
 
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})

@@ -3,7 +3,7 @@
 namespace PiAlarm::service {
 
     BaseService::BaseService(const std::string& serviceName)
-        : name_{serviceName}, running_{false}, paused_{false}
+        : HasLogger{serviceName}, running_{false}, paused_{false}
     {}
 
     BaseService::~BaseService() {
@@ -34,7 +34,7 @@ namespace PiAlarm::service {
         running_ = true;
         workerThread_ = std::thread([this]() { run(); });
 
-        logger().info("Service '{}' started", name_);
+        logger().info("Service started");
     }
 
     void BaseService::stop() {
@@ -49,7 +49,7 @@ namespace PiAlarm::service {
             workerThread_.join();
         }
 
-        logger().info("Service '{}' stopped", name_);
+        logger().info("Service stopped");
     }
 
     void BaseService::pause() {
@@ -58,7 +58,7 @@ namespace PiAlarm::service {
             paused_ = true;
         }
 
-        logger().info("Service '{}' paused", name_);
+        logger().info("Service paused");
     }
 
     void BaseService::resume() {
@@ -68,7 +68,7 @@ namespace PiAlarm::service {
         }
         cv_.notify_all();
 
-        logger().info("Service '{}' resumed", name_);
+        logger().info("Service resumed");
     }
 
     bool BaseService::isRunning() const {
@@ -77,13 +77,6 @@ namespace PiAlarm::service {
 
     bool BaseService::isPaused() const {
         return paused_.load();
-    }
-
-    spdlog::logger& BaseService::logger() {
-        if (!logger_) {
-            logger_ = spdlog::get("PiAlarm_logger");
-        }
-        return *logger_;
     }
 
 } // namespace PiAlarm::service

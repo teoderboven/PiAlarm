@@ -28,10 +28,11 @@ elseif(DISPLAY_CONSOLE)
     add_compile_definitions(DISPLAY_CONSOLE)
 endif()
 
+add_subdirectory(controller)
+add_subdirectory(logging)
 add_subdirectory(model)
 add_subdirectory(provider)
 add_subdirectory(service)
-add_subdirectory(controller)
 add_subdirectory(view)
 
 add_executable(${PROJECT_NAME}
@@ -58,8 +59,8 @@ else()
 endif ()
 
 
-target_compile_definitions(${PROJECT_NAME} PRIVATE LOG_LEVEL="${LOG_LEVEL}")
+target_compile_definitions(PiAlarm_logging PRIVATE LOG_LEVEL="${LOG_LEVEL}")
 
 if(CMAKE_BUILD_TYPE STREQUAL "Release")
-    target_compile_definitions(${PROJECT_NAME} PRIVATE BUILD_RELEASE=1)
+    add_compile_definitions(BUILD_RELEASE=1)
 endif()

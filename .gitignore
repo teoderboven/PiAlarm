@@ -58,6 +58,9 @@ Makefile.*
 # Documentation folder
 doc/
 
+#log files
+*.log
+
 # HTML files
 *.htm
 *.html

@@ -7,9 +7,8 @@
 #include <condition_variable>
 #include <chrono>
 
-#include <spdlog/spdlog.h>
-
 #include "service/IService.h"
+#include "logging/HasLogger.h"
 
 namespace PiAlarm::service {
 
@@ -19,10 +18,7 @@ namespace PiAlarm::service {
      *
      * This class implements the basic functionality for running, stopping, pausing, and resuming services.
      */
-    class BaseService : public IService {
-        std::shared_ptr<spdlog::logger> logger_; ///< Logger for the services
-        const std::string name_; ///< Name of the service
-
+    class BaseService : public IService, public logging::HasLogger {
         std::atomic<bool> running_;  ///< Indicates if the service is currently running
         std::atomic<bool> paused_;   ///< Indicates if the service is currently paused
         std::thread workerThread_;   ///< Thread for running the service
@@ -131,17 +127,6 @@ namespace PiAlarm::service {
         virtual inline std::chrono::milliseconds updateIntervalMs() const {
             return std::chrono::milliseconds{1000};
         }
-
-        /**
-         * @brief Gives access to the logger for the service.
-         *
-         * This method provides access to the logger used by the service.
-         * It can be used for logging messages specific to the service.
-         *
-         * @return A reference to the spdlog logger instance.
-         */
-        [[nodiscard]]
-        spdlog::logger& logger();
 
     private:
         /**
