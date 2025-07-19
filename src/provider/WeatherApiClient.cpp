@@ -1,3 +1,5 @@
+#include <chrono>
+
 #include "provider/WeatherApiClient.h"
 #include "utils/WeatherUtils.hpp"
 
@@ -31,7 +33,11 @@ namespace PiAlarm::provider {
     }
 
     cpr::Response WeatherApiClient::makeRequest() const {
-        return cpr::Get(weatherApiUrl_);
+        return cpr::Get(
+            weatherApiUrl_,
+            cpr::Timeout{std::chrono::seconds(20)},
+            cpr::Header{{"Accept", "application/json"}}
+        );
     }
 
     std::optional<WeatherError> WeatherApiClient::checkForErrors(const cpr::Response& response) const {
