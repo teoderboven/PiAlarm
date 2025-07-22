@@ -38,7 +38,14 @@ int main(int argc, char *argv[]) {
 
     // Views
     view::ViewManager viewManager{display};
-    viewManager.addView(std::make_unique<view::cli::MainClockView>(alarm_data, clock_data, temperatureSensor_data));
+    viewManager.addView(
+        std::make_unique<view::cli::MainClockView>(
+            alarm_data,
+            clock_data,
+            currentWeather_data,
+            temperatureSensor_data
+        )
+    );
 
     // Services
     service::TimeUpdateService timeUpdateService(clock_data);
