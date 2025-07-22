@@ -10,6 +10,7 @@
 #include "view/manager/ViewManager.h"
 #include "view/cli/MainClockView.h"
 #include "service/TimeUpdateService.h"
+#include "service/WeatherApiService.h"
 
 using namespace PiAlarm;
 
@@ -28,6 +29,9 @@ int main(int argc, char *argv[]) {
 
     // Controllers
     controller::AlarmController alarmController{alarm_data};
+
+    // Providers
+    provider::WeatherApiClient api {};
 
     // Display
 #ifdef DISPLAY_SSD1322
@@ -48,8 +52,10 @@ int main(int argc, char *argv[]) {
     );
 
     // Services
-    service::TimeUpdateService timeUpdateService(clock_data);
+    service::TimeUpdateService timeUpdateService {clock_data};
     timeUpdateService.start();
+    service::WeatherApiService weatherApiService {currentWeather_data, api};
+    weatherApiService.start();
 
     // Main application loop
     while (true) {
