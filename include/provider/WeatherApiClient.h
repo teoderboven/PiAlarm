@@ -45,7 +45,6 @@ namespace PiAlarm::provider {
         NetworkFailure,  ///< Error due to network issues
         HttpError,       ///< Error due to HTTP response issues (e.g., 404, 500)
         JsonParseError,  ///< Error due to JSON parsing issues
-        Timeout,         ///< Error due to request timeout
         Unknown          ///< An unknown error occurred
     };
 

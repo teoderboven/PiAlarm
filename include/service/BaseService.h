@@ -124,7 +124,7 @@ namespace PiAlarm::service {
          * @return std::chrono::milliseconds Interval in milliseconds between update cycles. Default is 1000 ms (1 second).
          */
         [[nodiscard]]
-        virtual inline std::chrono::milliseconds updateIntervalMs() const {
+        virtual inline std::chrono::milliseconds updateInterval() const {
             return std::chrono::milliseconds{1000};
         }
 

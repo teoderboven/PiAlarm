@@ -24,6 +24,7 @@ namespace PiAlarm::service {
          */
         explicit TimeUpdateService(model::ClockData &clockData);
 
+    protected:
         /**
          * @brief Updates the current time in the ClockData model.
          */
