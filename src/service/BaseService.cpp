@@ -25,7 +25,7 @@ namespace PiAlarm::service {
     }
 
     void BaseService::waitNextCycle() {
-        std::this_thread::sleep_for(updateIntervalMs());
+        std::this_thread::sleep_for(updateInterval());
     }
 
     void BaseService::start() {
@@ -45,7 +45,7 @@ namespace PiAlarm::service {
         }
         cv_.notify_all();
 
-        if (workerThread_.joinable()) {
+        if (workerThread_.joinable() && std::this_thread::get_id() != workerThread_.get_id()) {
             workerThread_.join();
         }
 
