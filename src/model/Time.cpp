@@ -45,11 +45,16 @@ namespace PiAlarm::model {
         return hour_ * 3600 + minute_ * 60 + second_;
     }
 
-    std::string Time::toString() const {
+    std::string Time::toString(bool includeSeconds) const {
         std::ostringstream oss;
         oss << std::setfill('0') << std::setw(2) << hour_ << ":"
-            << std::setw(2) << minute_ << ":"
-            << std::setw(2) << second_;
+            << std::setw(2) << minute_;
+
+        if (includeSeconds) {
+            oss << ":"
+                << std::setw(2) << second_;
+        }
+
         return oss.str();
     }
 

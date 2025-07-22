@@ -64,10 +64,13 @@ namespace PiAlarm::model {
         const int& second() const { return second_; }
 
         /**
-         * Returns the time as a string in the format "HH:MM:SS".
-         * @return Formatted time string.
+         * @brief Converts the time to a formatted string.
+         * Converts the time to a string in the format "HH:MM" or "HH:MM:SS"
+         * @param includeSeconds If true, includes seconds in the output string. Default is true.
+         * @return The formatted time string.
          */
-        std::string toString() const;
+        [[nodiscard]]
+        std::string toString(bool includeSeconds = true) const;
 
         /**
          * Calculates the number of seconds elapsed since another time.
