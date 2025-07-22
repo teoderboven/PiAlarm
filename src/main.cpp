@@ -4,6 +4,7 @@
 #include "display/DisplayConfig.hpp"
 #include "model/AlarmData.hpp"
 #include "model/ClockData.hpp"
+#include "model/CurrentWeatherData.h"
 #include "model/TemperatureSensorData.hpp"
 #include "controller/AlarmController.h"
 #include "view/manager/ViewManager.h"
@@ -22,6 +23,7 @@ int main(int argc, char *argv[]) {
     // Models
     model::AlarmData alarm_data;
     model::ClockData clock_data;
+    model::CurrentWeatherData currentWeather_data;
     model::TemperatureSensorData temperatureSensor_data;
 
     // Controllers
