@@ -6,8 +6,8 @@
 namespace PiAlarm::provider {
 
     WeatherApiClient::WeatherApiClient(const std::string& cityName)
-      : weatherApiUrl_{WEATHER_API_BASE_URL + cityName}
-    {}
+        : HasLogger{"WeatherApiClient"}, weatherApiUrl_{WEATHER_API_BASE_URL + cityName} {
+    }
 
     WeatherApiClient::WeatherResult WeatherApiClient::fetchCurrentWeather() const {
         try {
@@ -21,6 +21,10 @@ namespace PiAlarm::provider {
             if (std::holds_alternative<WeatherError>(json))
                 return std::get<WeatherError>(json);
 
+            err = checkForErrors(std::get<nlohmann::json>(json));
+            if (err.has_value())
+                return err.value();
+
             return extractDto(std::get<nlohmann::json>(json));
 
         } catch (const std::exception& e) {
@@ -33,6 +37,8 @@ namespace PiAlarm::provider {
     }
 
     cpr::Response WeatherApiClient::makeRequest() const {
+        logger().debug("Making request to weather API: {}", weatherApiUrl_.str());
+
         return cpr::Get(
             weatherApiUrl_,
             cpr::Timeout{std::chrono::seconds(20)},
@@ -40,7 +46,7 @@ namespace PiAlarm::provider {
         );
     }
 
-    std::optional<WeatherError> WeatherApiClient::checkForErrors(const cpr::Response& response) const {
+    std::optional<WeatherError> WeatherApiClient::checkForErrors(const cpr::Response& response) {
         if (response.error) {
             return WeatherError{
                 .type = WeatherErrorType::NetworkFailure,
@@ -62,9 +68,9 @@ namespace PiAlarm::provider {
         return {};
     }
 
-    std::variant<nlohmann::json, WeatherError> WeatherApiClient::parseJson(const std::string& text) const {
+    std::variant<nlohmann::json, WeatherError> WeatherApiClient::parseJson(const std::string& jsonString) {
         try {
-            return nlohmann::json::parse(text);
+            return nlohmann::json::parse(jsonString);
 
         } catch (const std::exception& e) {
 
@@ -75,7 +81,31 @@ namespace PiAlarm::provider {
         }
     }
 
-    WeatherDTO WeatherApiClient::extractDto(const nlohmann::json& json) const {
+    std::optional<WeatherError> WeatherApiClient::checkForErrors(const nlohmann::json& json) {
+        if (json.contains("errors")) {
+            std::ostringstream oss;
+            for (const auto& errEntry : json["errors"]) {
+                oss << errEntry.value("text", "") << " | "
+                    << errEntry.value("description", "") << "; ";
+            }
+
+            return WeatherError{
+                .type = WeatherErrorType::JsonParseError,
+                .message = "API error: " + oss.str()
+            };
+        }
+
+        if (!json.contains("current_condition")) {
+            return WeatherError{
+                .type = WeatherErrorType::JsonParseError,
+                .message = "Missing 'current_condition' in JSON response"
+            };
+        }
+
+        return {};
+    }
+
+    WeatherDTO WeatherApiClient::extractDto(const nlohmann::json& json) {
         // API documentation: https://www.prevision-meteo.ch/uploads/pdf/recuperation-donnees-meteo.pdf
 
         auto current = json["current_condition"];

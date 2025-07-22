@@ -19,4 +19,9 @@ target_link_libraries(${PROJECT_NAME} PUBLIC
         nlohmann_json::nlohmann_json
 )
 
+# link internal log library
+target_link_libraries(${PROJECT_NAME} PUBLIC
+        PiAlarm_logging
+)
+
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})

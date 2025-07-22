@@ -9,6 +9,7 @@
 #include <nlohmann/json.hpp>
 
 #include "common/WeatherCondition.h"
+#include "logging/HasLogger.h"
 
 
 #define WEATHER_API_BASE_URL "https://www.prevision-meteo.ch/services/json/"
@@ -65,7 +66,7 @@ namespace PiAlarm::provider {
      *
      * This class provides methods to fetch weather data from an external API.
      */
-    class WeatherApiClient {
+    class WeatherApiClient : public logging::HasLogger {
 
         /**
          * @brief Result type for weather API operations.
@@ -83,9 +84,11 @@ namespace PiAlarm::provider {
          *
          * This constructor initializes the client with the base API URL and the city name for which to fetch weather data.
          *
-         * @param cityName The name of the city for which to fetch weather data.
+         * @param cityName The name of the city for which to fetch weather data. Defaults to "Brussel-1".
+         *
+         * @note You can find the list of available cities at https://www.prevision-meteo.ch/services/json/cities
          */
-        explicit WeatherApiClient(const std::string& cityName);
+        explicit WeatherApiClient(const std::string& cityName = "Brussel-1");
 
         /**
          * @brief Fetches the current weather data.
@@ -116,10 +119,10 @@ namespace PiAlarm::provider {
          * This method checks the HTTP response for errors and returns a WeatherError if any are found.
          *
          * @param response The HTTP response to check.
-         * @return std::optional<WeatherError> containing an error if one occurred, or std::nullopt if no error.
+         * @return std::optional<WeatherError> containing an error if one occurred, or an empty optional if no errors were found.
          */
         [[nodiscard]]
-        std::optional<WeatherError> checkForErrors(const cpr::Response& response) const;
+        static std::optional<WeatherError> checkForErrors(const cpr::Response& response) ;
 
         /**
          * @brief Parses the JSON response from the weather API.
@@ -131,7 +134,18 @@ namespace PiAlarm::provider {
          * @return std::variant<nlohmann::json, WeatherError> containing either the parsed JSON or an error.
          */
         [[nodiscard]]
-        std::variant<nlohmann::json, WeatherError> parseJson(const std::string& jsonString) const;
+        static std::variant<nlohmann::json, WeatherError> parseJson(const std::string& jsonString);
+
+        /**
+         * @brief Checks the JSON object for API errors.
+         *
+         * This method checks the JSON object for specific error fields and returns a WeatherError if any are found.
+         *
+         * @param json The JSON object to check.
+         * @return std::optional<WeatherError> containing an error if one occurred, or an empty optional if no errors were found.
+         */
+        [[nodiscard]]
+        static std::optional<WeatherError> checkForErrors(const nlohmann::json& json);
 
         /**
          * @brief Extracts a WeatherDTO from the JSON object.
@@ -142,7 +156,7 @@ namespace PiAlarm::provider {
          * @return WeatherDTO containing the extracted weather data.
          */
         [[nodiscard]]
-        WeatherDTO extractDto(const nlohmann::json& json) const;
+        static WeatherDTO extractDto(const nlohmann::json& json);
 
     };
 
