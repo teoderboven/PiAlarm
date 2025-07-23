@@ -84,7 +84,6 @@ namespace PiAlarm::logging {
 
         // Named logger using the global sink
         logger_ = global_logger->clone(name);
-        logger_->set_pattern("[%Y-%m-%d %H:%M:%S.%e] [%l] [" + name + "] %v");
     }
 
     void HasLogger::init_global_logger() {
@@ -98,7 +97,8 @@ namespace PiAlarm::logging {
                 );
                 sink->set_pattern("[%Y-%m-%d %H:%M:%S.%e] [%n] [%l] %v");
 
-                global_logger = std::make_shared<spdlog::logger>("app", sink);
+                global_logger = std::make_shared<spdlog::logger>("global", sink);
+                global_logger->set_pattern("[%Y-%m-%d %H:%M:%S.%e] [%l] [%n] %v");
                 spdlog::register_logger(global_logger);
                 spdlog::set_default_logger(global_logger);
                 spdlog::set_level(parseLogLevel(LOG_LEVEL)); // use macro
