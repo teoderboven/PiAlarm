@@ -42,14 +42,14 @@ namespace PiAlarm::view::cli {
     void MainClockView::render(DisplayType &display) {
         clearDisplay(display);
 
-        display << "Heure actuelle    : " << formattedTime(currentTime_) << std::endl
-                << "Réveil à          : " << formattedTime(alarmTime_, alarmEnabled_) << std::endl
-                << "Température pièce : " << formattedTemperature(currentIndoorTemperature_, sensorDataValid_) << std::endl
-                << "Humidité pièce    : " << formattedHumidity(currentIndoorHumidity_, sensorDataValid_) << std::endl
-                << std::endl
-                << "Température ext.  : " << formattedTemperature(currentOutdoorTemperature_, currentWeatherDataValid_) << std::endl
-                << "Humidité ext.     : " << formattedHumidity(currentOutdoorHumidity_, currentWeatherDataValid_) << std::endl
-                << "Pression atm.     : " << formattedPressure(currentOutdoorPressure_, currentWeatherDataValid_) << std::endl
+        display << "Heure actuelle    : " << formattedTime(currentTime_) << "\n"
+                << "Réveil à          : " << formattedTime(alarmTime_, alarmEnabled_) << "\n"
+                << "Température pièce : " << formattedTemperature(currentIndoorTemperature_, sensorDataValid_) << "\n"
+                << "Humidité pièce    : " << formattedHumidity(currentIndoorHumidity_, sensorDataValid_) << "\n"
+                << "\n"
+                << "Température ext.  : " << formattedTemperature(currentOutdoorTemperature_, currentWeatherDataValid_) << "\n"
+                << "Humidité ext.     : " << formattedHumidity(currentOutdoorHumidity_, currentWeatherDataValid_) << "\n"
+                << "Pression atm.     : " << formattedPressure(currentOutdoorPressure_, currentWeatherDataValid_) << "\n"
                 << "Condition météo   : " << formattedWeatherCondition(currentWeatherCondition_, currentWeatherDataValid_) << std::endl;
     }
 
