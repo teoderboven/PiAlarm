@@ -30,6 +30,16 @@ namespace PiAlarm::model {
         alarms_ = nullptr;
     }
 
+    std::size_t AlarmsData::enabledAlarmCount() const noexcept {
+        std::size_t count = 0;
+        for (const auto &alarm : *this) {
+            if (alarm.isEnabled()) {
+                ++count;
+            }
+        }
+        return count;
+    }
+
     void AlarmsData::update() {
         saveToFile();
         notifyObservers();

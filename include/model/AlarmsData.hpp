@@ -62,15 +62,24 @@ namespace PiAlarm::model {
 
         /**
          * @brief Returns the number of alarms.
+         * This method provides the total number of alarms managed by this instance.
+         * @return The number of alarms.
+         */
+        inline std::size_t size() const noexcept;
+
+        /**
+         * @brief Returns the number of alarms.
+         * This method provides the total number of alarms managed by this instance.
          * @return The number of alarms.
          */
         inline std::size_t alarmCount() const noexcept;
 
         /**
-         * @brief Returns the number of alarms.
-         * @return The number of alarms.
+         * @brief Returns the number of enabled alarms.
+         * This method counts how many alarms are currently enabled.
+         * @return The number of enabled alarms.
          */
-        inline std::size_t size() const noexcept;
+        std::size_t enabledAlarmCount() const noexcept;
 
         /**
          * @brief Retrieves the alarm at the specified index.
@@ -210,6 +219,14 @@ namespace PiAlarm::model {
 
     // Inline methods implementations
 
+    inline std::size_t AlarmsData::size() const noexcept {
+        return alarmCount_;
+    }
+
+    inline std::size_t AlarmsData::alarmCount() const noexcept {
+        return alarmCount_;
+    }
+
     inline void AlarmsData::checkIndex(std::size_t index) const {
         if (index >= alarmCount_) {
             std::ostringstream oss;
@@ -271,14 +288,6 @@ namespace PiAlarm::model {
 
     inline const Alarm& AlarmsData::operator[](std::size_t index) const {
         return getAlarm(index);
-    }
-
-    inline std::size_t AlarmsData::alarmCount() const noexcept {
-        return alarmCount_;
-    }
-
-    inline std::size_t AlarmsData::size() const noexcept {
-        return alarmCount_;
     }
 
     inline Alarm* AlarmsData::begin() noexcept {

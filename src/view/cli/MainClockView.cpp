@@ -26,8 +26,9 @@ namespace PiAlarm::view::cli {
     void MainClockView::refresh() {
         currentTime_ = clockData_.getCurrentTime();
 
+        enabledAlarmCount_ = alarmsData_.enabledAlarmCount();
         const auto nextAlarm {alarmsData_.getNextAlarm(currentTime_)};
-        nextAlarmTime_ = nextAlarm ? nextAlarm->getTime() : model::Time();
+        nextAlarmTime_ = nextAlarm ? nextAlarm->getTime() : model::Time(0);
         hasAlarmEnabled_ = nextAlarm ? nextAlarm->isEnabled() : false;
 
         currentIndoorTemperature_ = temperatureSensorData_.getTemperature();
@@ -46,6 +47,8 @@ namespace PiAlarm::view::cli {
 
         display << "Heure actuelle    : " << formattedTime(currentTime_) << "\n"
                 << "Prochain réveil à : " << formattedTime(nextAlarmTime_, hasAlarmEnabled_) << "\n"
+                << "Nombre d'alarmes actives : " << enabledAlarmCount_ << "\n"
+                << "\n"
                 << "Température pièce : " << formattedTemperature(currentIndoorTemperature_, sensorDataValid_) << "\n"
                 << "Humidité pièce    : " << formattedHumidity(currentIndoorHumidity_, sensorDataValid_) << "\n"
                 << "\n"

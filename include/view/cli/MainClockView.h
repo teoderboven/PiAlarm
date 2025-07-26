@@ -29,16 +29,18 @@ namespace PiAlarm::view::cli {
 
         // Current state variables
         model::Time currentTime_; ///< Current time
-        model::Time nextAlarmTime_;   ///< Next alarm time
+
+        std::size_t enabledAlarmCount_; ///< Number of enabled alarms
+        model::Time nextAlarmTime_;  ///< Next alarm time
         bool hasAlarmEnabled_;       ///< Flag indicating if there is an enabled alarm
 
         float currentIndoorTemperature_; ///< Current indoor temperature
         float currentIndoorHumidity_;    ///< Current indoor humidity
-        bool sensorDataValid_;     ///< Flag indicating if the temperature sensor data is valid
+        bool sensorDataValid_; ///< Flag indicating if the temperature sensor data is valid
 
         float currentOutdoorTemperature_; ///< Current outdoor temperature
         float currentOutdoorHumidity_;    ///< Current outdoor humidity
-        float currentOutdoorPressure_; ///< Current outdoor pressure
+        float currentOutdoorPressure_;    ///< Current outdoor pressure
         common::WeatherCondition currentWeatherCondition_; ///< Current weather condition
         bool currentWeatherDataValid_; ///< Flag indicating if the current weather data is valid
 
