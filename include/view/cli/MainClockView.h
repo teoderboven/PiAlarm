@@ -2,7 +2,7 @@
 #define MAINCLOCKVIEW_H
 
 #include "view/cli/BaseCliView.h"
-#include "model/AlarmData.hpp"
+#include "model/AlarmsData.hpp"
 #include "model/ClockData.hpp"
 #include "model/CurrentWeatherData.h"
 #include "model/TemperatureSensorData.hpp"
@@ -22,15 +22,15 @@ namespace PiAlarm::view::cli {
      * This class is responsible for displaying the current time, alarm time, and temperature.
      */
     class MainClockView final : public BaseCliView {
-        const model::AlarmData& alarmData_; ///< Reference to the alarm data model
+        const model::AlarmsData& alarmsData_; ///< Reference to the alarms data model
         const model::ClockData& clockData_; ///< Reference to the clock data model
         const model::CurrentWeatherData& currentWeatherData_; ///< Reference to the current weather data model
         const model::TemperatureSensorData& temperatureSensorData_; ///< Reference to the temperature sensor data model
 
         // Current state variables
         model::Time currentTime_; ///< Current time
-        model::Time alarmTime_;   ///< Current alarm time
-        bool alarmEnabled_;       ///< Flag indicating if the alarm is enabled
+        model::Time nextAlarmTime_;   ///< Next alarm time
+        bool hasAlarmEnabled_;       ///< Flag indicating if there is an enabled alarm
 
         float currentIndoorTemperature_; ///< Current indoor temperature
         float currentIndoorHumidity_;    ///< Current indoor humidity
@@ -46,13 +46,13 @@ namespace PiAlarm::view::cli {
 
         /**
          * @brief Constructor for MainClockView.
-         * @param alarmData Reference to the alarm data model.
+         * @param alarmsData Reference to the alarms data model.
          * @param clockData Reference to the clock data model.
          * @param currentWeatherData Reference to the current weather data model.
          * @param temperatureSensorData Reference to the temperature sensor data model.
          */
         MainClockView(
-            const model::AlarmData& alarmData,
+            const model::AlarmsData& alarmsData,
             const model::ClockData& clockData,
             const model::CurrentWeatherData& currentWeatherData,
             const model::TemperatureSensorData& temperatureSensorData

@@ -6,18 +6,18 @@
 namespace PiAlarm::view::cli {
 
     MainClockView::MainClockView(
-        const model::AlarmData& alarmData,
+        const model::AlarmsData& alarmsData,
         const model::ClockData &clockData,
         const model::CurrentWeatherData &currentWeatherData,
         const model::TemperatureSensorData& temperatureSensorData
         )
         : BaseCliView{true},
-        alarmData_{alarmData},
+        alarmsData_{alarmsData},
         clockData_{clockData},
         currentWeatherData_{currentWeatherData},
         temperatureSensorData_{temperatureSensorData}
     {
-        alarmData_.addObserver(this);
+        alarmsData_.addObserver(this);
         clockData_.addObserver(this);
         currentWeatherData_.addObserver(this);
         temperatureSensorData_.addObserver(this);
@@ -25,8 +25,10 @@ namespace PiAlarm::view::cli {
 
     void MainClockView::refresh() {
         currentTime_ = clockData_.getCurrentTime();
-        alarmTime_ = alarmData_.getAlarmTime();
-        alarmEnabled_ = alarmData_.isAlarmEnabled();
+
+        const auto nextAlarm {alarmsData_.getNextAlarm(currentTime_)};
+        nextAlarmTime_ = nextAlarm ? nextAlarm->getTime() : model::Time();
+        hasAlarmEnabled_ = nextAlarm ? nextAlarm->isEnabled() : false;
 
         currentIndoorTemperature_ = temperatureSensorData_.getTemperature();
         currentIndoorHumidity_ = temperatureSensorData_.getHumidity();
@@ -43,7 +45,7 @@ namespace PiAlarm::view::cli {
         clearDisplay(display);
 
         display << "Heure actuelle    : " << formattedTime(currentTime_) << "\n"
-                << "Réveil à          : " << formattedTime(alarmTime_, alarmEnabled_) << "\n"
+                << "Prochain réveil à : " << formattedTime(nextAlarmTime_, hasAlarmEnabled_) << "\n"
                 << "Température pièce : " << formattedTemperature(currentIndoorTemperature_, sensorDataValid_) << "\n"
                 << "Humidité pièce    : " << formattedHumidity(currentIndoorHumidity_, sensorDataValid_) << "\n"
                 << "\n"

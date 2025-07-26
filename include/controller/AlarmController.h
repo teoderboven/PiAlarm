@@ -1,7 +1,7 @@
 #ifndef ALARMCONTROLLER_H
 #define ALARMCONTROLLER_H
 
-#include "model/AlarmData.hpp"
+#include "model/AlarmsData.hpp"
 
 /**
  * @namespace PiAlarm::controller
@@ -11,23 +11,24 @@ namespace PiAlarm::controller {
 
     /**
      * @class AlarmController
-     * @brief Controller for managing alarm data in the PiAlarm application.
+     * @brief Controller for managing alarms in the PiAlarm application.
      *
-     * This class is responsible for handling operations related to alarm data.
+     * This class provides an interface to interact with the model::AlarmsData,
+     * allowing for setting, updating, and managing alarms.
      */
     class AlarmController {
-        model::AlarmData& alarmData_;
+        model::AlarmsData& alarmsData_;
 
     public:
 
         /**
-         * @brief Constructs an AlarmController that manages alarm data.
-         * @param alarmData Reference to the AlarmData model to be managed by this controller.
+         * @brief Constructs an AlarmController with the specified alarms data.
+         * @param alarmsData Reference to the model::AlarmsData instance to manage.
          */
-        explicit AlarmController(model::AlarmData& alarmData);
+        explicit AlarmController(model::AlarmsData& alarmsData);
 
     };
 
-} // PiAlarm
+} // namespace PiAlarm::controller
 
 #endif //ALARMCONTROLLER_H

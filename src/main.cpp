@@ -2,7 +2,7 @@
 
 #include "utils/consoleUtils.h"
 #include "display/DisplayConfig.hpp"
-#include "model/AlarmData.hpp"
+#include "model/AlarmsData.hpp"
 #include "model/ClockData.hpp"
 #include "model/CurrentWeatherData.h"
 #include "model/TemperatureSensorData.hpp"
@@ -36,13 +36,13 @@ int main(int argc, char *argv[]) {
 #endif
 
     // Models
-    model::AlarmData alarm_data;
     model::ClockData clock_data;
+    model::AlarmsData alarms_data{3};
     model::CurrentWeatherData currentWeather_data;
     model::TemperatureSensorData temperatureSensor_data;
 
     // Controllers
-    controller::AlarmController alarmController{alarm_data};
+    controller::AlarmController alarmController{alarms_data};
 
     // Providers
     provider::WeatherApiClient api {};
@@ -58,7 +58,7 @@ int main(int argc, char *argv[]) {
     view::ViewManager viewManager{display};
     viewManager.addView(
         std::make_unique<view::cli::MainClockView>(
-            alarm_data,
+            alarms_data,
             clock_data,
             currentWeather_data,
             temperatureSensor_data

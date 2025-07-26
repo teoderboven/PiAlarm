@@ -1,24 +1,24 @@
-#include "model/AlarmData.hpp"
+#include "model/Alarm.hpp"
 
 namespace PiAlarm::model {
 
-    AlarmData::AlarmData(const Time& alarmTime, bool enabled)
+    Alarm::Alarm(const Time& alarmTime, bool enabled)
         : BaseModelData{}, alarmTime_{alarmTime}, alarmEnabled_{enabled}
     {}
 
-    void AlarmData::setAlarmTime(const Time& time) {
+    void Alarm::setTime(const Time& time) {
         bool valueChanged = setIfDifferent(alarmTime_, time);
 
         if (valueChanged) notifyObservers();
     }
 
-    void AlarmData::setAlarmEnabled(bool enabled) {
+    void Alarm::setEnabled(bool enabled) {
         bool valueChanged = setIfDifferent(alarmEnabled_, enabled);
 
         if (valueChanged) notifyObservers();
     }
 
-    void AlarmData::setAlarm(const Time& alarm, bool enabled) {
+    void Alarm::setAlarm(const Time& alarm, bool enabled) {
         bool valueChanged {false};
 
         {
