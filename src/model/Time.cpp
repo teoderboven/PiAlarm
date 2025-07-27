@@ -41,6 +41,15 @@ namespace PiAlarm::model {
         return std::chrono::seconds(diff);
     }
 
+    std::chrono::seconds Time::secondsUntil(const Time& other) const {
+        const int thisSec = toSeconds();
+        const int otherSec = other.toSeconds();
+        int diff = otherSec - thisSec;
+        if (diff < 0)
+            diff += 24 * 3600;
+        return std::chrono::seconds(diff);
+    }
+
     int Time::toSeconds() const {
         return hour_ * 3600 + minute_ * 60 + second_;
     }

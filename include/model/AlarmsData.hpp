@@ -256,11 +256,10 @@ namespace PiAlarm::model {
         AlarmType* nextAlarm {nullptr};
         std::chrono::seconds minDiff {std::chrono::seconds::max()};
 
-        for (std::size_t i {0}; i < alarmCount_; ++i) {
-            const Alarm& alarm = alarms_[i];
+        for (const auto& alarm : *this) {
 
             if (alarm.isEnabled()) {
-                std::chrono::seconds diff {alarm.getTime().secondsSince(currentTime)};
+                std::chrono::seconds diff {currentTime.secondsUntil(alarm.getTime())};
 
                 if (diff.count() > 0 && diff < minDiff) {
                     minDiff = diff;

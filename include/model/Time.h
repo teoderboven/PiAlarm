@@ -86,6 +86,20 @@ namespace PiAlarm::model {
          */
         std::chrono::seconds secondsSince(const Time& other) const;
 
+        /**
+         * Calculates the number of seconds until another time.
+         *
+         * This method returns the remaining time in seconds until a reference time (`other`)
+         * from the current time (`*this`). It assumes a 24-hour cyclical day. If `*this`
+         * represents a later time than `other`, the calculation wraps around midnight.
+         *
+         * @param other The reference time to compare with.
+         * @return std::chrono::seconds Number of seconds until `other`.
+         *
+         * @note The result is always non-negative and ranges from 0 to 86399 seconds.
+         */
+        std::chrono::seconds secondsUntil(const Time& other) const;
+
         bool operator==(const Time& other) const;
         bool operator!=(const Time& other) const;
         bool operator<(const Time& other) const;
