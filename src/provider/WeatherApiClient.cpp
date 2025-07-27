@@ -39,11 +39,15 @@ namespace PiAlarm::provider {
     cpr::Response WeatherApiClient::makeRequest() const {
         logger().debug("Making request to weather API: {}", weatherApiUrl_.str());
 
-        return cpr::Get(
+        auto res = cpr::Get(
             weatherApiUrl_,
             cpr::Timeout{std::chrono::seconds(20)},
             cpr::Header{{"Accept", "application/json"}}
         );
+
+        logger().debug("Response received");
+
+        return res;
     }
 
     std::optional<WeatherError> WeatherApiClient::checkForErrors(const cpr::Response& response) {
