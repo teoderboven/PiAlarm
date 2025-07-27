@@ -1,5 +1,5 @@
-#ifndef CONSOLEUTILS_H
-#define CONSOLEUTILS_H
+#ifndef CONSOLEUTILS_HPP
+#define CONSOLEUTILS_HPP
 
 #ifdef _WIN32
 #include <windows.h>
@@ -48,4 +48,4 @@ namespace PiAlarm::utils {
 
 } // namespace PiAlarm::utils
 
-#endif //CONSOLEUTILS_H
+#endif //CONSOLEUTILS_HPP

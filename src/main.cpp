@@ -1,6 +1,6 @@
 #include <thread>
 
-#include "utils/consoleUtils.h"
+#include "utils/consoleUtils.hpp"
 #include "display/DisplayConfig.hpp"
 #include "model/AlarmsData.hpp"
 #include "model/ClockData.hpp"

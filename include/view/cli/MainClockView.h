@@ -1,6 +1,10 @@
 #ifndef MAINCLOCKVIEW_H
 #define MAINCLOCKVIEW_H
 
+#include <string>
+#include <vector>
+#include <utility>
+
 #include "view/cli/BaseCliView.h"
 #include "model/AlarmsData.hpp"
 #include "model/ClockData.hpp"
@@ -65,6 +69,14 @@ namespace PiAlarm::view::cli {
         void render(DisplayType& display) override;
 
     private:
+
+        /**
+         * @brief Displays labels on the display.
+         * Labels are displayed in a formatted manner, ensuring that the longest label is aligned properly.
+         * @param display The display to render the labels on.
+         * @param labels A vector of pairs containing label names and their values.
+         */
+        void displayLabels(DisplayType& display, const std::vector<std::pair<std::string, std::string>>& labels);
 
         /**
          * @brief Formats a value for display.
