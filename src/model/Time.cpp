@@ -9,11 +9,12 @@ namespace PiAlarm::model {
         auto now = std::chrono::system_clock::now();
         auto time = std::chrono::system_clock::to_time_t(now);
         std::tm* tm = std::localtime(&time);
+
         return Time(tm->tm_hour, tm->tm_min, tm->tm_sec);
     }
 
-    Time::Time(const int& hour, const int& minute, const int& second)
-        : hour_{hour}, minute_{minute}, second_{second}
+    Time::Time(int hour, int minute, int second)
+        : sinceMidnight_{std::chrono::hours(hour) + std::chrono::minutes(minute) + std::chrono::seconds(second)}
     {
         if (hour < 0 || hour > 23) {
             std::ostringstream oss;
@@ -32,71 +33,24 @@ namespace PiAlarm::model {
         }
     }
 
-    std::chrono::seconds Time::secondsSince(const Time& other) const {
-        const int thisSec = toSeconds();
-        const int otherSec = other.toSeconds();
-        int diff = thisSec - otherSec;
-        if (diff < 0)
-            diff += 24 * 3600;
-        return std::chrono::seconds(diff);
-    }
-
-    std::chrono::seconds Time::secondsUntil(const Time& other) const {
-        const int thisSec = toSeconds();
-        const int otherSec = other.toSeconds();
-        int diff = otherSec - thisSec;
-        if (diff < 0)
-            diff += 24 * 3600;
-        return std::chrono::seconds(diff);
-    }
-
-    int Time::toSeconds() const {
-        return hour_ * 3600 + minute_ * 60 + second_;
+    Time::Time(std::chrono::seconds sinceMidnight) {
+        auto s = sinceMidnight.count();
+        // Ensure the seconds are within the range of a day (0 to 86399)
+        s = ((s % 86400) + 86400) % 86400;
+        sinceMidnight_ = std::chrono::seconds(s);
     }
 
     std::string Time::toString(bool includeSeconds) const {
         std::ostringstream oss;
-        oss << std::setfill('0') << std::setw(2) << hour_ << ":"
-            << std::setw(2) << minute_;
+        oss << std::setfill('0') << std::setw(2) << hour() << ":"
+            << std::setw(2) << minute();
 
         if (includeSeconds) {
             oss << ":"
-                << std::setw(2) << second_;
+                << std::setw(2) << second();
         }
 
         return oss.str();
-    }
-
-    bool Time::operator==(const Time& other) const {
-        return hour_ == other.hour_ &&
-               minute_ == other.minute_ &&
-               second_ == other.second_;
-    }
-
-    bool Time::operator!=(const Time& other) const {
-        return !(*this == other);
-    }
-
-    bool Time::operator<(const Time& other) const {
-        if (hour_ != other.hour_) return hour_ < other.hour_;
-        if (minute_ != other.minute_) return minute_ < other.minute_;
-        return second_ < other.second_;
-    }
-
-    bool Time::operator<=(const Time& other) const {
-        return *this < other || *this == other;
-    }
-
-    bool Time::operator>(const Time& other) const {
-        return !(*this <= other);
-    }
-
-    bool Time::operator>=(const Time& other) const {
-        return !(*this < other);
-    }
-
-    std::ostream& operator<<(std::ostream& os, const Time& time) {
-        return os << time.toString();
     }
 
 } // namespace PiAlarm::model
