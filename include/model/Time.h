@@ -105,6 +105,26 @@ namespace PiAlarm::model {
         inline bool operator==(const Time& other) const; ///< Checks if two Time objects are equal.
         inline bool operator!=(const Time& other) const; ///< Checks if two Time objects are not equal.
 
+        /**
+         * @brief Adds a duration to the current time.
+         * @tparam Rep The representation type of the duration (e.g., int, long).
+         * @tparam Period The period type of the duration (e.g., std::chrono::seconds).
+         * @param duration The duration to add.
+         * @return A new Time object representing the time after adding the duration.
+         */
+        template<typename Rep, typename Period>
+        Time operator+(const std::chrono::duration<Rep, Period>& duration) const;
+
+        /**
+         * @brief Subtracts a duration from the current time.
+         * @tparam Rep The representation type of the duration (e.g., int, long).
+         * @tparam Period The period type of the duration (e.g., std::chrono::seconds).
+         * @param duration The duration to subtract.
+         * @return A new Time object representing the time after subtracting the duration.
+         */
+        template<typename Rep, typename Period>
+        Time operator-(const std::chrono::duration<Rep, Period>& duration) const;
+
     };
 
     std::ostream& operator<<(std::ostream& os, const Time& time);
@@ -138,6 +158,16 @@ namespace PiAlarm::model {
 
     inline bool Time::operator!=(const Time& other) const {
         return sinceMidnight_ != other.sinceMidnight_;
+    }
+
+    template<typename Rep, typename Period>
+    Time Time::operator+(const std::chrono::duration<Rep, Period>& duration) const {
+        return Time(sinceMidnight_ + std::chrono::duration_cast<std::chrono::seconds>(duration));
+    }
+
+    template<typename Rep, typename Period>
+    Time Time::operator-(const std::chrono::duration<Rep, Period>& duration) const {
+        return Time(sinceMidnight_ - std::chrono::duration_cast<std::chrono::seconds>(duration));
     }
 
     inline std::ostream& operator<<(std::ostream& os, const Time& time) {
