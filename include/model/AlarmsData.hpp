@@ -257,20 +257,19 @@ namespace PiAlarm::model {
         std::chrono::seconds minDiff {std::chrono::seconds::max()};
 
         for (const auto& alarm : *this) {
+            if (!alarm.isEnabled()) continue;
 
-            if (alarm.isEnabled()) {
-                std::chrono::seconds diff {currentTime.secondsUntil(alarm.getTime())};
+            std::chrono::seconds diff {currentTime.secondsUntil(alarm.getTime())};
 
-                if (diff.count() > 0 && diff < minDiff) {
-                    minDiff = diff;
-                    /*
-                     * We use const_cast here because we are returning a pointer to AlarmType,
-                     * which could be either Alarm or const Alarm.
-                     * This is safe as we are only reading the alarm data, not modifying it.
-                     * Real alarms are non-const, so we can safely cast to non-const.
-                     */
-                    nextAlarm = const_cast<AlarmType*>(&alarm);
-                }
+            if (diff.count() > 0 && diff < minDiff) {
+                minDiff = diff;
+                /*
+                 * We use const_cast here because we are returning a pointer to AlarmType,
+                 * which could be either Alarm or const Alarm.
+                 * This is safe as we are only reading the alarm data, not modifying it.
+                 * Real alarms are non-const, so we can safely cast to non-const.
+                 */
+                nextAlarm = const_cast<AlarmType*>(&alarm);
             }
         }
 

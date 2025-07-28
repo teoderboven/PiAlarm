@@ -15,7 +15,7 @@ namespace PiAlarm::model {
      *
      * This class extends the Observable class to notify observers of changes in the clock data.
      */
-    class Alarm final : public BaseModelData,  public common::Observable{
+    class Alarm final : public BaseModelData, public common::Observable {
         Time alarmTime_;
         bool alarmEnabled_ = false;
 
