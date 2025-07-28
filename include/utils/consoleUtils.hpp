@@ -19,6 +19,8 @@ namespace PiAlarm::utils {
      */
     void setup_console() {
 #ifdef _WIN32
+        if (IsDebuggerPresent()) return;
+
         // Set windows console to UTF-8
         SetConsoleOutputCP(CP_UTF8);
         SetConsoleCP(CP_UTF8);
