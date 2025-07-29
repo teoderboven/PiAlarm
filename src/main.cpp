@@ -51,7 +51,7 @@ int main(int argc, char *argv[]) {
     };
 
     // Controllers
-    controller::AlarmController alarmController{alarms_data};
+    controller::AlarmController alarmController{alarms_data, alarmManager};
 
     // Providers
     provider::WeatherApiClient api {};
