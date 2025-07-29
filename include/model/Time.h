@@ -64,6 +64,17 @@ namespace PiAlarm::model {
         inline int second() const;
 
         /**
+         * @brief Checks if the time is between two other times.
+         * This method checks if the current time is greater than or equal to `start`
+         * and less than `end`. It handles cases where the range wraps around midnight.
+         * @param start The start time of the range.
+         * @param end The end time of the range.
+         * @return True if the current time is within the range, false otherwise.
+         */
+        [[nodiscard]]
+        bool isBetween(const Time& start, const Time& end) const;
+
+        /**
          * @brief Converts the time to a formatted string.
          * Converts the time to a string in the format "HH:MM" or "HH:MM:SS"
          * @param includeSeconds If true, includes seconds in the output string. Default is true.
@@ -104,6 +115,10 @@ namespace PiAlarm::model {
 
         inline bool operator==(const Time& other) const; ///< Checks if two Time objects are equal.
         inline bool operator!=(const Time& other) const; ///< Checks if two Time objects are not equal.
+        inline bool operator<(const Time& other) const;  ///< Checks if this Time is less than another.
+        inline bool operator<=(const Time& other) const; ///< Checks if this Time is less than or equal to another.
+        inline bool operator>(const Time& other) const;  ///< Checks if this Time is greater
+        inline bool operator>=(const Time& other) const; ///< Checks if this Time is greater than or equal to another.
 
         /**
          * @brief Adds a duration to the current time.
@@ -158,6 +173,22 @@ namespace PiAlarm::model {
 
     inline bool Time::operator!=(const Time& other) const {
         return sinceMidnight_ != other.sinceMidnight_;
+    }
+
+    inline bool Time::operator<(const Time& other) const {
+        return sinceMidnight_ < other.sinceMidnight_;
+    }
+
+    inline bool Time::operator<=(const Time& other) const {
+        return sinceMidnight_ <= other.sinceMidnight_;
+    }
+
+    inline bool Time::operator>(const Time& other) const {
+        return sinceMidnight_ > other.sinceMidnight_;
+    }
+
+    inline bool Time::operator>=(const Time& other) const {
+        return sinceMidnight_ >= other.sinceMidnight_;
     }
 
     template<typename Rep, typename Period>

@@ -40,6 +40,14 @@ namespace PiAlarm::model {
         sinceMidnight_ = std::chrono::seconds(s);
     }
 
+    bool Time::isBetween(const Time& start, const Time& end) const {
+        if (start <= end) {
+            return *this >= start && *this < end;
+        }
+        // if the range wraps around midnight
+        return *this >= start || *this < end;
+    }
+
     std::string Time::toString(bool includeSeconds) const {
         std::ostringstream oss;
         oss << std::setfill('0') << std::setw(2) << hour() << ":"
