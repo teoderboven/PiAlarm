@@ -10,17 +10,20 @@ namespace PiAlarm::view::cli {
 
     MainClockView::MainClockView(
         const model::AlarmsData& alarmsData,
+        const model::AlarmState& alarmStateData,
         const model::ClockData &clockData,
         const model::CurrentWeatherData &currentWeatherData,
         const model::TemperatureSensorData& temperatureSensorData
         )
         : BaseCliView{true},
         alarmsData_{alarmsData},
+        alarmStateData_{alarmStateData},
         clockData_{clockData},
         currentWeatherData_{currentWeatherData},
         temperatureSensorData_{temperatureSensorData}
     {
         alarmsData_.addObserver(this);
+        alarmStateData_.addObserver(this);
         clockData_.addObserver(this);
         currentWeatherData_.addObserver(this);
         temperatureSensorData_.addObserver(this);
@@ -50,7 +53,7 @@ namespace PiAlarm::view::cli {
 
         std::vector<std::pair<std::string, std::string>> labels = {
             { "Heure actuelle", formattedTime(currentTime_) },
-            { "Prochaine sonnerie à", formattedTime(nextAlarmTime_, hasAlarmEnabled_) },
+            { "Etat de l'alarme", getAlarmStatus() },
             { "Nombre d'alarmes actives", std::to_string(enabledAlarmCount_) },
             { "", "" },
 
@@ -123,6 +126,22 @@ namespace PiAlarm::view::cli {
         if (!valid) return "???";
 
         return utils::getLocalizedWeatherCondition(condition, locale);
+    }
+
+    std::string MainClockView::getAlarmStatus() const {
+        if (!hasAlarmEnabled_)
+            return "Aucune alarme activée";
+
+        if (!alarmStateData_.hasTriggeredAlarm())
+            return "Prochaine alarme à " + nextAlarmTime_.toString();
+
+        if (alarmStateData_.isAlarmRinging())
+            return "Alarme en cours";
+
+        if (alarmStateData_.isAlarmSnoozed())
+            return "Alarme en pause";
+
+        return "???";
     }
 
 } // namespace PiAlarm::view::cli

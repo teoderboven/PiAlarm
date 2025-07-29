@@ -68,6 +68,7 @@ int main(int argc, char *argv[]) {
     viewManager.addView(
         std::make_unique<view::cli::MainClockView>(
             alarms_data,
+            alarmManager.getAlarmState(),
             clock_data,
             currentWeather_data,
             temperatureSensor_data

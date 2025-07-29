@@ -7,6 +7,7 @@
 
 #include "view/cli/BaseCliView.h"
 #include "model/AlarmsData.hpp"
+#include "model/AlarmState.hpp"
 #include "model/ClockData.hpp"
 #include "model/CurrentWeatherData.h"
 #include "model/TemperatureSensorData.hpp"
@@ -27,6 +28,7 @@ namespace PiAlarm::view::cli {
      */
     class MainClockView final : public BaseCliView {
         const model::AlarmsData& alarmsData_; ///< Reference to the alarms data model
+        const model::AlarmState& alarmStateData_; ///< Reference to the alarm state data model
         const model::ClockData& clockData_; ///< Reference to the clock data model
         const model::CurrentWeatherData& currentWeatherData_; ///< Reference to the current weather data model
         const model::TemperatureSensorData& temperatureSensorData_; ///< Reference to the temperature sensor data model
@@ -53,12 +55,14 @@ namespace PiAlarm::view::cli {
         /**
          * @brief Constructor for MainClockView.
          * @param alarmsData Reference to the alarms data model.
+         * @param alarmStateData Reference to the alarm state data model.
          * @param clockData Reference to the clock data model.
          * @param currentWeatherData Reference to the current weather data model.
          * @param temperatureSensorData Reference to the temperature sensor data model.
          */
         MainClockView(
             const model::AlarmsData& alarmsData,
+            const model::AlarmState& alarmStateData,
             const model::ClockData& clockData,
             const model::CurrentWeatherData& currentWeatherData,
             const model::TemperatureSensorData& temperatureSensorData
@@ -77,6 +81,14 @@ namespace PiAlarm::view::cli {
          * @param labels A vector of pairs containing label names and their values.
          */
         void displayLabels(DisplayType& display, const std::vector<std::pair<std::string, std::string>>& labels);
+
+        /**
+         * @brief Gets the current alarm status.
+         * This method checks if there is an enabled alarm and returns a string representation of the alarm status.
+         * @return A string indicating the current alarm status.
+         */
+        [[nodiscard]]
+        std::string getAlarmStatus() const;
 
         /**
          * @brief Formats a value for display.
