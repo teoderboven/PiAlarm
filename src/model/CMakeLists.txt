@@ -9,6 +9,7 @@ set(SOURCES
         Time.cpp
         Alarm.cpp
         AlarmsData.cpp
+        AlarmState.cpp
         ClockData.cpp
         TemperatureSensorData.cpp
         CurrentWeatherData.cpp
