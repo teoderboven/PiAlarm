@@ -45,6 +45,7 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
         PiAlarm_controller
         PiAlarm_service
         PiAlarm_provider
+        PiAlarm_model_manager
         PiAlarm_model
 )
 

@@ -6,6 +6,7 @@
 #include "model/ClockData.hpp"
 #include "model/CurrentWeatherData.h"
 #include "model/TemperatureSensorData.hpp"
+#include "model/manager/AlarmManager.h"
 #include "controller/AlarmController.h"
 #include "view/manager/ViewManager.h"
 #include "view/cli/MainClockView.h"
@@ -40,6 +41,14 @@ int main(int argc, char *argv[]) {
     model::AlarmsData alarms_data{3};
     model::CurrentWeatherData currentWeather_data;
     model::TemperatureSensorData temperatureSensor_data;
+
+    // Model Manager
+    model::manager::AlarmManager alarmManager{
+        clock_data,
+        alarms_data,
+        std::chrono::minutes{5}, // Snooze duration
+        std::chrono::minutes{60} // Ring duration
+    };
 
     // Controllers
     controller::AlarmController alarmController{alarms_data};
