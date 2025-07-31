@@ -24,6 +24,10 @@
 *.app
 *.out
 
+# Allow specific shared libraries in external directory
+!external/**/*.dll
+!external/**/*.so
+
 # Build folders
 release/
 debug/
