@@ -44,3 +44,21 @@ elseif(UNIX AND NOT APPLE) # Linux
 else()
     message(FATAL_ERROR "Unsupported platform: ${CMAKE_SYSTEM_NAME}")
 endif()
+
+# Copy the BASS runtime library to the output directory after building targets that link against it
+# This is necessary for the application to run correctly, as it needs the BASS library at runtime.
+# The function `copy_bass_dll_to_target` can be called for each target that links against `bass`.
+function(copy_bass_dll_to_target target)
+    get_target_property(BASS_RUNTIME_PATH bass IMPORTED_LOCATION)
+
+    if(EXISTS "${BASS_RUNTIME_PATH}")
+        add_custom_command(TARGET ${target} POST_BUILD
+                COMMAND ${CMAKE_COMMAND} -E copy_if_different
+                "${BASS_RUNTIME_PATH}"
+                $<TARGET_FILE_DIR:${target}>
+        )
+    else()
+        message(WARNING "IMPORTED_LOCATION for `bass` is not set or does not exist: ${BASS_RUNTIME_PATH}")
+    endif()
+endfunction()
+

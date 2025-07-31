@@ -61,6 +61,7 @@ else()
     )
 endif ()
 
+copy_bass_dll_to_target(${PROJECT_NAME})
 
 target_compile_definitions(PiAlarm_logging PRIVATE LOG_LEVEL="${LOG_LEVEL}")
 
