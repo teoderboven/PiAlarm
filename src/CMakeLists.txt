@@ -30,6 +30,7 @@ endif()
 
 add_subdirectory(controller)
 add_subdirectory(logging)
+add_subdirectory(media)
 add_subdirectory(model)
 add_subdirectory(provider)
 add_subdirectory(service)
@@ -47,6 +48,7 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
         PiAlarm_provider
         PiAlarm_model_manager
         PiAlarm_model
+        PiAlarm_media
 )
 
 if(DISPLAY_SSD1322)
