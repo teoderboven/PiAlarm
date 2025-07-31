@@ -3,6 +3,7 @@
 
 #include "bass.h"
 #include "AudioTypes.h"
+#include "BassContext.hpp"
 #include <string>
 #include <vector>
 #include <thread>
@@ -18,6 +19,8 @@ namespace PiAlarm::media {
      * This class utilizes the BASS audio library to play and manage audio streams.
      */
     class MusicPlayer {
+        BassContext bassContext_; ///< RAII context for BASS initialization and cleanup.
+
         const std::string folderPath_; ///< Path to the folder containing audio files.
         std::vector<std::string> playlist_; ///< List of audio files in the playlist.
         std::atomic<bool> running_; ///< Flag to indicate if the player is running.

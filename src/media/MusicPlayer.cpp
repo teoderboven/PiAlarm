@@ -12,15 +12,10 @@ namespace PiAlarm::media {
 
     MusicPlayer::MusicPlayer(std::string folderPath)
         : folderPath_(std::move(folderPath)), running_(false)
-    {
-        if (!BASS_Init(-1, 44100, 0, nullptr, nullptr)) {
-            throw std::runtime_error("Failed to initialize BASS");
-        }
-    }
+    {}
 
     MusicPlayer::~MusicPlayer() {
         stop();
-        BASS_Free();
     }
 
     void MusicPlayer::start() {
