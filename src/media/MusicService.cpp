@@ -14,11 +14,11 @@ namespace PiAlarm::media {
         if (!atLeastOnePlayable(playlist)) {
             logger().warn("No valid tracks found in primary folder, falling back to: {}", fallbackFolder_.string());
             playlist = loadPlaylist(fallbackFolder_);
-        }
 
-        if (!atLeastOnePlayable(playlist)) {
-            logger().error("No valid tracks found in both folders.");
-            return;
+            if (!atLeastOnePlayable(playlist)) {
+                logger().error("No valid tracks found in both folders.");
+                return;
+            }
         }
 
         musicPlayer_.start(playlist);
