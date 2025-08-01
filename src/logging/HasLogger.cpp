@@ -98,7 +98,6 @@ namespace PiAlarm::logging {
                 sink->set_pattern("[%Y-%m-%d %H:%M:%S.%e] [%n] [%l] %v");
 
                 global_logger = std::make_shared<spdlog::logger>("global", sink);
-                global_logger->set_pattern("[%Y-%m-%d %H:%M:%S.%e] [%l] [%n] %v");
                 spdlog::register_logger(global_logger);
                 spdlog::set_default_logger(global_logger);
                 spdlog::set_level(parseLogLevel(LOG_LEVEL)); // use macro

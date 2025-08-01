@@ -4,6 +4,7 @@
 #include "bass.h"
 #include <mutex>
 #include <stdexcept>
+#include "logging/HasLogger.h"
 
 namespace PiAlarm::media {
 
@@ -15,7 +16,7 @@ namespace PiAlarm::media {
      * and automatically freed when the last instance is destroyed.
      * Thread-safe.
      */
-    class BassContext {
+    class BassContext : public logging::HasLogger{
         static inline std::mutex mutex_; ///< Mutex for thread safety
         static inline int instanceCount_ {0}; ///< Count of active instances
 
@@ -32,7 +33,7 @@ namespace PiAlarm::media {
          * @brief Destructor
          * Frees BASS if this is the last instance.
          */
-        inline ~BassContext();
+        inline ~BassContext() override;
 
         BassContext(const BassContext&) = delete; ///< No copy constructor
         BassContext& operator=(const BassContext&) = delete; ///< No copy assignment operator
@@ -43,15 +44,17 @@ namespace PiAlarm::media {
 
     // Methods implementations
 
-    inline BassContext::BassContext() {
+    inline BassContext::BassContext(): HasLogger("BassContext") {
         std::lock_guard lock{mutex_};
 
         if (++instanceCount_ == 1) {
-
             if (!BASS_Init(-1, 44100, 0, nullptr, nullptr)) {
                 --instanceCount_; // roll back on failure
+
+                logger().error("Failed to initialize BASS: code = {}", BASS_ErrorGetCode());
                 throw std::runtime_error("Failed to initialize BASS.");
             }
+            logger().info("Successfully initialized BASS.");
         }
     }
 
@@ -60,6 +63,7 @@ namespace PiAlarm::media {
 
         if (--instanceCount_ == 0) {
             BASS_Free();
+            logger().debug("BASS has been freed.");
         }
     }
 

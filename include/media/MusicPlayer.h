@@ -4,6 +4,7 @@
 #include "bass.h"
 #include "AudioTypes.h"
 #include "BassContext.hpp"
+#include "logging/HasLogger.h"
 #include <string>
 #include <vector>
 #include <thread>
@@ -18,7 +19,7 @@ namespace PiAlarm::media {
      * Audio files are played in a loop or in a shuffled playlist mode with smooth crossfade transitions.
      * This class utilizes the BASS audio library to play and manage audio streams.
      */
-    class MusicPlayer {
+    class MusicPlayer : public logging::HasLogger {
         BassContext bassContext_; ///< RAII context for BASS initialization and cleanup.
 
         const std::string folderPath_; ///< Path to the folder containing audio files.
@@ -41,7 +42,7 @@ namespace PiAlarm::media {
          * @brief Destructor for MusicPlayer.
          * Stops playback and releases all associated resources.
          */
-        ~MusicPlayer();
+        ~MusicPlayer() override;
 
         /**
          * @brief Starts the music playback loop in a separate thread.
@@ -129,14 +130,14 @@ namespace PiAlarm::media {
          * @brief Stops and frees the specified audio stream.
          * @param stream The audio stream to clean up.
          */
-        static void cleanupStream(AudioStream stream);
+        void cleanupStream(AudioStream stream);
 
         /**
          * @brief Scans a folder for supported audio files (.mp3, .wav).
          * @param folder Path to the folder to scan.
          * @return List of audio file paths found in the folder.
          */
-        static std::vector<std::string> getFiles(const std::string& folder);
+        std::vector<std::string> getFiles(const std::string& folder);
     };
 
 } // namespace PiAlarm::media
