@@ -1,11 +1,10 @@
 #ifndef MUSICPLAYER_H
 #define MUSICPLAYER_H
 
-#include "bass.h"
 #include "AudioTypes.h"
 #include "BassContext.hpp"
 #include "logging/HasLogger.h"
-#include <string>
+#include <filesystem>
 #include <vector>
 #include <thread>
 #include <atomic>
@@ -22,21 +21,20 @@ namespace PiAlarm::media {
     class MusicPlayer : public logging::HasLogger {
         BassContext bassContext_; ///< RAII context for BASS initialization and cleanup.
 
-        const std::string folderPath_; ///< Path to the folder containing audio files.
-        std::vector<std::string> playlist_; ///< List of audio files in the playlist.
         std::atomic<bool> running_; ///< Flag to indicate if the player is running.
         std::thread playerThread_; ///< Thread running the music playback loop.
 
         static constexpr float FADE_DURATION = 3.0f; ///< Duration for volume fade in seconds.
 
     public:
+        using Track = std::filesystem::path; ///< Type alias for a single audio track path.
+        using Playlist = std::vector<Track>; ///< Type alias for a playlist of audio file paths.
 
         /**
          * @brief Constructor for MusicPlayer.
-         * @param folderPath Path to the folder containing audio files.
-         * Initializes the BASS library.
+         * Initializes the BASS audio library and prepares the player for playback.
          */
-        explicit MusicPlayer(std::string folderPath);
+        MusicPlayer();
 
         /**
          * @brief Destructor for MusicPlayer.
@@ -45,47 +43,57 @@ namespace PiAlarm::media {
         ~MusicPlayer() override;
 
         /**
-         * @brief Starts the music playback loop in a separate thread.
-         * Loads the playlist and plays tracks either in loop or with crossfade transitions.
+         * @brief Starts the music playback loop with the specified playlist.
+         * If the playlist contains only one track, it plays that track in a loop.
+         * If multiple tracks are available, it plays them with crossfade transitions.
+         * @param playlist A vector of strings containing paths to audio files.
          */
-        void start();
+        void start(const Playlist& playlist);
 
         /**
          * @brief Stops the music playback loop and releases audio resources.
          */
         void stop();
 
+        /**
+         * @brief Checks if the given path is a playable audio file.
+         * @note This method loads the file to verify its playability.
+         * @param path Path to the audio file.
+         * @return True if the file is playable, false otherwise.
+         */
+        static bool isPlayable(const std::filesystem::path& path);
+
     private:
 
         /**
-         * @brief Main playback loop running in a background thread.
-         * Chooses the appropriate playback strategy based on the playlist content.
+         * @brief The main loop for the music player.
+         * This function runs in a separate thread and handles playback of the playlist.
+         * It plays tracks in a loop or with crossfade transitions as needed.
+         * @param playlist The playlist to play, represented as a vector of Track paths.
          */
-        void playerLoop();
+        void playerLoop(Playlist playlist);
 
         /**
-         * @brief Plays a single track in an infinite loop.
-         * Used when only one track is available in the playlist.
+         * @brief Plays a single track in a loop.
+         * This method is used when the playlist contains only one track.
+         * It plays the track continuously until stopped.
+         * @param track The track to play, represented as a Track path.
          */
-        void playSingleTrackLooped();
+        void playSingleTrackLooped(const Track& track);
 
         /**
-         * @brief Plays the entire playlist with crossfade transitions.
-         * Each track is played with a smooth transition to the next.
+         * @brief Plays a playlist with crossfade transitions between tracks.
+         * This method handles the playback of multiple tracks with smooth volume transitions.
+         * @param playlist The playlist to play, represented as a vector of Track paths.
          */
-        void playPlaylistWithCrossfade();
-
-        /**
-         * @brief Scans the folder and populates the playlist with audio files.
-         */
-        void loadPlaylist();
+        void playPlaylistWithCrossfade(const Playlist& playlist);
 
         /**
          * @brief Starts playback of the track at the given index.
-         * @param index Index of the track to play in the playlist.
+         * @param track The track to play, represented as a string path.
          * @return AudioStream handle representing the active stream.
          */
-        AudioStream playTrack(size_t index);
+        AudioStream playTrack(const Track& track);
 
         /**
          * @brief Waits until the current track is near its end.
@@ -132,12 +140,6 @@ namespace PiAlarm::media {
          */
         void cleanupStream(AudioStream stream);
 
-        /**
-         * @brief Scans a folder for supported audio files (.mp3, .wav).
-         * @param folder Path to the folder to scan.
-         * @return List of audio file paths found in the folder.
-         */
-        std::vector<std::string> getFiles(const std::string& folder);
     };
 
 } // namespace PiAlarm::media

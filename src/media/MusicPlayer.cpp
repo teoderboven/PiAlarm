@@ -1,28 +1,23 @@
 #include "media/MusicPlayer.h"
 #include <filesystem>
-#include <algorithm>
 #include <random>
 #include <chrono>
-#include <iostream>
-#include <utility>
 
 namespace PiAlarm::media {
 
-    namespace fs = std::filesystem;
-
-    MusicPlayer::MusicPlayer(std::string folderPath)
-        : HasLogger("MusicPlayer"), folderPath_(std::move(folderPath)), running_(false)
+    MusicPlayer::MusicPlayer()
+        : HasLogger("MusicPlayer"), running_(false)
     {}
 
     MusicPlayer::~MusicPlayer() {
         stop();
     }
 
-    void MusicPlayer::start() {
+    void MusicPlayer::start(const Playlist& playlist) {
         if (running_) return;
 
         running_ = true;
-        playerThread_ = std::thread(&MusicPlayer::playerLoop, this);
+        playerThread_ = std::thread(&MusicPlayer::playerLoop, this, playlist);
     }
 
     void MusicPlayer::stop() {
@@ -35,25 +30,24 @@ namespace PiAlarm::media {
         }
     }
 
-    void MusicPlayer::playerLoop() {
-        loadPlaylist();
+    void MusicPlayer::playerLoop(Playlist playlist) {
 
-        if (playlist_.empty()) {
+        if (playlist.empty()) {
             logger().warn("Playlist is empty.");
             return;
         }
 
-        if (playlist_.size() == 1) {
-            playSingleTrackLooped();
+        if (playlist.size() == 1) {
+            playSingleTrackLooped(playlist[0]);
         } else {
-            playPlaylistWithCrossfade();
+            playPlaylistWithCrossfade(playlist);
         }
     }
 
-    void MusicPlayer::playSingleTrackLooped() {
-        logger().info("Playing single track in loop: {}", playlist_[0]);
+    void MusicPlayer::playSingleTrackLooped(const Track& track) {
+        logger().info("Playing single track in loop: {}", track.string());
 
-        AudioStream stream = BASS_StreamCreateFile(FALSE, playlist_[0].c_str(), 0, 0, BASS_SAMPLE_LOOP);
+        AudioStream stream = BASS_StreamCreateFile(FALSE, track.c_str(), 0, 0, BASS_SAMPLE_LOOP);
         if (!stream) {
             logger().error("Failed to play single track.");
             return;
@@ -71,24 +65,24 @@ namespace PiAlarm::media {
         cleanupStream(stream);
     }
 
-    void MusicPlayer::playPlaylistWithCrossfade() {
+    void MusicPlayer::playPlaylistWithCrossfade(const Playlist& playlist) {
         size_t currentIndex = 0;
 
         logger().info("Playing playlist with crossfade.");
 
-        AudioStream current = playTrack(currentIndex);
+        AudioStream current = playTrack(playlist[currentIndex]);
 
         std::thread fadeInThread(&MusicPlayer::fadeIn, this, current);
         fadeInThread.join();
 
         do {
-            logger().debug("Playing track: {}", playlist_[currentIndex]);
+            logger().debug("Playing track: {}", playlist[currentIndex].string());
 
             waitBeforeTransition(current);
             if (!running_) break;
 
-            currentIndex = (currentIndex + 1) % playlist_.size();
-            AudioStream next = playTrack(currentIndex);
+            currentIndex = (currentIndex + 1) % playlist.size();
+            AudioStream next = playTrack(playlist[currentIndex]);
             if (!next) break;
 
             crossfade(current, next);
@@ -100,30 +94,21 @@ namespace PiAlarm::media {
         cleanupStream(current);
     }
 
-    void MusicPlayer::loadPlaylist() {
-        playlist_ = getFiles(folderPath_);
-        std::ranges::shuffle(playlist_, std::mt19937{std::random_device{}()});
+    AudioStream MusicPlayer::playTrack(const Track& track) {
+        const AudioStream stream = BASS_StreamCreateFile(FALSE, track.c_str(), 0, 0, BASS_SAMPLE_LOOP);
 
-        logger().info("Loaded {} tracks from folder: {}", playlist_.size(), folderPath_);
-    }
-
-    AudioStream MusicPlayer::playTrack(size_t index) {
-        if (index >= playlist_.size()) return 0;
-
-        auto streamPath = playlist_[index];
-        const AudioStream stream = BASS_StreamCreateFile(FALSE, streamPath.c_str(), 0, 0, BASS_SAMPLE_LOOP);
         if (stream) {
-            logger().debug("Successfully opened audio stream: {}", streamPath);
+            logger().debug("Successfully opened audio stream: {}", track.string());
 
             BASS_ChannelSetAttribute(stream, BASS_ATTRIB_VOL, 0);
             BASS_ChannelPlay(stream, FALSE);
         }else {
-            logger().error("Failed to open audio stream: {}. Error code: {}", streamPath, BASS_ErrorGetCode());
+            logger().error("Failed to open audio stream: {}. Error code: {}", track.string(), BASS_ErrorGetCode());
         }
         return stream;
     }
 
-    void MusicPlayer::waitBeforeTransition(AudioStream stream) {
+    void MusicPlayer::waitBeforeTransition(const AudioStream stream) {
         const AudioPosition length = BASS_ChannelGetLength(stream, BASS_POS_BYTE);
         const double totalSecs = BASS_ChannelBytes2Seconds(stream, length);
 
@@ -172,20 +157,12 @@ namespace PiAlarm::media {
         }
     }
 
-    std::vector<std::string> MusicPlayer::getFiles(const std::string& folder) {
-        std::vector<std::string> files;
+    bool MusicPlayer::isPlayable(const std::filesystem::path &path) {
+        const AudioStream stream = BASS_StreamCreateFile(FALSE, path.c_str(), 0, 0, BASS_SAMPLE_LOOP);
+        if (!stream) return false;
 
-        if (!fs::exists(folder)) {
-            logger().warn("Folder '{}' does not exist.", folder);
-            return files;
-        }
-
-        for (const auto& entry : fs::directory_iterator(folder)) {
-            if (entry.path().extension() == ".mp3" || entry.path().extension() == ".wav") {
-                files.push_back(entry.path().string());
-            }
-        }
-        return files;
+        BASS_StreamFree(stream);
+        return true;
     }
 
 } // namespace PiAlarm::media
