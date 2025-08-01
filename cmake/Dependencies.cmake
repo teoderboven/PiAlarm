@@ -17,6 +17,7 @@ FetchContent_Declare(
         GIT_REPOSITORY https://github.com/libcpr/cpr.git
         GIT_TAG        1.11.3
 )
+set(CURL_USE_LIBPSL OFF)
 FetchContent_MakeAvailable(cpr)
 
 FetchContent_Declare(
