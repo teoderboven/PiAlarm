@@ -1,6 +1,4 @@
 #include "media/MusicService.h"
-#include <filesystem>
-#include <algorithm>
 
 namespace PiAlarm::media {
 
@@ -9,43 +7,21 @@ namespace PiAlarm::media {
     {}
 
     void MusicService::start() {
-        auto playlist = loadPlaylist(folder_);
+        auto playlist = MusicPlayer::loadPlaylist(folder_);
 
-        if (!atLeastOnePlayable(playlist)) {
+        if (!MusicPlayer::hasAtLeastOnePlayable(playlist)) {
             logger().warn("No valid tracks found in primary folder, falling back to: {}", fallbackFolder_.string());
-            playlist = loadPlaylist(fallbackFolder_);
+            playlist = MusicPlayer::loadPlaylist(fallbackFolder_);
 
-            if (!atLeastOnePlayable(playlist)) {
+            if (!MusicPlayer::hasAtLeastOnePlayable(playlist)) {
                 logger().error("No valid tracks found in both folders.");
                 return;
             }
         }
 
+        MusicPlayer::shufflePlaylist(playlist);
+
         musicPlayer_.start(playlist);
-    }
-
-    MusicPlayer::Playlist MusicService::loadPlaylist(const fs::path& folder) const {
-        MusicPlayer::Playlist files;
-
-        if (!fs::exists(folder)) {
-            logger().error("Folder {} does not exist.", folder.string());
-            return files;
-        }
-
-        for (const auto& entry : fs::directory_iterator(folder)) {
-            const auto& path = entry.path();
-            if (path.extension() == ".mp3" || path.extension() == ".wav") {
-                files.push_back(path);
-            }
-        }
-
-        return files;
-    }
-
-    bool MusicService::atLeastOnePlayable(const MusicPlayer::Playlist& playlist) {
-        return std::ranges::any_of(playlist, [](const fs::path& path) {
-            return MusicPlayer::isPlayable(path);
-        });
     }
 
 } // namespace PiAlarm::media

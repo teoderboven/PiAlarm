@@ -6,7 +6,6 @@
 #include "media/MusicPlayer.h"
 #include "logging/HasLogger.h"
 
-
 namespace PiAlarm::media {
 
     namespace fs = std::filesystem;
@@ -44,25 +43,6 @@ namespace PiAlarm::media {
          * Stops the music player and releases all associated resources.
          */
         inline void stop();
-
-    private:
-
-        /**
-         * @brief Loads a playlist from the specified folder.
-         * Scans the folder for audio files and returns a vector of their paths.
-         * @param folder Path to the folder containing audio files.
-         * @return A vector of strings containing paths to audio files.
-         */
-        MusicPlayer::Playlist loadPlaylist(const fs::path& folder) const;
-
-        /**
-         * @brief Checks if at least one track in the playlist is playable.
-         * Iterates through the playlist and checks if any track can be played.
-         * @param playlist A vector of strings containing paths to audio files.
-         * @return True if at least one track is playable, false otherwise.
-         * @see MusicPlayer::isPlayable
-         */
-        bool atLeastOnePlayable(const MusicPlayer::Playlist& playlist);
 
     };
 

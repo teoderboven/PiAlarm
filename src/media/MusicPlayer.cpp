@@ -1,7 +1,8 @@
-#include "media/MusicPlayer.h"
-#include <filesystem>
-#include <random>
 #include <chrono>
+#include <random>
+#include <algorithm>
+
+#include "media/MusicPlayer.h"
 
 namespace PiAlarm::media {
 
@@ -192,12 +193,41 @@ namespace PiAlarm::media {
         }
     }
 
-    bool MusicPlayer::isPlayable(const std::filesystem::path &path) {
+    bool MusicPlayer::isPlayable(const fs::path &path) {
         const AudioStream stream = BASS_StreamCreateFile(FALSE, path.c_str(), 0, 0, BASS_SAMPLE_LOOP);
         if (!stream) return false;
 
         BASS_StreamFree(stream);
         return true;
+    }
+
+    bool MusicPlayer::hasAtLeastOnePlayable(const Playlist& playlist) {
+        return std::ranges::any_of(playlist, [](const fs::path& path) {
+            return isPlayable(path);
+        });
+    }
+
+    MusicPlayer::Playlist MusicPlayer::loadPlaylist(const fs::path& folder) {
+        Playlist files;
+
+        if (!fs::exists(folder)) {
+            return files;
+        }
+
+        for (const auto& entry : fs::directory_iterator(folder)) {
+            const auto& path = entry.path();
+            if (path.extension() == ".mp3" || path.extension() == ".wav") {
+                files.push_back(path);
+            }
+        }
+
+        return files;
+    }
+
+    void MusicPlayer::shufflePlaylist(Playlist& playlist) {
+        std::random_device rd;
+        std::mt19937 g{rd()};
+        std::ranges::shuffle(playlist, g);
     }
 
 } // namespace PiAlarm::media

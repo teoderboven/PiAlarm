@@ -1,9 +1,6 @@
 #ifndef MUSICPLAYER_H
 #define MUSICPLAYER_H
 
-#include "AudioTypes.h"
-#include "BassContext.hpp"
-#include "logging/HasLogger.h"
 #include <filesystem>
 #include <optional>
 #include <utility>
@@ -11,7 +8,13 @@
 #include <thread>
 #include <atomic>
 
+#include "media/AudioTypes.h"
+#include "media/BassContext.hpp"
+#include "logging/HasLogger.h"
+
 namespace PiAlarm::media {
+
+    namespace fs = std::filesystem;
 
     /**
      * @class MusicPlayer
@@ -29,7 +32,7 @@ namespace PiAlarm::media {
         static constexpr float FADE_DURATION = 3.0f; ///< Duration for volume fade in seconds.
 
     public:
-        using Track = std::filesystem::path; ///< Type alias for a single audio track path.
+        using Track = fs::path; ///< Type alias for a single audio track path.
         using Playlist = std::vector<Track>; ///< Type alias for a playlist of audio file paths.
 
         /**
@@ -63,7 +66,31 @@ namespace PiAlarm::media {
          * @param path Path to the audio file.
          * @return True if the file is playable, false otherwise.
          */
-        static bool isPlayable(const std::filesystem::path& path);
+        static bool isPlayable(const fs::path& path);
+
+        /**
+         * @brief Checks if at least one track in the playlist is playable.
+         * Iterates through the playlist and checks if any track can be played.
+         * @param playlist A vector of strings containing paths to audio files.
+         * @return True if at least one track is playable, false otherwise.
+         * @see isPlayable
+         */
+        static bool hasAtLeastOnePlayable(const Playlist& playlist);
+
+        /**
+         * @brief Loads a playlist from the specified folder.
+         * Scans the folder for audio files and returns a vector of their paths.
+         * @param folder Path to the folder containing audio files.
+         * @return A vector of strings containing paths to audio files.
+         */
+        static Playlist loadPlaylist(const fs::path& folder);
+
+        /**
+         * @brief Shuffles a playlist in place.
+         * Uses a random number generator to shuffle the order of tracks in the playlist.
+         * @param playlist A vector of strings containing paths to audio files.
+         */
+        static void shufflePlaylist(Playlist& playlist);
 
     private:
 
