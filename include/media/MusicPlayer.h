@@ -5,6 +5,8 @@
 #include "BassContext.hpp"
 #include "logging/HasLogger.h"
 #include <filesystem>
+#include <optional>
+#include <utility>
 #include <vector>
 #include <thread>
 #include <atomic>
@@ -91,9 +93,23 @@ namespace PiAlarm::media {
         /**
          * @brief Starts playback of the track at the given index.
          * @param track The track to play, represented as a string path.
-         * @return AudioStream handle representing the active stream.
+         * @return AudioStream handle representing the active stream or an invalid handle if playback failed.
+         * @note This method does not check if the track is playable.
+         * @note Always verify the stream is valid before using it.
          */
         AudioStream playTrack(const Track& track);
+
+        /**
+         * @brief Finds the next playable track in the playlist starting from a given index.
+         * This method attempts to play tracks until it finds one that is playable.
+         * If no playable track is found, the optional is empty
+         * @param playlist The playlist to search through.
+         * @param startIndex The index to start searching from.
+         * @return A pair containing the index and AudioStream of the playable track, or an empty optional if none found.
+         */
+        std::optional<std::pair<size_t, AudioStream>> findNextPlayableTrack(
+            const Playlist& playlist, size_t startIndex
+        );
 
         /**
          * @brief Waits until the current track is near its end.

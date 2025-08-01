@@ -42,6 +42,9 @@ namespace PiAlarm::media {
         } else {
             playPlaylistWithCrossfade(playlist);
         }
+
+        running_ = false; // Ensure the running flag is reset when playback ends
+        logger().warn("Music playback stopped.");
     }
 
     void MusicPlayer::playSingleTrackLooped(const Track& track) {
@@ -49,7 +52,7 @@ namespace PiAlarm::media {
 
         AudioStream stream = BASS_StreamCreateFile(FALSE, track.c_str(), 0, 0, BASS_SAMPLE_LOOP);
         if (!stream) {
-            logger().error("Failed to play single track.");
+            logger().error("Failed to play single track. Error code = {}", BASS_ErrorGetCode());;
             return;
         }
 
@@ -66,11 +69,16 @@ namespace PiAlarm::media {
     }
 
     void MusicPlayer::playPlaylistWithCrossfade(const Playlist& playlist) {
-        size_t currentIndex = 0;
-
         logger().info("Playing playlist with crossfade.");
 
-        AudioStream current = playTrack(playlist[currentIndex]);
+        const auto currentResult = findNextPlayableTrack(playlist, 0);
+        if (!currentResult) {
+            logger().error("No playable tracks found in playlist.");
+            return;
+        }
+
+        size_t currentIndex = currentResult->first;
+        AudioStream current = currentResult->second;
 
         std::thread fadeInThread(&MusicPlayer::fadeIn, this, current);
         fadeInThread.join();
@@ -81,13 +89,20 @@ namespace PiAlarm::media {
             waitBeforeTransition(current);
             if (!running_) break;
 
-            currentIndex = (currentIndex + 1) % playlist.size();
-            AudioStream next = playTrack(playlist[currentIndex]);
-            if (!next) break;
+            auto nextResult = findNextPlayableTrack(playlist, (currentIndex + 1) % playlist.size());
+            if (!nextResult) {
+                logger().error("No playable next track found. Stopping playback.");
+                break;
+            }
+
+            size_t nextIndex = nextResult->first;
+            AudioStream next = nextResult->second;
 
             crossfade(current, next);
             cleanupStream(current);
+
             current = next;
+            currentIndex = nextIndex;
 
         } while (running_);
 
@@ -103,9 +118,29 @@ namespace PiAlarm::media {
             BASS_ChannelSetAttribute(stream, BASS_ATTRIB_VOL, 0);
             BASS_ChannelPlay(stream, FALSE);
         }else {
-            logger().error("Failed to open audio stream: {}. Error code: {}", track.string(), BASS_ErrorGetCode());
+            logger().error("Failed to open audio stream: {}. Error code = {}", track.string(), BASS_ErrorGetCode());
         }
         return stream;
+    }
+
+    std::optional<std::pair<size_t, AudioStream>> MusicPlayer::findNextPlayableTrack(
+        const Playlist& playlist, size_t startIndex
+    ) {
+        size_t index {startIndex};
+        size_t attempts {0};
+
+        while (attempts < playlist.size() && running_) {
+            AudioStream stream = playTrack(playlist[index]);
+            if (stream) {
+                return std::make_pair(index, stream);
+            }
+
+            logger().warn("Skipping unplayable track: {}", playlist[index].string());
+            index = (index + 1) % playlist.size(); // wrap around to the start
+            ++attempts;
+        }
+
+        return {}; // No valid track found
     }
 
     void MusicPlayer::waitBeforeTransition(const AudioStream stream) {
