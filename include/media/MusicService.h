@@ -44,6 +44,12 @@ namespace PiAlarm::media {
          */
         inline void stop();
 
+        /**
+         * @brief Checks if the music player is currently running.
+         * @return True if the music player is running, false otherwise.
+         */
+        inline bool isRunning() const;
+
     };
 
     // Inline method implementation
@@ -52,6 +58,9 @@ namespace PiAlarm::media {
         musicPlayer_.stop();
     }
 
+    inline bool MusicService::isRunning() const {
+        return musicPlayer_.isRunning();
+    }
 } // namespace PiAlarm::media
 
 #endif //MUSICSERVICE_H

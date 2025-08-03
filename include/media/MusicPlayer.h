@@ -61,6 +61,12 @@ namespace PiAlarm::media {
         void stop();
 
         /**
+         * @brief Checks if the music player is currently running.
+         * @return True if the player is running, false otherwise.
+         */
+        inline bool isRunning() const;
+
+        /**
          * @brief Checks if the given path is a playable audio file.
          * @note This method loads the file to verify its playability.
          * @param path Path to the audio file.
@@ -184,6 +190,12 @@ namespace PiAlarm::media {
         void cleanupStream(AudioStream stream);
 
     };
+
+    // Inline method implementation
+
+    inline bool MusicPlayer::isRunning() const {
+        return running_.load();
+    }
 
 } // namespace PiAlarm::media
 
