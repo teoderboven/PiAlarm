@@ -139,7 +139,7 @@ namespace PiAlarm::view::cli {
             return "Alarme en cours";
 
         if (alarmStateData_.isAlarmSnoozed())
-            return "Alarme en pause";
+            return "Alarme en pause jusqu'à " + alarmStateData_.getSnoozeUntil()->toString();
 
         return "???";
     }
