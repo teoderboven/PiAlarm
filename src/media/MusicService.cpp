@@ -10,7 +10,7 @@ namespace PiAlarm::media {
         auto playlist = MusicPlayer::loadPlaylist(folder_);
 
         if (!MusicPlayer::hasAtLeastOnePlayable(playlist)) {
-            logger().warn("No valid tracks found in primary folder, falling back to: {}", fallbackFolder_.string());
+            logger().warn("No valid tracks found in primary folder ({}), falling back to {}", folder_.string(), fallbackFolder_.string());
             playlist = MusicPlayer::loadPlaylist(fallbackFolder_);
 
             if (!MusicPlayer::hasAtLeastOnePlayable(playlist)) {
