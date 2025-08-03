@@ -29,6 +29,14 @@ namespace PiAlarm::view::cli {
         temperatureSensorData_.addObserver(this);
     }
 
+    MainClockView::~MainClockView() {
+        alarmsData_.removeObserver(this);
+        alarmStateData_.removeObserver(this);
+        clockData_.removeObserver(this);
+        currentWeatherData_.removeObserver(this);
+        temperatureSensorData_.removeObserver(this);
+    }
+
     void MainClockView::refresh() {
         currentTime_ = clockData_.getCurrentTime();
 

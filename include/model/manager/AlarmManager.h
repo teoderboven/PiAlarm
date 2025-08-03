@@ -44,11 +44,17 @@ namespace PiAlarm::model::manager {
          * @throws std::invalid_argument if ringDuration is zero.
          */
         explicit AlarmManager(
-             const ClockData& clockData,
-             const AlarmsData& alarmsData,
-             std::chrono::minutes snoozeDuration = std::chrono::minutes(5),
-             std::chrono::minutes ringDuration = std::chrono::minutes(60)
-         );
+            const ClockData& clockData,
+            const AlarmsData& alarmsData,
+            std::chrono::minutes snoozeDuration = std::chrono::minutes(5),
+            std::chrono::minutes ringDuration = std::chrono::minutes(60)
+        );
+
+        /**
+         * @brief Destructor for AlarmManager.
+         * Cleans up resources and stops observing the clock data.
+         */
+        ~AlarmManager() override;
 
         /**
          * @brief Snoozes the alarm if it is currently ringing.

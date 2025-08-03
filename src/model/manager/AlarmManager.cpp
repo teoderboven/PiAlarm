@@ -26,6 +26,10 @@ namespace PiAlarm::model::manager {
         clockData_.addObserver(this);
     }
 
+    AlarmManager::~AlarmManager() {
+        clockData_.removeObserver(this);
+    }
+
     void AlarmManager::snoozeAlarm() {
         auto snoozeUntil {clockData_.getCurrentTime() + snoozeDuration_};
 

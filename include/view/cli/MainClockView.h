@@ -68,6 +68,12 @@ namespace PiAlarm::view::cli {
             const model::TemperatureSensorData& temperatureSensorData
         );
 
+        /**
+         * @brief Destructor for MainClockView.
+         * Cleans up resources and stops observing the data models.
+         */
+        ~MainClockView() override;
+
         // Inherited from IView
         void refresh() override;
         void render(DisplayType& display) override;

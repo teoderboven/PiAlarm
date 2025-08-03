@@ -23,9 +23,17 @@ namespace PiAlarm::model {
 
             getAlarm(0).setEnabled(); // Enable the first alarm by default
         }
+
+        for (Alarm& alarm : *this) {
+            alarm.addObserver(this);
+        }
     }
 
     AlarmsData::~AlarmsData() {
+        for (Alarm& alarm : *this) {
+            alarm.removeObserver(this);
+        }
+
         delete[] alarms_;
         alarms_ = nullptr;
     }
