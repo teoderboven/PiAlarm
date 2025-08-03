@@ -31,19 +31,19 @@ namespace PiAlarm::model {
          * @param humidity The humidity to set.
          * @param valid True if the weather data is valid, false otherwise.
          */
-        TemperatureSensorData(const float& temperature, const float& humidity, bool valid);
+        TemperatureSensorData(float temperature, float humidity, bool valid);
 
         /**
          * Sets the temperature and notifies observers of the change.
          * @param temperature The new temperature to set.
          */
-        void setTemperature(const float& temperature);
+        void setTemperature(float temperature);
 
         /**
          * Sets the humidity and notifies observers of the change.
          * @param humidity The new humidity to set.
          */
-        void setHumidity(const float& humidity);
+        void setHumidity(float humidity);
 
         /**
          * Sets the validity status of the weather data and notifies observers of the change.
@@ -58,7 +58,7 @@ namespace PiAlarm::model {
          * @param humidity The new humidity to set.
          * @param valid True if the weather data is valid, false otherwise. Defaults to true.
          */
-        void setValues(const float& temperature, const float& humidity, bool valid = true);
+        void setValues(float temperature, float humidity, bool valid = true);
 
         /**
          * Gets the current temperature.
@@ -66,7 +66,7 @@ namespace PiAlarm::model {
          * @note Always checks if the weather data is valid before using this value.
          */
         [[nodiscard]]
-        inline const float& getTemperature() const;
+        inline float getTemperature() const;
 
         /**
          * Gets the current humidity.
@@ -74,7 +74,7 @@ namespace PiAlarm::model {
          * @note Always checks if the weather data is valid before using this value.
          */
         [[nodiscard]]
-        inline const float& getHumidity() const;
+        inline float getHumidity() const;
 
         /**
          * Checks if the weather data is valid.
@@ -88,13 +88,13 @@ namespace PiAlarm::model {
 
     // inline methods implementations
 
-    inline const float& TemperatureSensorData::getTemperature() const {
+    inline float TemperatureSensorData::getTemperature() const {
         std::lock_guard lock{mutex_};
 
         return temperature_;
     }
 
-    inline const float& TemperatureSensorData::getHumidity() const {
+    inline float TemperatureSensorData::getHumidity() const {
         std::lock_guard lock{mutex_};
 
         return humidity_;

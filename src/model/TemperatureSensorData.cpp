@@ -2,17 +2,17 @@
 
 namespace PiAlarm::model {
 
-    TemperatureSensorData::TemperatureSensorData(const float& temperature, const float& humidity, bool valid)
+    TemperatureSensorData::TemperatureSensorData(float temperature, float humidity, bool valid)
         : temperature_{temperature}, humidity_{humidity}, valid_{valid}
     {}
 
-    void TemperatureSensorData::setTemperature(const float& temperature) {
+    void TemperatureSensorData::setTemperature(float temperature) {
         bool valueChanged = setIfDifferent(temperature_, temperature);
 
         if (valueChanged) notifyObservers();
     }
 
-    void TemperatureSensorData::setHumidity(const float& humidity) {
+    void TemperatureSensorData::setHumidity(float humidity) {
         bool valueChanged = setIfDifferent(humidity_, humidity);
 
         if (valueChanged) notifyObservers();
@@ -24,7 +24,7 @@ namespace PiAlarm::model {
         if (valueChanged) notifyObservers();
     }
 
-    void TemperatureSensorData::setValues(const float& temperature, const float& humidity, bool valid) {
+    void TemperatureSensorData::setValues(float temperature, float humidity, bool valid) {
         bool valueChanged = false;
 
         {

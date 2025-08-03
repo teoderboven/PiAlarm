@@ -2,11 +2,11 @@
 
 namespace PiAlarm::model {
 
-    ClockData::ClockData(const Time& current)
+    ClockData::ClockData(Time current)
         : currentTime_{current}
     {}
 
-    void ClockData::setCurrentTime(const Time& time) {
+    void ClockData::setCurrentTime(Time time) {
         bool valueChanged = setIfDifferent(currentTime_, time);
 
         if (valueChanged) notifyObservers();

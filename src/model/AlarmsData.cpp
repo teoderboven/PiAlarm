@@ -53,7 +53,7 @@ namespace PiAlarm::model {
         notifyObservers();
     }
 
-    void AlarmsData::setAlarm(std::size_t index, const Time &alarmTime, bool enabled) {
+    void AlarmsData::setAlarm(std::size_t index, Time alarmTime, bool enabled) {
         getAlarm(index).setAlarm(alarmTime, enabled);
     }
 

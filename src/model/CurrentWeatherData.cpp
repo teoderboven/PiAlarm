@@ -3,10 +3,10 @@
 namespace PiAlarm::model {
 
     CurrentWeatherData::CurrentWeatherData(
-        const float& temperature,
-        const float& humidity,
-        const float& pressure,
-        const common::WeatherCondition& condition,
+        float temperature,
+        float humidity,
+        float pressure,
+        common::WeatherCondition condition,
         bool valid
         )
         : BaseModelData{},
@@ -17,25 +17,25 @@ namespace PiAlarm::model {
         valid_{valid}
         {}
 
-    void CurrentWeatherData::setTemperature(const float& temperature) {
+    void CurrentWeatherData::setTemperature(float temperature) {
         bool valueChanged = setIfDifferent(temperature_, temperature);
 
         if (valueChanged) notifyObservers();
     }
 
-    void CurrentWeatherData::setHumidity(const float& humidity) {
+    void CurrentWeatherData::setHumidity(float humidity) {
         bool valueChanged = setIfDifferent(humidity_, humidity);
 
         if (valueChanged) notifyObservers();
     }
 
-    void CurrentWeatherData::setPressure(const float& pressure) {
+    void CurrentWeatherData::setPressure(float pressure) {
         bool valueChanged = setIfDifferent(pressure_, pressure);
 
         if (valueChanged) notifyObservers();
     }
 
-    void CurrentWeatherData::setCondition(const common::WeatherCondition& condition) {
+    void CurrentWeatherData::setCondition(common::WeatherCondition condition) {
         bool valueChanged = setIfDifferent(condition_, condition);
 
         if (valueChanged) notifyObservers();
@@ -48,10 +48,10 @@ namespace PiAlarm::model {
     }
 
     void CurrentWeatherData::setValues(
-        const float& temperature,
-        const float& humidity,
-        const float& pressure,
-        const common::WeatherCondition& condition,
+        float temperature,
+        float humidity,
+        float pressure,
+        common::WeatherCondition condition,
         bool valid
     ) {
         bool valueChanged {false};

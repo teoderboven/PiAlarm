@@ -29,26 +29,26 @@ namespace PiAlarm::model {
          * Constructs a ClockData object with specified current time, alarm time, and alarm status.
          * @param current The current time to set.
          */
-        explicit ClockData(const Time& current);
+        explicit ClockData(Time current);
 
         /**
          * Sets the current time and notifies observers of the change.
          * @param time The new current time to set.
          */
-        void setCurrentTime(const Time& time);
+        void setCurrentTime(Time time);
 
         /**
          * Gets the current time.
          * @return A reference to the current time.
          */
         [[nodiscard]]
-        inline const Time& getCurrentTime() const;
+        inline Time getCurrentTime() const;
 
     };
 
     // inline method implementation
 
-    inline const Time& ClockData::getCurrentTime() const {
+    inline Time ClockData::getCurrentTime() const {
         std::lock_guard lock{mutex_};
 
         return currentTime_;

@@ -35,31 +35,31 @@ namespace PiAlarm::model {
          * @param condition The weather condition to set.
          * @param valid True if the weather data is valid, false otherwise.
          */
-        CurrentWeatherData(const float& temperature, const float& humidity, const float& pressure, const common::WeatherCondition& condition, bool valid);
+        CurrentWeatherData(float temperature, float humidity, float pressure, common::WeatherCondition condition, bool valid);
 
         /**
          * Sets the current temperature and notifies observers of the change.
          * @param temperature The new temperature to set.
          */
-        void setTemperature(const float& temperature);
+        void setTemperature(float temperature);
 
         /**
          * Sets the current humidity and notifies observers of the change.
          * @param humidity The new humidity to set.
          */
-        void setHumidity(const float& humidity);
+        void setHumidity(float humidity);
 
         /**
          * Sets the current pressure and notifies observers of the change.
          * @param pressure The new pressure to set.
          */
-        void setPressure(const float& pressure);
+        void setPressure(float pressure);
 
         /**
          * Sets the current weather condition and notifies observers of the change.
          * @param condition The new weather condition to set.
          */
-        void setCondition(const common::WeatherCondition& condition);
+        void setCondition(common::WeatherCondition condition);
 
         /**
          * Sets the validity status of the weather data and notifies observers of the change.
@@ -76,7 +76,7 @@ namespace PiAlarm::model {
          * @param condition The new weather condition to set.
          * @param valid True if the weather data is valid, false otherwise. Defaults to true.
          */
-        void setValues(const float& temperature, const float& humidity, const float& pressure, const common::WeatherCondition& condition, bool valid = true);
+        void setValues(float temperature, float humidity, float pressure, common::WeatherCondition condition, bool valid = true);
 
         /**
          * Gets the current temperature.
@@ -84,7 +84,7 @@ namespace PiAlarm::model {
          * @note Always checks if the weather data is valid before using this value.
          */
         [[nodiscard]]
-        inline const float& getTemperature() const;
+        inline float getTemperature() const;
 
         /**
          * Gets the current humidity.
@@ -92,7 +92,7 @@ namespace PiAlarm::model {
          * @note Always checks if the weather data is valid before using this value.
          */
         [[nodiscard]]
-        inline const float& getHumidity() const;
+        inline float getHumidity() const;
 
         /**
          * Gets the current pressure.
@@ -100,7 +100,7 @@ namespace PiAlarm::model {
          * @note Always checks if the weather data is valid before using this value.
          */
         [[nodiscard]]
-        inline const float& getPressure() const;
+        inline float getPressure() const;
 
         /**
          * Gets the current weather condition.
@@ -121,19 +121,19 @@ namespace PiAlarm::model {
 
     // Inline method implementations
 
-    inline const float& CurrentWeatherData::getTemperature() const {
+    inline float CurrentWeatherData::getTemperature() const {
         std::lock_guard lock{mutex_};
 
         return temperature_;
     }
 
-    inline const float& CurrentWeatherData::getHumidity() const {
+    inline float CurrentWeatherData::getHumidity() const {
         std::lock_guard lock{mutex_};
 
         return humidity_;
     }
 
-    inline const float& CurrentWeatherData::getPressure() const {
+    inline float CurrentWeatherData::getPressure() const {
         std::lock_guard lock{mutex_};
 
         return pressure_;

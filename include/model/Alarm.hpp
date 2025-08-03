@@ -31,13 +31,13 @@ namespace PiAlarm::model {
          * @param alarm The alarm time to set.
          * @param enabled True if the alarm is enabled, false otherwise.
          */
-        explicit Alarm(const Time& alarm, bool enabled);
+        explicit Alarm(Time alarm, bool enabled);
 
         /**
          * Sets the alarm time and notifies observers of the change.
          * @param time The new alarm time to set.
          */
-        void setTime(const Time& time);
+        void setTime(Time time);
 
         /**
          * Enables or disables the alarm and notifies observers of the change.
@@ -56,14 +56,14 @@ namespace PiAlarm::model {
          * @param alarm The new alarm time to set.
          * @param enabled True to enable the alarm, false to disable it.
          */
-        void setAlarm(const Time& alarm, bool enabled);
+        void setAlarm(Time alarm, bool enabled);
 
         /**
          * Gets the current alarm time.
          * @return A const reference to the alarm time.
          */
         [[nodiscard]]
-        inline const Time& getTime() const;
+        inline Time getTime() const;
 
         /**
          * Checks if the alarm is enabled.
@@ -80,7 +80,7 @@ namespace PiAlarm::model {
         setEnabled(false);
     }
 
-    inline const Time& Alarm::getTime() const {
+    inline Time Alarm::getTime() const {
         std::lock_guard lock{mutex_};
 
         return alarmTime_;

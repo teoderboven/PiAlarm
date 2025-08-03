@@ -34,7 +34,7 @@ namespace PiAlarm::model {
         notifyObservers();
     }
 
-    void AlarmState::snooze(const Time& snoozeUntil) {
+    void AlarmState::snooze(Time snoozeUntil) {
         {
             std::lock_guard lock{mutex_};
 

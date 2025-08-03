@@ -6,7 +6,7 @@ namespace PiAlarm::model {
         : BaseModelData{}, alarmTime_{alarmTime}, alarmEnabled_{enabled}
     {}
 
-    void Alarm::setTime(const Time& time) {
+    void Alarm::setTime(Time time) {
         bool valueChanged = setIfDifferent(alarmTime_, time);
 
         if (valueChanged) notifyObservers();
@@ -18,7 +18,7 @@ namespace PiAlarm::model {
         if (valueChanged) notifyObservers();
     }
 
-    void Alarm::setAlarm(const Time& alarm, bool enabled) {
+    void Alarm::setAlarm(Time alarm, bool enabled) {
         bool valueChanged {false};
 
         {

@@ -54,7 +54,7 @@ namespace PiAlarm::model {
          *       If no alarm is ringing, it will not have any effect.
          * @param snoozeUntil The time until which the alarm should be snoozed.
          */
-        void snooze(const Time& snoozeUntil);
+        void snooze(Time snoozeUntil);
 
         /**
          * @brief Stops the currently ringing alarm.

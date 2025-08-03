@@ -51,7 +51,7 @@ namespace PiAlarm::model {
          * @param alarmTime The time to set for the alarm.
          * @param enabled True to enable the alarm, false to disable it.
          */
-        void setAlarm(std::size_t index, const Time& alarmTime, bool enabled);
+        void setAlarm(std::size_t index, Time alarmTime, bool enabled);
 
         /**
          * @brief Updates the alarms data save and notifies observers.
@@ -107,7 +107,7 @@ namespace PiAlarm::model {
          * @param currentTime The current time to compare against.
          * @return A pointer to the next enabled Alarm, or nullptr if no such alarm exists.
          */
-        inline Alarm* getNextAlarm(const Time& currentTime);
+        inline Alarm* getNextAlarm(Time currentTime);
 
         /**
          * @brief Retrieves the next enabled alarm based on the current time.
@@ -119,7 +119,7 @@ namespace PiAlarm::model {
          * @param currentTime The current time to compare against.
          * @return A const pointer to the next enabled Alarm, or nullptr if no such alarm exists.
          */
-        inline const Alarm* getNextAlarm(const Time& currentTime) const;
+        inline const Alarm* getNextAlarm(Time currentTime) const;
 
         /**
          * @brief Accesses the alarm at the specified index.
@@ -247,7 +247,7 @@ namespace PiAlarm::model {
         return alarms_[index];
     }
 
-    inline Alarm* AlarmsData::getNextAlarm(const Time& currentTime) {
+    inline Alarm* AlarmsData::getNextAlarm(Time currentTime) {
         return getNextAlarmImpl<Alarm>(currentTime);
     }
 
@@ -276,7 +276,7 @@ namespace PiAlarm::model {
         return nextAlarm;
     }
 
-    inline const Alarm* AlarmsData::getNextAlarm(const Time& currentTime) const {
+    inline const Alarm* AlarmsData::getNextAlarm(Time currentTime) const {
         return getNextAlarmImpl<const Alarm>(currentTime);
     }
 
