@@ -45,7 +45,7 @@ namespace PiAlarm::media {
         }
 
         running_ = false; // Ensure the running flag is reset when playback ends
-        logger().warn("Music playback stopped.");
+        logger().info("Music playback stopped.");
     }
 
     void MusicPlayer::playSingleTrackLooped(const Track& track) {
@@ -85,7 +85,7 @@ namespace PiAlarm::media {
         fadeInThread.join();
 
         do {
-            logger().debug("Playing track: {}", playlist[currentIndex].string());
+            logger().info("Playing track: {}", playlist[currentIndex].string());
 
             waitBeforeTransition(current);
             if (!running_) break;
