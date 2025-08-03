@@ -34,6 +34,7 @@ add_subdirectory(media)
 add_subdirectory(model)
 add_subdirectory(provider)
 add_subdirectory(service)
+add_subdirectory(trigger)
 add_subdirectory(view)
 
 add_executable(${PROJECT_NAME}
@@ -46,6 +47,7 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
         PiAlarm_controller
         PiAlarm_service
         PiAlarm_provider
+        PiAlarm_trigger
         PiAlarm_model_manager
         PiAlarm_model
         PiAlarm_media
@@ -62,6 +64,10 @@ else()
 endif ()
 
 copy_bass_dll_to_target(${PROJECT_NAME})
+# Copy assets directory to the target directory after build
+add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_directory
+        ${CMAKE_SOURCE_DIR}/assets $<TARGET_FILE_DIR:${PROJECT_NAME}>/assets)
 
 target_compile_definitions(PiAlarm_logging PRIVATE LOG_LEVEL="${LOG_LEVEL}")
 

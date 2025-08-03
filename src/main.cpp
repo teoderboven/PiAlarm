@@ -12,6 +12,8 @@
 #include "view/cli/MainClockView.h"
 #include "service/TimeUpdateService.h"
 #include "service/WeatherApiService.h"
+#include "media/MusicService.h"
+#include "trigger/AlarmSoundTrigger.h"
 
 namespace PiAlarm {
     // Forward declaration of the run function
@@ -80,6 +82,12 @@ int main(int argc, char *argv[]) {
     timeUpdateService.start();
     service::WeatherApiService weatherApiService {currentWeather_data, api};
     weatherApiService.start();
+
+    // Music Service to play alarm sounds
+    media::MusicService musicService{"", "assets/default_alarm"};
+
+    // Triggers
+    trigger::AlarmSoundTrigger alarmSoundTrigger{alarmManager.getAlarmState(), musicService};
 
     // Main application loop
     run(viewManager);
