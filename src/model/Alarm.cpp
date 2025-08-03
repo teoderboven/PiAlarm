@@ -2,7 +2,7 @@
 
 namespace PiAlarm::model {
 
-    Alarm::Alarm(const Time& alarmTime, bool enabled)
+    Alarm::Alarm(Time alarmTime, bool enabled)
         : BaseModelData{}, alarmTime_{alarmTime}, alarmEnabled_{enabled}
     {}
 
