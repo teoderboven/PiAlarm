@@ -6,6 +6,17 @@ Réveil matin intelligent sur Raspberry Pi
 
 > [Téo Derboven - 60073](mailto:60073@etu.he2b.be)
 
+## Prérequis
+
+Pour l'utilisation de l'affichage SSD1322 et des boutons, vous aurez besoin des bibliothèques suivantes, à installer manuellement :
+
+- libgpiod-dev
+
+Un fichier `apt-requirements.txt` est fourni pour faciliter l'installation des dépendances nécessaires. Vous pouvez l'utiliser avec la commande suivante :
+
+```bash
+sudo apt install < apt-requirements.txt
+```
 
 ## Options de configuration de la compilation
 
