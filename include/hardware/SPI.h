@@ -1,6 +1,8 @@
 #ifndef SPI_H
 #define SPI_H
 
+#ifdef __linux__
+
 #include <string>
 
 namespace PiAlarm::hardware {
@@ -58,4 +60,5 @@ namespace PiAlarm::hardware {
 
 } // namespace PiAlarm::hardware
 
+#endif // __linux__
 #endif //SPI_H

@@ -1,3 +1,5 @@
+#ifdef __linux__
+
 #include <stdexcept>
 #include <cerrno>
 #include <cstring>
@@ -69,3 +71,5 @@ namespace PiAlarm::hardware {
     }
 
 } // namespace PiAlarm::hardware
+
+#endif // __linux__

@@ -1,6 +1,8 @@
 #ifndef GPIO_H
 #define GPIO_H
 
+#ifdef __linux__
+
 #include <gpiod.h>
 #include <string>
 
@@ -147,4 +149,5 @@ namespace PiAlarm::hardware {
 
 } // namespace PiAlarm::hardware
 
+#endif // __linux__
 #endif //GPIO_H

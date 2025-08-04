@@ -1,3 +1,5 @@
+#ifdef __linux__
+
 #include <fcntl.h>
 #include <unistd.h>
 #include <stdexcept>
@@ -63,3 +65,5 @@ namespace PiAlarm::hardware {
     }
 
 } // namespace PiAlarm::hardware
+
+#endif // __linux__
