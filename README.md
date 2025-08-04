@@ -8,7 +8,7 @@ Réveil matin intelligent sur Raspberry Pi
 
 ## Prérequis
 
-Pour l'utilisation de l'affichage SSD1322 et des boutons, vous aurez besoin des bibliothèques suivantes, à installer manuellement :
+Pour l'utilisation de l'affichage SSD1322 et des boutons (uniquement sur Linux, uniquement testé sur raspberry pi 5 (Debian Bookworm)), vous aurez besoin des bibliothèques suivantes, à installer manuellement :
 
 - libgpiod-dev
 
@@ -17,6 +17,9 @@ Un fichier `apt-requirements.txt` est fourni pour faciliter l'installation des d
 ```bash
 sudo apt install < apt-requirements.txt
 ```
+
+Les prérequis windows sont inclus dans les cmake files, il n'est pas nécessaire de les installer manuellement.
+(Seule la vue console est supportée sur Windows, l'affichage SSD1322 n'est pas compatible.)
 
 ## Options de configuration de la compilation
 
@@ -29,7 +32,7 @@ le type d’affichage cible et le niveau de log.
 
 - `DISPLAY_SSD1322` (par défaut : OFF)
     
-  Active le support pour l’écran SSD1322 (driver Adafruit SSD1322).
+  Active le support pour l’écran SSD1322 (driver SSD1322 personnalisé) (uniquement sur Linux (raspberry pi)).
 
 
 - `DISPLAY_CONSOLE` (par défaut : OFF)
