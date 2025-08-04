@@ -19,6 +19,8 @@ if(DISPLAY_SSD1322 AND DISPLAY_CONSOLE)
     message(FATAL_ERROR "You cannot enable both DISPLAY_SSD1322 and DISPLAY_CONSOLE.")
 elseif(NOT DISPLAY_SSD1322 AND NOT DISPLAY_CONSOLE)
     message(FATAL_ERROR "You must enable one display option: DISPLAY_SSD1322 or DISPLAY_CONSOLE.")
+elseif(DISPLAY_SSD1322 AND NOT (UNIX AND NOT APPLE))
+    message(FATAL_ERROR "DISPLAY_SSD1322 is only supported on Linux, more specifically on Raspberry Pi.")
 endif()
 
 # global definitions based on display options
@@ -36,6 +38,10 @@ add_subdirectory(provider)
 add_subdirectory(service)
 add_subdirectory(trigger)
 add_subdirectory(view)
+
+if(DISPLAY_SSD1322)
+    add_subdirectory(hardware)
+endif ()
 
 add_executable(${PROJECT_NAME}
         main.cpp
@@ -55,7 +61,7 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
 
 if(DISPLAY_SSD1322)
     target_link_libraries(${PROJECT_NAME} PRIVATE
-            # ...
+            PiAlarm_hardware
     )
 else()
     target_link_libraries(${PROJECT_NAME} PRIVATE
