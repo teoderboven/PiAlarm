@@ -15,6 +15,7 @@ endif()
 set(SOURCES
         GPIO.cpp
         SPI.cpp
+        SSD1322.cpp
 )
 
 add_library(${PROJECT_NAME} STATIC ${SOURCES})

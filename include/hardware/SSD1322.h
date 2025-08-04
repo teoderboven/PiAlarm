@@ -1,0 +1,153 @@
+#ifndef SSD1322_H
+#define SSD1322_H
+
+#ifdef __linux__
+
+#include <cstdint>
+#include <vector>
+
+#include "hardware/GPIO.h"
+#include "hardware/SPI.h"
+
+// SSD1322 Command Definitions
+// copied from https://github.com/venice1200/SSD1322_for_Adafruit_GFX/blob/v0.1.2/SSD1322_for_Adafruit_GFX.h
+#define SSD1322_SETCOLUMN 0x15
+#define SSD1322_ENWRITEDATA 0x5C               // Enable Write Data
+#define SSD1322_SETROW 0x75
+#define SSD1322_SEGREMAP 0xA0
+#define SSD1322_SETSTARTLINE 0xA1
+#define SSD1322_SETDISPLAYOFFSET 0xA2
+#define SSD1322_DISPLAYALLOFF 0xA4              // All Pixel OFF in GS level 0
+#define SSD1322_DISPLAYALLON 0xA5               // All Pixel ON in GS level 15
+#define SSD1322_NORMALDISPLAY 0xA6
+#define SSD1322_INVERTDISPLAY 0xA7
+#define SSD1322_ENPARTDISPLAY 0xA8
+#define SSD1322_EXITPARTDISPLAY 0xA9
+#define SSD1322_SETMULTIPLEX 0xCA
+#define SSD1322_FUNCSEL 0xAB
+#define SSD1322_DISPLAYOFF 0xAE
+#define SSD1322_DISPLAYON 0xAF
+#define SSD1322_PHASELEN 0xB1
+#define SSD1322_DISPLAYCLK 0xB3
+#define SSD1322_DISPLAYENHA 0xB4
+#define SSD1322_SETGPIO 0xB5
+#define SSD1322_PRECHARGE2 0xB6
+#define SSD1322_GRAYTABLE 0xB8
+#define SSD1322_PRECHARGE 0xBB
+#define SSD1322_SETVCOM 0xBE
+#define SSD1322_SETCONTRAST 0xC1
+#define SSD1322_MASTERCONTRAST 0xC7
+#define SSD1322_DISPLAYENHB 0xD1
+#define SSD1322_FUNCSELB 0xD5
+#define SSD1322_CMDLOCK 0xFD
+
+namespace PiAlarm::hardware {
+
+    // Not using the premade driver, causes it uses AdaFruit GFX library which is not compatible with the current project.
+    /**
+     * @class SSD1322
+     * @brief Represents an SSD1322 OLED display controller.
+     *
+     * This class provides methods to initialize the SSD1322 display,
+     * send commands and data, and clear the screen.
+     *
+     * The SSD1322 is a monochrome OLED display controller with a resolution of 256x64 pixels.
+     *
+     * Mostly based on the venice1200/SSD1322_for_Adafruit_GFX library.
+     * (https://github.com/venice1200/SSD1322_for_Adafruit_GFX)
+     *
+     * Made with the help of ChatGPT and the SSD1322 datasheet.
+     */
+    class SSD1322 {
+        SPI& spi_; ///< Reference to the SPI interface used for communication
+        GPIO& dcPin_; ///< Data/Command pin for the SSD1322 display
+        GPIO& resetPin_; ///< Reset pin for the SSD1322 display
+
+    public:
+        using CommandByte = uint8_t; ///< Type alias for command byte
+        using DataByte = uint8_t; ///< Type alias for data byte
+
+        /**
+         * Constructs an SSD1322 object with the specified SPI and GPIO pins.
+         * @param spi Reference to the SPI interface used for communication.
+         * @param dcPin Reference to the GPIO pin used for Data/Command selection.
+         * @param resetPin Reference to the GPIO pin used for resetting the display.
+         * @note The GPIO pins are configured as output by this constructor.
+         * @note After creating the SSD1322 object, the `initialize()` method should be called to set up the display.
+         */
+        SSD1322(SPI& spi, GPIO& dcPin, GPIO& resetPin);
+
+        /**
+         * Initializes the SSD1322 display.
+         * This method sends the necessary commands to configure the display.
+         * It should be called after creating the SSD1322 object.
+         */
+        void initialize() const;
+
+        /**
+         * Resets the SSD1322 display.
+         * This method sets the reset pin low for a short duration and then sets it high again.
+         * It is typically called at the start of the initialization process.
+         */
+        void reset() const;
+
+        /**
+         * Sends a command to the SSD1322 display.
+         * @param cmd The command byte to send.
+         * @note The command is sent in command mode, which is set by the `setDCPinCommand()` method.
+         */
+        void sendCommand(CommandByte cmd) const;
+
+        /**
+         * Sends data to the SSD1322 display.
+         * @param data The data byte to send.
+         * @note The data is sent in data mode, which is set by the `setDCPinData()` method.
+         */
+        void sendData(DataByte data) const;
+
+        /**
+         * Sends an array of data bytes to the SSD1322 display.
+         * @param data Pointer to the array of data bytes.
+         * @param length The number of bytes to send.
+         * @note The data is sent in data mode, which is set by the `setDCPinData()` method.
+         */
+        void sendData(const DataByte* data, size_t length) const;
+
+        /**
+         * Sends a vector of data bytes to the SSD1322 display.
+         * @param data The vector containing the data bytes to send.
+         * @note The data is sent in data mode, which is set by the `setDCPinData()` method.
+         */
+        void sendData(const std::vector<DataByte>& data) const;
+
+        /**
+         * Turns on all pixels on the SSD1322 display.
+         * This method sends a command to turn on all pixels, making the display fully lit.
+         */
+        void allPixelsOn() const;
+
+        /**
+         * Turns off all pixels on the SSD1322 display.
+         * This method sends a command to turn off all pixels, making the display fully dark.
+         */
+        void allPixelsOff() const;
+
+    private:
+
+        /**
+         * Sets the DC pin to command mode.
+         * This method is used to indicate that the next byte sent is a command.
+         */
+        void setDCPinCommand() const;
+
+        /**
+         * Sets the DC pin to data mode.
+         * This method is used to indicate that the next byte sent is data.
+         */
+        void setDCPinData() const;
+    };
+
+} // namespace PiAlarm::hardware
+
+#endif // __linux__
+#endif //SSD1322_H
