@@ -17,33 +17,50 @@ namespace PiAlarm::hardware {
         }
     }
 
-    GPIO::GPIO(unsigned int lineNumber) : GPIO{"gpiochip0", lineNumber}
-    {}
-
     GPIO::~GPIO() {
         if (line_) gpiod_line_release(line_);
         if (chip_) gpiod_chip_close(chip_);
     }
 
     void GPIO::setOutput(int initialValue) {
-        if (gpiod_line_request_output(line_, "gpio_cpp", initialValue) < 0) {
+        if (mode_ == GPIOMode::OUTPUT) {
+            // If already set as output, just set the value
+            set(initialValue);
+            return;
+        }
+
+        gpiod_line_release(line_); // Release any previous request
+        if (gpiod_line_request_output(line_, CONSUMER, initialValue) < 0) {
             throw std::runtime_error("Unable to set GPIO line as output : " + std::string(std::strerror(errno)));
         }
+        mode_ = GPIOMode::OUTPUT;
     }
 
     void GPIO::setInput() {
-        if (gpiod_line_request_input(line_, "gpio_cpp") < 0) {
+        if (mode_ == GPIOMode::INPUT) {
+            return;
+        }
+
+        gpiod_line_release(line_); // Release any previous request
+        if (gpiod_line_request_input(line_, CONSUMER) < 0) {
             throw std::runtime_error("Unable to set GPIO line as input : " + std::string(std::strerror(errno)));
         }
+        mode_ = GPIOMode::INPUT;
     }
 
-    void GPIO::set(int value) {
+    void GPIO::set(int value) const {
+        if (mode_ != GPIOMode::OUTPUT) {
+            throw std::runtime_error("GPIO line is not set as output, cannot set value.");
+        }
         if (gpiod_line_set_value(line_, value) < 0) {
             throw std::runtime_error("Unable to set GPIO line value : " + std::string(std::strerror(errno)));
         }
     }
 
-    int GPIO::get() {
+    int GPIO::get() const {
+        if (mode_ != GPIOMode::INPUT) {
+            throw std::runtime_error("GPIO line is not set as input, cannot get value.");
+        }
         int val = gpiod_line_get_value(line_);
         if (val < 0) {
             throw std::runtime_error("Unable to read GPIO line value : " + std::string(std::strerror(errno)));
