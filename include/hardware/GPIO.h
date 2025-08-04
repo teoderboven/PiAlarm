@@ -23,6 +23,8 @@ namespace PiAlarm::hardware {
      *
      * GPIO stands for General Purpose Input/Output,
      * and is used to control or read the state of pins on a Raspberry Pi.
+     *
+     * Made with the help of ChatGPT.
      */
     class GPIO {
     public:

@@ -16,6 +16,8 @@ namespace PiAlarm::hardware {
      *
      * SPI (Serial Peripheral Interface) is a synchronous serial communication protocol
      * used for short-distance communication, primarily in embedded systems.
+     *
+     * Made with the help of ChatGPT.
      */
     class SPI {
         int fd_; ///< File descriptor for the SPI device
@@ -42,19 +44,19 @@ namespace PiAlarm::hardware {
         SPI& operator=(SPI&&) = delete; ///< No move assignment operator
 
         /**
-         * Reads a single byte from the SPI device.
-         * @return The byte read from the device.
-         * @throws std::runtime_error if the read operation fails.
+         * Writes a single byte to the SPI device.
+         * @param byte The byte to write.
+         * @throws std::runtime_error if the write operation fails.
          */
-        void writeByte(uint8_t byte);
+        void writeByte(uint8_t byte) const;
 
         /**
-         * Reads a specified number of bytes from the SPI device.
-         * @param length The number of bytes to read.
-         * @return A pointer to the buffer containing the read bytes.
-         * @throws std::runtime_error if the read operation fails.
+         * Writes multiple bytes to the SPI device.
+         * @param data Pointer to the data to write.
+         * @param length The number of bytes to write.
+         * @throws std::runtime_error if the write operation fails.
          */
-        void writeData(const uint8_t* data, size_t length);
+        void writeData(const uint8_t* data, size_t length) const;
 
     };
 
