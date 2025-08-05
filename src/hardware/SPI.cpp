@@ -59,8 +59,17 @@ namespace PiAlarm::hardware {
     }
 
     void SPI::writeData(const uint8_t* data, size_t length) const {
-        if (write(fd_, data, length) != static_cast<ssize_t>(length)) { // Ensure all bytes are written
-            throw std::runtime_error("SPI write failed: " + std::string(std::strerror(errno)));
+        size_t totalWritten = 0;
+
+        while (totalWritten < length) {
+            const size_t chunkSize = std::min(static_cast<size_t>(SPI_MAX_DATA_SIZE), length - totalWritten);
+            const ssize_t bytesWritten = write(fd_, data + totalWritten, chunkSize);
+
+            if (bytesWritten != static_cast<ssize_t>(chunkSize)) {
+                throw std::runtime_error("SPI write failed: " + std::string(std::strerror(errno)));
+            }
+
+            totalWritten += bytesWritten;
         }
     }
 
