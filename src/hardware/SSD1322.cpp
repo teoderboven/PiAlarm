@@ -47,7 +47,7 @@ namespace PiAlarm::hardware {
         spi_.writeData(data, length);
     }
 
-    void SSD1322::flush(const Buffer& buffer, size_t size) const {
+    void SSD1322::flush(const uint8_t* buffer, size_t size) const {
         assert(size == DISPLAY_HEIGHT * (DISPLAY_WIDTH/2)); // Ensure the buffer size matches the expected dimensions
 
         // Set the drawing area to the full display size

@@ -81,8 +81,6 @@ namespace PiAlarm::hardware {
     public:
         using CommandByte = uint8_t; ///< Type alias for command byte
         using DataByte = uint8_t; ///< Type alias for data byte
-        using PixelPairByte = uint8_t; ///< Type alias for 2 pixel byte (4 bits per pixel)
-        using Buffer = PixelPairByte*; ///< Type alias for display buffer
 
         /**
          * Constructs an SSD1322 object with the specified SPI and GPIO pins.
@@ -140,7 +138,7 @@ namespace PiAlarm::hardware {
          * @param size
          * @note The size of the framebuffer must match the defined BUFFER_WIDTH * BUFFER_HEIGHT (8192 for 64*128 bytes).
          */
-        void flush(const Buffer& buffer, size_t size) const;
+        void flush(const uint8_t* buffer, size_t size) const;
 
         /**
          * Turns on all pixels on the SSD1322 display.
