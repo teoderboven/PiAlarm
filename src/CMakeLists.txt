@@ -14,7 +14,6 @@ option(DISPLAY_SSD1322 "Use SSD1322 display" OFF)
 option(DISPLAY_CONSOLE "Use console display" OFF)
 set(LOG_LEVEL "info" CACHE STRING "Log level (trace, debug, info, warn, error, critical)")
 
-
 if(DISPLAY_SSD1322 AND DISPLAY_CONSOLE)
     message(FATAL_ERROR "You cannot enable both DISPLAY_SSD1322 and DISPLAY_CONSOLE.")
 elseif(NOT DISPLAY_SSD1322 AND NOT DISPLAY_CONSOLE)
@@ -31,6 +30,7 @@ elseif(DISPLAY_CONSOLE)
 endif()
 
 add_subdirectory(controller)
+add_subdirectory(gfx)
 add_subdirectory(logging)
 add_subdirectory(media)
 add_subdirectory(model)
@@ -58,6 +58,7 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
 
 if(DISPLAY_SSD1322)
     target_link_libraries(${PROJECT_NAME} PRIVATE
+            PiAlarm_gfx
             PiAlarm_hardware
     )
 else()
