@@ -3,6 +3,7 @@
 #include "hardware/SSD1322.h"
 #include <thread>
 #include <chrono>
+#include <cassert>
 
 namespace PiAlarm::hardware {
 
@@ -46,8 +47,23 @@ namespace PiAlarm::hardware {
         spi_.writeData(data, length);
     }
 
-    void SSD1322::sendData(const std::vector<DataByte>& data) const {
-        sendData(data.data(), data.size());
+    void SSD1322::flush(const Buffer& buffer) const {
+        assert(buffer.size() == BUFFER_WIDTH * BUFFER_HEIGHT); // Ensure the buffer size matches the expected dimensions
+
+        // Set the drawing area to the full display size
+        sendCommand(SSD1322_SETCOLUMN);
+        sendData(COLUMN_START); // Start column
+        sendData(COLUMN_END); // End column (256 pixels / 4 bits per pixel = 64 columns)
+
+        sendCommand(SSD1322_SETROW);
+        sendData(ROW_START); // Start row
+        sendData(ROW_END); // End row (63)
+
+        // Enable graphic data write mode
+        sendCommand(SSD1322_ENWRITEDATA);
+
+        // Send the framebuffer data
+        sendData(buffer.data(), buffer.size());
     }
 
     void SSD1322::initialize() const {
@@ -120,6 +136,10 @@ namespace PiAlarm::hardware {
 
     void SSD1322::allPixelsOff() const {
         sendCommand(SSD1322_DISPLAYALLOFF); // 0xA4
+    }
+
+    void SSD1322::setNormalDisplay() const {
+        sendCommand(SSD1322_NORMALDISPLAY); // 0xA6
     }
 
 } // namespace PiAlarm::hardware

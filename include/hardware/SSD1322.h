@@ -4,7 +4,7 @@
 #ifdef __linux__
 
 #include <cstdint>
-#include <vector>
+#include <array>
 
 #include "hardware/GPIO.h"
 #include "hardware/SPI.h"
@@ -64,8 +64,26 @@ namespace PiAlarm::hardware {
         GPIO& resetPin_; ///< Reset pin for the SSD1322 display
 
     public:
+        static constexpr size_t DISPLAY_WIDTH = 256; ///< Width of the SSD1322 display in pixels
+        static constexpr size_t DISPLAY_HEIGHT = 64; ///< Height of the SSD1322 display in pixels
+        static constexpr size_t BUFFER_WIDTH = DISPLAY_WIDTH/2; ///< Width of the display buffer in row (256/2 => 4 bits per pixel)
+        static constexpr size_t BUFFER_HEIGHT = DISPLAY_HEIGHT; ///< Height of the display buffer in lines
+    private:
+        /*
+         * COLUMN note:
+         * The SSD1322 ram can contain more columns than the physical display,
+         * so the current column range is from 0x1C to 0x5B to be centered in the display.
+         */
+        static constexpr uint8_t COLUMN_START = 0x1C; ///< Start column for the display buffer (28 in decimal)
+        static constexpr uint8_t COLUMN_END = 0x5B; ///< End column for the display buffer (91 in decimal, 256 pixels / 4 bits per pixel = 64 columns, so 0x5B = 28 + 64 - 1 = 91)
+        static constexpr uint8_t ROW_START = 0x00; ///< Start row for the display buffer
+        static constexpr uint8_t ROW_END = 0x3F; ///< End row for the display buffer (63 in decimal)
+
+    public:
         using CommandByte = uint8_t; ///< Type alias for command byte
         using DataByte = uint8_t; ///< Type alias for data byte
+        using PixelPairByte = uint8_t; ///< Type alias for 2 pixel byte (4 bits per pixel)
+        using Buffer = std::array<PixelPairByte, BUFFER_WIDTH * BUFFER_HEIGHT>; ///< Type alias for display buffer
 
         /**
          * Constructs an SSD1322 object with the specified SPI and GPIO pins.
@@ -114,23 +132,35 @@ namespace PiAlarm::hardware {
         void sendData(const DataByte* data, size_t length) const;
 
         /**
-         * Sends a vector of data bytes to the SSD1322 display.
-         * @param data The vector containing the data bytes to send.
-         * @note The data is sent in data mode, which is set by the `setDCPinData()` method.
+         * @brief Transfers a 4-bit grayscale framebuffer to the SSD1322 display.
+         *
+         * This method sets the drawing area (256x64 pixels), enables graphic data write mode,
+         * and sends the entire framebuffer to the display.
+         *
+         * @param buffer Pointer to the framebuffer (must be 4 bits per pixel, packed: 2 pixels per byte).
+         * @note The size of the framebuffer must match the defined BUFFER_WIDTH * BUFFER_HEIGHT (8192 for 64*128 bytes).
          */
-        void sendData(const std::vector<DataByte>& data) const;
+        void flush(const Buffer& buffer) const;
 
         /**
          * Turns on all pixels on the SSD1322 display.
          * This method sends a command to turn on all pixels, making the display fully lit.
+         * @note Call `setNormalDisplay()` to return to normal mode after this.
          */
         void allPixelsOn() const;
 
         /**
          * Turns off all pixels on the SSD1322 display.
          * This method sends a command to turn off all pixels, making the display fully dark.
+         * @note Call `setNormalDisplay()` to return to normal mode after this.
          */
         void allPixelsOff() const;
+
+        /**
+         * Sets the display to normal mode (non-inverted).
+         * This method sends a command to set the display to normal mode, where pixels are displayed as they are in the buffer.
+         */
+        void setNormalDisplay() const;
 
     private:
 
