@@ -38,10 +38,7 @@ add_subdirectory(provider)
 add_subdirectory(service)
 add_subdirectory(trigger)
 add_subdirectory(view)
-
-if(DISPLAY_SSD1322)
-    add_subdirectory(hardware)
-endif ()
+add_subdirectory(hardware)
 
 add_executable(${PROJECT_NAME}
         main.cpp
