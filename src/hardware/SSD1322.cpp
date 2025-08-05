@@ -47,8 +47,8 @@ namespace PiAlarm::hardware {
         spi_.writeData(data, length);
     }
 
-    void SSD1322::flush(const Buffer& buffer) const {
-        assert(buffer.size() == BUFFER_WIDTH * BUFFER_HEIGHT); // Ensure the buffer size matches the expected dimensions
+    void SSD1322::flush(const Buffer& buffer, size_t size) const {
+        assert(size == DISPLAY_HEIGHT * (DISPLAY_WIDTH/2)); // Ensure the buffer size matches the expected dimensions
 
         // Set the drawing area to the full display size
         sendCommand(SSD1322_SETCOLUMN);
@@ -63,7 +63,7 @@ namespace PiAlarm::hardware {
         sendCommand(SSD1322_ENWRITEDATA);
 
         // Send the framebuffer data
-        sendData(buffer.data(), buffer.size());
+        sendData(buffer, size);
     }
 
     void SSD1322::initialize() const {

@@ -66,8 +66,7 @@ namespace PiAlarm::hardware {
     public:
         static constexpr size_t DISPLAY_WIDTH = 256; ///< Width of the SSD1322 display in pixels
         static constexpr size_t DISPLAY_HEIGHT = 64; ///< Height of the SSD1322 display in pixels
-        static constexpr size_t BUFFER_WIDTH = DISPLAY_WIDTH/2; ///< Width of the display buffer in row (256/2 => 4 bits per pixel)
-        static constexpr size_t BUFFER_HEIGHT = DISPLAY_HEIGHT; ///< Height of the display buffer in lines
+
     private:
         /*
          * COLUMN note:
@@ -83,7 +82,7 @@ namespace PiAlarm::hardware {
         using CommandByte = uint8_t; ///< Type alias for command byte
         using DataByte = uint8_t; ///< Type alias for data byte
         using PixelPairByte = uint8_t; ///< Type alias for 2 pixel byte (4 bits per pixel)
-        using Buffer = std::array<PixelPairByte, BUFFER_WIDTH * BUFFER_HEIGHT>; ///< Type alias for display buffer
+        using Buffer = PixelPairByte*; ///< Type alias for display buffer
 
         /**
          * Constructs an SSD1322 object with the specified SPI and GPIO pins.
@@ -138,9 +137,10 @@ namespace PiAlarm::hardware {
          * and sends the entire framebuffer to the display.
          *
          * @param buffer Pointer to the framebuffer (must be 4 bits per pixel, packed: 2 pixels per byte).
+         * @param size
          * @note The size of the framebuffer must match the defined BUFFER_WIDTH * BUFFER_HEIGHT (8192 for 64*128 bytes).
          */
-        void flush(const Buffer& buffer) const;
+        void flush(const Buffer& buffer, size_t size) const;
 
         /**
          * Turns on all pixels on the SSD1322 display.
