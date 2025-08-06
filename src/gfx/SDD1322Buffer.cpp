@@ -2,10 +2,6 @@
 
 namespace PiAlarm::gfx {
 
-    SDD1322Buffer::SDD1322Buffer() {
-        buffer_.fill(0x00); // Initialize the buffer to black
-    }
-
     void SDD1322Buffer::setPixel(size_t x, size_t y, Pixel grayscale) {
         if (x>= BUFFER_PIXEL_WIDTH || y >= BUFFER_PIXEL_HEIGHT) return; // Out of bounds check
 

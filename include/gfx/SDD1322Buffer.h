@@ -30,7 +30,7 @@ namespace PiAlarm::gfx {
         /**
          * @brief Default constructor for SDD1322Buffer.
          */
-        SDD1322Buffer();
+        SDD1322Buffer() = default;
 
         /**
          * @brief Sets a pixel in the buffer.
@@ -40,6 +40,12 @@ namespace PiAlarm::gfx {
          * @param grayscale The grayscale value to set for the pixel (0-255).
          */
         void setPixel(size_t x, size_t y, Pixel grayscale) override;
+
+        /**
+         * @brief Clears the buffer by setting all pixels to zero (black).
+         * This method should be called to reset the buffer before drawing new content.
+         */
+        void clear() override;
 
         /**
          * @brief Gets the raw data of the buffer.
@@ -56,18 +62,20 @@ namespace PiAlarm::gfx {
          * since each byte contains 2 pixels (4 bits per pixel).
          */
         [[nodiscard]]
-        constexpr const size_t size() const override;
+        constexpr size_t size() const override;
 
         /**
          * @brief Gets the width of the buffer.
          * @return The width of the buffer in pixels.
          */
+        [[nodiscard]]
         constexpr size_t getWidth() const override;
 
         /**
          * @brief Gets the height of the buffer.
          * @return The height of the buffer in pixels.
          */
+        [[nodiscard]]
         constexpr size_t getHeight() const override;
 
     private:
@@ -83,11 +91,15 @@ namespace PiAlarm::gfx {
 
     // Inline method implementations
 
+    inline void SDD1322Buffer::clear() {
+        buffer_.fill(0x00);
+    }
+
     constexpr const uint8_t* SDD1322Buffer::data() const {
         return buffer_.data();
     }
 
-    constexpr const size_t SDD1322Buffer::size() const {
+    constexpr size_t SDD1322Buffer::size() const {
         return buffer_.size();
     }
 

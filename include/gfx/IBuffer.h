@@ -41,6 +41,12 @@ namespace PiAlarm::gfx {
         virtual void setPixel(size_t x, size_t y, Pixel grayscale) = 0;
 
         /**
+         * @brief Clears the buffer by setting all pixels to zero (black).
+         * This method should be called to reset the buffer before drawing new content.
+         */
+        virtual void clear() = 0;
+
+        /**
          * @brief Gets the raw data of the buffer.
          * @return A pointer to the raw data of the buffer.
          * @note The data is typically stored in a packed format, depending on the specific implementation.
@@ -54,18 +60,20 @@ namespace PiAlarm::gfx {
          * @note This is typically the total number of pixels multiplied by the number of bytes per pixel.
          */
         [[nodiscard]]
-        virtual const size_t size() const = 0;
+        virtual size_t size() const = 0;
 
         /**
          * @brief Gets the width in pixels of the buffer.
          * @return The width of the buffer in pixels.
          */
+        [[nodiscard]]
         virtual size_t getWidth() const = 0;
 
         /**
          * @brief Gets the height in pixels of the buffer.
          * @return The height of the buffer in pixels.
          */
+        [[nodiscard]]
         virtual size_t getHeight() const = 0;
 
     };
