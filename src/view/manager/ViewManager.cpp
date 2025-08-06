@@ -3,8 +3,8 @@
 
 namespace PiAlarm::view {
 
-    ViewManager::ViewManager(DisplayType& display)
-        : display_{display}
+    ViewManager::ViewManager(ScreenType& screen, RenderType& renderer)
+        : screen_{screen}, renderer_{renderer}
     {}
 
     void ViewManager::addView(std::unique_ptr<IView> view) {
@@ -40,9 +40,13 @@ namespace PiAlarm::view {
 
         IView* activeView = views_[currentViewIndex_].get();
         if (activeView->isDirty()) {
+            clearRenderer(); // Clear the renderer before rendering the new view
+
             activeView->refresh();
-            activeView->render(display_);
+            activeView->render(renderer_);
             activeView->clearDirty();
+
+            flushDisplay(); // Flush the display to show the rendered view
         }
     }
 

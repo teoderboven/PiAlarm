@@ -4,7 +4,7 @@
 #include <memory>
 #include <vector>
 
-#include "display/DisplayConfig.hpp"
+#include "display/ViewOutputConfig.h"
 #include "view/IView.h"
 
 namespace PiAlarm::view {
@@ -21,16 +21,18 @@ namespace PiAlarm::view {
         std::vector<std::unique_ptr<IView>> views_; ///< Owned views
         int currentViewIndex_ = -1; ///< Index of the active view (-1 if none)
 
-        DisplayType& display_; ///< Reference to the display for rendering
+        ScreenType& screen_; ///< Reference to the screen for rendering views
+        RenderType& renderer_; ///< Reference to the renderer for drawing views
 
     public:
 
         /**
          * Constructor for ViewManager.
-         * Initializes the manager with a reference to the display.
-         * @param display Reference to the display to use for rendering views.
+         * Initializes the manager with a screen and renderer.
+         * @param screen Reference to the screen where views will be rendered.
+         * @param renderer Reference to the renderer used for drawing views.
          */
-        ViewManager(DisplayType& display);
+        ViewManager(ScreenType& screen, RenderType& renderer);
 
         /**
          * Adds a view to the manager.
@@ -60,7 +62,44 @@ namespace PiAlarm::view {
          */
         void loop();
 
+    private:
+
+        /**
+         * Clears the renderer's buffer.
+         * This method is called before rendering a new view to ensure a clean slate.
+         */
+        inline void clearRenderer() const;
+
+        /**
+         * Flushes the display to ensure all changes are rendered.
+         * This method is called after rendering the current view.
+         */
+        inline void flushDisplay() const;
+
     };
+
+    // Inline methods implementation
+
+    inline void ViewManager::clearRenderer() const {
+#ifdef SSD1322_DISPLAY
+        renderer_.clear();
+#elif defined(DISPLAY_CONSOLE)
+        renderer_.str(""); // Clear the string stream
+        renderer_.clear(); // Clear the internal state of the stream
+
+        screen_ << "\033[2J\033[H"; // ANSI escape codes to clear the screen and move cursor to home position
+#endif
+    }
+
+    inline void ViewManager::flushDisplay() const {
+#ifdef SSD1322_DISPLAY
+        screen_.flush(renderer_.getBuffer());
+#elif defined(DISPLAY_CONSOLE)
+        // screen is typically std::cout
+        screen_ << renderer_.str();
+        screen_ << std::flush;
+#endif
+    }
 
 } // namespace PiAlarm::view
 

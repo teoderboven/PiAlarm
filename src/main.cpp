@@ -1,7 +1,7 @@
 #include <thread>
 
 #include "utils/consoleUtils.hpp"
-#include "display/DisplayConfig.hpp"
+#include "display/ViewOutputConfig.h"
 #include "model/AlarmsData.hpp"
 #include "model/ClockData.hpp"
 #include "model/CurrentWeatherData.h"
@@ -14,6 +14,14 @@
 #include "service/WeatherApiService.h"
 #include "media/MusicService.h"
 #include "trigger/AlarmSoundTrigger.h"
+
+#ifdef DISPLAY_SSD1322
+    #include "hardware/GPIO.h"
+    #include "hardware/SPI.h"
+    #include "hardware/SSD1322.h"
+    #include "gfx/SDD1322Buffer.h"
+    #include "gfx/Canvas.h"
+#endif
 
 namespace PiAlarm {
     // Forward declaration of the run function
@@ -60,13 +68,26 @@ int main(int argc, char *argv[]) {
 
     // Display
 #ifdef DISPLAY_SSD1322
-    // ...
+    hardware::SPI oledSpi{"/dev/spidev0.0", 10'000'000}; // SPI device for OLED display
+    hardware::GPIO oledDcPin{25}; // GPIO pin for Data/Command selection
+    hardware::GPIO oledResetPin{24}; // GPIO pin for reset
+
+    RenderType renderer {std::make_unique<gfx::SDD1322Buffer>()}; // gfx::Canvas
+    ScreenType screen {oledSpi, oledDcPin, oledResetPin}; // SSD1322 OLED display
+
+    screen.initialize();
 #elif defined(DISPLAY_CONSOLE)
-    DisplayType& display {std::cout};
+    RenderType renderer{}; // std::ostringstream
+    ScreenType& screen{std::cout}; // Console output stream
 #endif
 
     // Views
-    view::ViewManager viewManager{display};
+    view::ViewManager viewManager{screen, renderer};
+
+    // Add views to the view manager
+#ifdef DISPLAY_SSD1322
+
+#elif defined(DISPLAY_CONSOLE)
     viewManager.addView(
         std::make_unique<view::cli::MainClockView>(
             alarms_data,
@@ -76,6 +97,7 @@ int main(int argc, char *argv[]) {
             temperatureSensor_data
         )
     );
+#endif
 
     // Services
     service::TimeUpdateService timeUpdateService {clock_data};

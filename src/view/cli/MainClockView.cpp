@@ -56,9 +56,7 @@ namespace PiAlarm::view::cli {
         currentWeatherDataValid_ = currentWeatherData_.isValid();
     }
 
-    void MainClockView::render(DisplayType &display) {
-        clearDisplay(display);
-
+    void MainClockView::render(RenderType& renderer) {
         std::vector<std::pair<std::string, std::string>> labels = {
             { "Heure actuelle", formattedTime(currentTime_) },
             { "Etat de l'alarme", getAlarmStatus() },
@@ -75,11 +73,10 @@ namespace PiAlarm::view::cli {
             { "Condition météo", formattedWeatherCondition(currentWeatherCondition_, currentWeatherDataValid_) }
         };
 
-        displayLabels(display,labels);
-        display << std::flush;
+        displayLabels(renderer,labels);
     }
 
-    void MainClockView::displayLabels(DisplayType& display, const std::vector<std::pair<std::string, std::string>>& labels) {
+    void MainClockView::displayLabels(RenderType& renderer, const std::vector<std::pair<std::string, std::string>>& labels) {
         size_t max_len = 0;
         for (const auto &label: labels | std::views::keys) {
 
@@ -88,7 +85,7 @@ namespace PiAlarm::view::cli {
 
         for (const auto& [label, value] : labels) {
             if (label.empty()) {
-                display << '\n'; // Empty line for spacing
+                renderer << '\n'; // Empty line for spacing
                 continue;
             }
 
@@ -98,7 +95,7 @@ namespace PiAlarm::view::cli {
              */
             auto alignmentWidth = static_cast<int>(max_len + utils::countMultibyteChars(label));
 
-            display << std::setfill(' ') << std::setw(alignmentWidth) << std::right << label
+            renderer << std::setfill(' ') << std::setw(alignmentWidth) << std::right << label
                     << " : "
                     << value
                     << '\n';

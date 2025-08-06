@@ -1,7 +1,7 @@
 #ifndef IVIEW_H
 #define IVIEW_H
 
-#include "display/DisplayConfig.hpp"
+#include "display/ViewOutputConfig.h"
 
 /**
  * @namespace PiAlarm::view
@@ -33,11 +33,11 @@ namespace PiAlarm::view {
         virtual void refresh() = 0;
 
         /**
-         * Renders the view to the specified display.
-         * This method should be called to draw the view on the screen.
-         * @param display The display where the view will be rendered.
+         * Renders the view using the provided renderer.
+         * This method should be implemented to draw the view's content on the screen.
+         * @param renderer The renderer used to draw the view.
          */
-        virtual void render(DisplayType& display) = 0;
+        virtual void render(RenderType& renderer) = 0;
 
         /**
          * Checks if the view has undisplayed changes.

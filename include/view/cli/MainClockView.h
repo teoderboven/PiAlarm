@@ -76,17 +76,17 @@ namespace PiAlarm::view::cli {
 
         // Inherited from IView
         void refresh() override;
-        void render(DisplayType& display) override;
+        void render(RenderType& renderer) override;
 
     private:
 
         /**
-         * @brief Displays labels on the display.
-         * Labels are displayed in a formatted manner, ensuring that the longest label is aligned properly.
-         * @param display The display to render the labels on.
-         * @param labels A vector of pairs containing label names and their values.
+         * @brief Displays labels and their corresponding values.
+         * This method formats and displays a list of labels and their values in the CLI.
+         * @param renderer The renderer used to output the labels.
+         * @param labels A vector of pairs containing label names and their corresponding values.
          */
-        void displayLabels(DisplayType& display, const std::vector<std::pair<std::string, std::string>>& labels);
+        void displayLabels(RenderType& renderer, const std::vector<std::pair<std::string, std::string>>& labels);
 
         /**
          * @brief Gets the current alarm status.

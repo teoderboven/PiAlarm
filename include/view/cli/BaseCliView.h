@@ -37,16 +37,10 @@ namespace PiAlarm::view::cli {
          */
         virtual ~BaseCliView() override = default;
 
-        /**
-         * Clears the display by sending ANSI escape codes.
-         * @param display The display to clear.
-         */
-        inline void clearDisplay(DisplayType& display) const;
-
         // Inherited from IView
         // Still needs to be implemented by derived classes.
         virtual void refresh() override = 0;
-        virtual void render(DisplayType& display) override = 0;
+        virtual void render(RenderType& renderer) override = 0;
 
         // Inherited from IView
         // Is implemented here to avoid code duplication in derived classes.
@@ -62,10 +56,6 @@ namespace PiAlarm::view::cli {
     };
 
     // inline methods implementation
-
-    inline void BaseCliView::clearDisplay(DisplayType& display) const {
-        display << "\033[2J\033[H"; // ANSI escape codes to clear the screen and move cursor to home position
-    }
 
     inline bool BaseCliView::isDirty() const {
         return dirty_.load();
