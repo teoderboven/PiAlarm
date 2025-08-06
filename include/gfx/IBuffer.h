@@ -1,16 +1,9 @@
 #ifndef IBUFFER_H
 #define IBUFFER_H
 
-#include <cstdint> // For uint8_t
 #include <cstddef> // For size_t
+#include "gfx/Types.h"
 
-/**
- * @namespace PiAlarm::gfx
- * @brief Contains graphics-related classes and interfaces for the PiAlarm application.
- *
- * This namespace includes interfaces and classes for managing graphics buffers,
- * rendering, and other graphical operations.
- */
 namespace PiAlarm::gfx {
 
     /**
@@ -23,8 +16,6 @@ namespace PiAlarm::gfx {
      */
     class IBuffer {
     public:
-
-        using Pixel = uint8_t; ///< Type alias for a pixel, typically 8 bits (1 byte) representing grayscale (0 to 255).
 
         /**
          * @brief Virtual destructor for IBuffer.

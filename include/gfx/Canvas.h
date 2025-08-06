@@ -3,6 +3,7 @@
 
 #include <memory>
 
+#include "gfx/Types.h"
 #include "gfx/IBuffer.h"
 
 namespace PiAlarm::gfx {
@@ -18,8 +19,6 @@ namespace PiAlarm::gfx {
         std::unique_ptr<IBuffer> buffer_; ///< Unique pointer to the buffer used for drawing
 
     public:
-
-        using Pixel = IBuffer::Pixel; ///< Type alias for a pixel, typically 8 bits (1 byte) representing grayscale (0 to 255)
 
         /**
          * Constructor for Canvas.
