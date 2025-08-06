@@ -40,7 +40,7 @@ namespace PiAlarm::gfx {
          * @param y The y-coordinate of the pixel (vertical position).
          * @param grayscale The grayscale value to set for the pixel (0-255).
          */
-        inline void setPixel(size_t x, size_t y, Pixel grayscale) const;
+        inline void drawPixel(size_t x, size_t y, Pixel grayscale) const;
 
         /**
          * Gets the buffer used for drawing.
@@ -72,7 +72,7 @@ namespace PiAlarm::gfx {
         buffer_->clear();
     }
 
-    inline void Canvas::setPixel(size_t x, size_t y, Pixel grayscale) const {
+    inline void Canvas::drawPixel(size_t x, size_t y, Pixel grayscale) const {
         buffer_->setPixel(x, y, grayscale);
     }
 
