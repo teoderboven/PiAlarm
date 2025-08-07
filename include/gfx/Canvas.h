@@ -33,6 +33,17 @@ namespace PiAlarm::gfx {
             InvertAndDisplayAll ///< Inverted drawing mode that displays all pixels
         };
 
+        /**
+         * @struct DrawMetrics
+         * @brief Contains metrics for the drawn content on the canvas.
+         *
+         * This structure holds the width and height of the drawn content in pixels.
+         */
+        struct DrawMetrics {
+            size_t width; ///< Width of the drawn content in pixels
+            size_t height; ///< Height of the drawn content in pixels
+        };
+
     private:
         std::unique_ptr<IBuffer> buffer_; ///< Unique pointer to the buffer used for drawing
         DrawMode drawMode_; ///< Current drawing mode for the canvas
@@ -129,8 +140,9 @@ namespace PiAlarm::gfx {
          * @param y The y-coordinate where the text will be drawn.
          * @param text The text to draw, represented as a standard string.
          * @param font The Font used to render the text.
+         * @return DrawMetrics containing the width and height of the drawn text.
          */
-        void drawText(size_t x, size_t y, const std::string& text, IFont& font) const;
+        DrawMetrics drawText(size_t x, size_t y, const std::string& text, IFont& font) const;
 
         /**
          * @brief Draws text centered at the specified coordinates using the provided font.
@@ -139,8 +151,9 @@ namespace PiAlarm::gfx {
          * @param centerY The y-coordinate of the center point where the text will be drawn.
          * @param text The text to draw, represented as a standard string.
          * @param font The Font used to render the text.
+         * @return DrawMetrics containing the width and height of the drawn text.
          */
-        void drawTextCentered(size_t centerX, size_t centerY, const std::string& text, IFont& font) const;
+        DrawMetrics drawTextCentered(size_t centerX, size_t centerY, const std::string& text, IFont& font) const;
 
         /**
          * @brief Gets the buffer used for drawing.

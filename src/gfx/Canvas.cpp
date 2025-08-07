@@ -51,18 +51,20 @@ namespace PiAlarm::gfx {
         drawBitmap(drawX, drawY, glyph.bitmap);
     }
 
-    void Canvas::drawText(size_t x, size_t y, const std::string& text, IFont& font) const {
+    Canvas::DrawMetrics Canvas::drawText(size_t x, size_t y, const std::string& text, IFont& font) const {
         auto glyphs = layoutText(text, font);
         size_t baselineY = y + font.getAscender();
 
         for (const auto& g : glyphs) {
             drawGlyph(x + g.xOffset, baselineY, g.glyph);
         }
+
+        auto [textWidth, textHeight] = measureText(glyphs, font);
+        return {textWidth, textHeight};
     }
 
-    void Canvas::drawTextCentered(size_t centerX, size_t centerY, const std::string& text, IFont& font) const {
+    Canvas::DrawMetrics Canvas::drawTextCentered(size_t centerX, size_t centerY, const std::string& text, IFont& font) const {
         auto glyphs = layoutText(text, font);
-        if (glyphs.empty()) return;
 
         auto [textWidth, textHeight] = measureText(glyphs, font);
         size_t startX = centerX - textWidth / 2;
@@ -71,6 +73,8 @@ namespace PiAlarm::gfx {
         for (const auto& g : glyphs) {
             drawGlyph(startX + g.xOffset, baselineY, g.glyph);
         }
+
+        return {textWidth, textHeight};
     }
 
     std::vector<PositionedGlyph> Canvas::layoutText(const std::string& text, IFont& font) const {
