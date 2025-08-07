@@ -35,4 +35,15 @@ namespace PiAlarm::gfx {
         }
     }
 
+    void Canvas::drawChar(size_t x, size_t y, const IFont::UTF8Char& utf8Char, IFont& font) const {
+        const auto glyph = font.renderChar(utf8Char);
+
+        const size_t baselineY = y + font.getAscender();
+
+        const size_t drawX = x + glyph.bearingX;
+        const size_t drawY = baselineY - glyph.bearingY;
+
+        drawBitmap(drawX, drawY, glyph.bitmap);
+    }
+
 } // namespace PiAlarm::gfx

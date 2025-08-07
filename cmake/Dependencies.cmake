@@ -26,3 +26,18 @@ FetchContent_Declare(
         GIT_TAG        v3.12.0
 )
 FetchContent_MakeAvailable(nlohmann_json)
+
+FetchContent_Declare(
+        freetype
+        GIT_REPOSITORY https://github.com/freetype/freetype.git
+        GIT_TAG        VER-2-13-3
+)
+set(FT_DISABLE_HARFBUZZ ON)
+FetchContent_MakeAvailable(freetype)
+
+FetchContent_Declare(
+        utf8cpp
+        GIT_REPOSITORY https://github.com/nemtrif/utfcpp.git
+        GIT_TAG        v3.2.5
+)
+FetchContent_MakeAvailable(utf8cpp)

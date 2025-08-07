@@ -8,6 +8,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(SOURCES
         Canvas.cpp
         SDD1322Buffer.cpp
+        TrueTypeFont.cpp
 )
 
 add_library(${PROJECT_NAME} STATIC
@@ -15,3 +16,8 @@ add_library(${PROJECT_NAME} STATIC
 )
 
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+
+target_link_libraries(${PROJECT_NAME} PUBLIC
+        freetype
+        utf8cpp
+)

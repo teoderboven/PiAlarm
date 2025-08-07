@@ -6,6 +6,7 @@
 #include "gfx/Types.h"
 #include "gfx/Bitmap.h"
 #include "gfx/IBuffer.h"
+#include "gfx/IFont.h"
 
 namespace PiAlarm::gfx {
 
@@ -80,6 +81,15 @@ namespace PiAlarm::gfx {
          * @param bitmap The Bitmap object to draw on the canvas.
          */
         void drawBitmap(size_t x, size_t y, const Bitmap& bitmap) const;
+
+        /**
+         * @brief Draws a character at the specified coordinates using the provided font.
+         * @param x The x-coordinate where the character will be drawn.
+         * @param y The y-coordinate where the character will be drawn.
+         * @param utf8Char The character to draw, represented as a UTF-8 encoded string.
+         * @param font The Font used to render the character.
+         */
+        void drawChar(size_t x, size_t y, const IFont::UTF8Char& utf8Char, IFont& font) const;
 
         /**
          * @brief Gets the buffer used for drawing.
