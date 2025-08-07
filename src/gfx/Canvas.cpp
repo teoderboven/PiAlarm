@@ -27,4 +27,12 @@ namespace PiAlarm::gfx {
         buffer_->setPixel(x, y, finalValue);
     }
 
+    void Canvas::drawBitmap(size_t x, size_t y, const Bitmap &bitmap) const {
+        for (size_t row = 0; row < bitmap.height; row++) {
+            for (size_t col = 0; col < bitmap.width; col++) {
+                setPixel(x + col, y + row, bitmap.getPixel(col, row));
+            }
+        }
+    }
+
 } // namespace PiAlarm::gfx

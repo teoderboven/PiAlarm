@@ -4,6 +4,7 @@
 #include <memory>
 
 #include "gfx/Types.h"
+#include "gfx/Bitmap.h"
 #include "gfx/IBuffer.h"
 
 namespace PiAlarm::gfx {
@@ -71,6 +72,14 @@ namespace PiAlarm::gfx {
          * @param grayscale The grayscale value to set for the pixel (0-255).
          */
         inline void drawPixel(size_t x, size_t y, Pixel grayscale) const;
+
+        /**
+         * @brief Draws a bitmap at the specified coordinates on the canvas.
+         * @param x The x-coordinate where the bitmap will be drawn.
+         * @param y The y-coordinate where the bitmap will be drawn.
+         * @param bitmap The Bitmap object to draw on the canvas.
+         */
+        void drawBitmap(size_t x, size_t y, const Bitmap& bitmap) const;
 
         /**
          * @brief Gets the buffer used for drawing.
