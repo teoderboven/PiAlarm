@@ -89,7 +89,7 @@ namespace PiAlarm::gfx {
          * @param utf8Char The character to draw, represented as a UTF-8 encoded string.
          * @param font The Font used to render the character.
          */
-        void drawChar(size_t x, size_t y, const IFont::UTF8Char& utf8Char, IFont& font) const;
+        void drawChar(size_t x, size_t y, const UTF8Char& utf8Char, IFont& font) const;
 
     private:
 

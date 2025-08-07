@@ -1,6 +1,7 @@
 #ifndef FONT_H
 #define FONT_H
 
+#include "gfx/Types.h"
 #include "gfx/Glyph.h"
 
 namespace PiAlarm::gfx {
@@ -14,8 +15,6 @@ namespace PiAlarm::gfx {
      */
     class IFont {
     public:
-        using UnicodeChar = uint32_t; ///< Alias for Unicode character representation
-        using UTF8Char = std::string; ///< Alias for UTF-8 encoded character representation
 
         /**
          * @brief Default destructor for Font.

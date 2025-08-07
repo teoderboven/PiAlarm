@@ -15,7 +15,7 @@ namespace PiAlarm::gfx {
     struct RenderedGlyph {
         int bearingX; ///< The horizontal offset from the baseline to the left side of the glyph
         int bearingY; ///< The vertical offset from the baseline to the top of the glyph
-        long advance; ///< The horizontal advance (spacing) to the next glyph
+        ssize_t advance; ///< The horizontal advance (spacing) to the next glyph
         Bitmap bitmap; ///< The bitmap representation of the rendered glyph, containing pixel data
 
         /**
@@ -25,7 +25,7 @@ namespace PiAlarm::gfx {
          * @param advance The horizontal advance (spacing) to the next glyph
          * @param bitmap The bitmap representation of the rendered glyph
          */
-        RenderedGlyph(int bearingX, int bearingY, long advance, Bitmap bitmap)
+        RenderedGlyph(int bearingX, int bearingY, ssize_t advance, Bitmap bitmap)
             : bearingX{bearingX}, bearingY{bearingY}, advance{advance}, bitmap{std::move(bitmap)}
         {}
     };

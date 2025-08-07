@@ -36,7 +36,7 @@ namespace PiAlarm::gfx {
         }
     }
 
-    void Canvas::drawChar(size_t x, size_t y, const IFont::UTF8Char& utf8Char, IFont& font) const {
+    void Canvas::drawChar(size_t x, size_t y, const UTF8Char& utf8Char, IFont& font) const {
         const auto glyph = font.renderChar(utf8Char);
 
         const size_t baselineY = y + font.getAscender();
