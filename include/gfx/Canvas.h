@@ -38,7 +38,7 @@ namespace PiAlarm::gfx {
     public:
 
         /**
-         * Constructor for Canvas.
+         * @brief Constructor for Canvas.
          * Initializes the canvas with a unique pointer to an IBuffer.
          * @param buffer Unique pointer to the buffer used for drawing.
          * @param drawMode The drawing mode for the canvas, default is DrawMode::Normal.
@@ -46,26 +46,26 @@ namespace PiAlarm::gfx {
         explicit Canvas(std::unique_ptr<IBuffer> buffer, DrawMode drawMode = DrawMode::IgnoreBlack);
 
         /**
-         * Sets the drawing mode for the canvas.
+         * @brief Sets the drawing mode for the canvas.
          * @param drawMode The drawing mode to set.
          */
         inline void setDrawMode(DrawMode drawMode);
 
         /**
-         * Gets the current drawing mode of the canvas.
+         * @brief Gets the current drawing mode of the canvas.
          * @return The current drawing mode.
          */
         [[nodiscard]]
         inline DrawMode getDrawMode() const;
 
         /**
-         * Clears the canvas by resetting the buffer.
+         * @brief Clears the canvas by resetting the buffer.
          * This method should be called before drawing new content.
          */
         inline void clear() const;
 
         /**
-         * Sets a pixel in the canvas at the specified coordinates.
+         * @brief Sets a pixel in the canvas at the specified coordinates.
          * @param x The x-coordinate of the pixel (horizontal position).
          * @param y The y-coordinate of the pixel (vertical position).
          * @param grayscale The grayscale value to set for the pixel (0-255).
@@ -73,7 +73,7 @@ namespace PiAlarm::gfx {
         inline void drawPixel(size_t x, size_t y, Pixel grayscale) const;
 
         /**
-         * Gets the buffer used for drawing.
+         * @brief Gets the buffer used for drawing.
          * @return A constant reference to the IBuffer instance.
          * @note The returned buffed cannot be stored in a variable as the return type is a reference to the Interface.
          */
@@ -81,14 +81,14 @@ namespace PiAlarm::gfx {
         inline const IBuffer& buffer() const;
 
         /**
-         * Gets the width of the buffer in pixels.
+         * @brief Gets the width of the buffer in pixels.
          * @return The width of the buffer in pixels.
          */
         [[nodiscard]]
         constexpr size_t getWidth() const;
 
         /**
-         * Gets the height of the buffer in pixels.
+         * @brief Gets the height of the buffer in pixels.
          * @return The height of the buffer in pixels.
          */
         [[nodiscard]]
@@ -97,7 +97,7 @@ namespace PiAlarm::gfx {
     private:
 
         /**
-         * Sets a pixel in the buffer at the specified coordinates.
+         * @brief Sets a pixel in the buffer at the specified coordinates.
          * This method applies the current drawing mode before setting the pixel value.
          * @param x The x-coordinate of the pixel (horizontal position).
          * @param y The y-coordinate of the pixel (vertical position).
