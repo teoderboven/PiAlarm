@@ -16,7 +16,24 @@ namespace PiAlarm::gfx {
      * It is designed to work with a unique pointer to an IBuffer instance, which handles the pixel data.
      */
     class Canvas {
+    public:
+        /**
+         * @enum DrawMode
+         * @brief Specifies the drawing mode for the canvas.
+         *
+         * This enum defines different modes for drawing on the canvas, such as normal drawing,
+         * ignoring black pixels, inverting colors, or both ignoring black pixels and inverting colors.
+         */
+        enum class DrawMode : uint8_t {
+            IgnoreBlack, ///< Ignore black pixels when drawing
+            DisplayAll, ///< Display all pixels without any filtering
+            Invert, ///< Invert the pixel colors when drawing. Pixels that are 0 (black) after inversion will not be drawn.
+            InvertAndDisplayAll ///< Inverted drawing mode that displays all pixels
+        };
+
+    private:
         std::unique_ptr<IBuffer> buffer_; ///< Unique pointer to the buffer used for drawing
+        DrawMode drawMode_; ///< Current drawing mode for the canvas
 
     public:
 
@@ -24,8 +41,22 @@ namespace PiAlarm::gfx {
          * Constructor for Canvas.
          * Initializes the canvas with a unique pointer to an IBuffer.
          * @param buffer Unique pointer to the buffer used for drawing.
+         * @param drawMode The drawing mode for the canvas, default is DrawMode::Normal.
          */
-        explicit Canvas(std::unique_ptr<IBuffer> buffer);
+        explicit Canvas(std::unique_ptr<IBuffer> buffer, DrawMode drawMode = DrawMode::IgnoreBlack);
+
+        /**
+         * Sets the drawing mode for the canvas.
+         * @param drawMode The drawing mode to set.
+         */
+        inline void setDrawMode(DrawMode drawMode);
+
+        /**
+         * Gets the current drawing mode of the canvas.
+         * @return The current drawing mode.
+         */
+        [[nodiscard]]
+        inline DrawMode getDrawMode() const;
 
         /**
          * Clears the canvas by resetting the buffer.
@@ -63,16 +94,35 @@ namespace PiAlarm::gfx {
         [[nodiscard]]
         constexpr size_t getHeight() const;
 
+    private:
+
+        /**
+         * Sets a pixel in the buffer at the specified coordinates.
+         * This method applies the current drawing mode before setting the pixel value.
+         * @param x The x-coordinate of the pixel (horizontal position).
+         * @param y The y-coordinate of the pixel (vertical position).
+         * @param value The pixel value to set (0-255).
+         */
+        void setPixel(size_t x, size_t y, Pixel value) const;
+
     };
 
     // Inline methods implementation
+
+    inline void Canvas::setDrawMode(DrawMode drawMode) {
+        drawMode_ = drawMode;
+    }
+
+    inline Canvas::DrawMode Canvas::getDrawMode() const {
+        return drawMode_;
+    }
 
     inline void Canvas::clear() const {
         buffer_->clear();
     }
 
     inline void Canvas::drawPixel(size_t x, size_t y, Pixel grayscale) const {
-        buffer_->setPixel(x, y, grayscale);
+        setPixel(x, y, grayscale);
     }
 
     inline const IBuffer& Canvas::buffer() const {
