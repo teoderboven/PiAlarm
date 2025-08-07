@@ -102,6 +102,25 @@ namespace PiAlarm::gfx {
          */
         void drawGlyph(size_t x, size_t baselineY, const RenderedGlyph& glyph) const;
 
+        /**
+         * @brief Lays out the text by rendering each character and positioning them.
+         * This method processes the input text and returns a vector of PositionedGlyphs,
+         * which contain the rendered glyphs and their respective x-offsets.
+         * @param text The text to layout, represented as a standard string.
+         * @param font The Font used to render the text.
+         * @return A vector of PositionedGlyphs representing the laid-out text.
+         */
+        std::vector<PositionedGlyph> layoutText(const std::string& text, IFont& font) const;
+
+        /**
+         * @brief Measures the width and height of the laid-out text.
+         * This method calculates the total width and height of the text based on the rendered glyphs.
+         * @param glyphs The vector of PositionedGlyphs representing the laid-out text.
+         * @param font The Font used to render the text.
+         * @return A pair containing the width and height of the text in pixels.
+         */
+        std::pair<size_t, size_t> measureText(const std::vector<PositionedGlyph>& glyphs, const IFont& font) const;
+
     public:
 
         /**
@@ -112,6 +131,16 @@ namespace PiAlarm::gfx {
          * @param font The Font used to render the text.
          */
         void drawText(size_t x, size_t y, const std::string& text, IFont& font) const;
+
+        /**
+         * @brief Draws text centered at the specified coordinates using the provided font.
+         * This method calculates the starting position to center the text based on its width and height.
+         * @param centerX The x-coordinate of the center point where the text will be drawn.
+         * @param centerY The y-coordinate of the center point where the text will be drawn.
+         * @param text The text to draw, represented as a standard string.
+         * @param font The Font used to render the text.
+         */
+        void drawTextCentered(size_t centerX, size_t centerY, const std::string& text, IFont& font) const;
 
         /**
          * @brief Gets the buffer used for drawing.

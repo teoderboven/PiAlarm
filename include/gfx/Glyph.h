@@ -30,6 +30,26 @@ namespace PiAlarm::gfx {
         {}
     };
 
+    /**
+     * @struct PositionedGlyph
+     * @brief Represents a glyph positioned at a specific horizontal offset.
+     *
+     * This structure contains the rendered glyph data and its horizontal offset relative to the start of the text line.
+     */
+    struct PositionedGlyph {
+        RenderedGlyph glyph; ///< The rendered glyph data
+        ssize_t xOffset; ///< The horizontal offset relative to the start of the text line where the glyph is positioned
+
+        /**
+         * @brief Constructs a PositionedGlyph struct.
+         * @param glyph The rendered glyph data
+         * @param xOffset The horizontal offset relative to the start of the text line
+         */
+        PositionedGlyph(RenderedGlyph glyph, ssize_t xOffset)
+            : glyph{std::move(glyph)}, xOffset{xOffset}
+        {}
+    };
+
 } // namespace PiAlarm::gfx
 
 #endif //PIALARM_GLYPH_H
