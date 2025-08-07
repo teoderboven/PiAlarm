@@ -27,10 +27,30 @@ namespace PiAlarm::gfx {
          * ignoring black pixels, inverting colors, or both ignoring black pixels and inverting colors.
          */
         enum class DrawMode : uint8_t {
-            IgnoreBlack, ///< Ignore black pixels when drawing
-            DisplayAll, ///< Display all pixels without any filtering
-            Invert, ///< Invert the pixel colors when drawing. Pixels that are 0 (black) after inversion will not be drawn.
+            IgnoreBlack,        ///< Ignore black pixels when drawing
+            DisplayAll,         ///< Display all pixels without any filtering
+            Invert,             ///< Invert the pixel colors when drawing. Pixels that are 0 (black) after inversion will not be drawn.
             InvertAndDisplayAll ///< Inverted drawing mode that displays all pixels
+        };
+
+        /**
+         * @enum Anchor
+         * @brief Specifies the anchor point used to position text on the canvas.
+         *
+         * This enum defines which point of the text bounding box is aligned with the
+         * given (x, y) coordinates in text rendering functions. It provides precise
+         * control over text placement on the screen.
+         */
+        enum class Anchor : uint8_t {
+            TopLeft,       ///< Aligns the top-left corner of the text box with (x, y).
+            MiddleLeft,    ///< Aligns the vertical center of the left edge with (x, y).
+            BottomLeft,    ///< Aligns the bottom-left corner of the text box with (x, y).
+            TopCenter,     ///< Aligns the top-center of the text box with (x, y).
+            Center,        ///< Aligns the center of the text box with (x, y).
+            BottomCenter,  ///< Aligns the bottom-center of the text box with (x, y).
+            TopRight,      ///< Aligns the top-right corner of the text box with (x, y).
+            MiddleRight,   ///< Aligns the vertical center of the right edge with (x, y).
+            BottomRight    ///< Aligns the bottom-right corner of the text box with (x, y).
         };
 
         /**
@@ -102,6 +122,27 @@ namespace PiAlarm::gfx {
          */
         void drawChar(size_t x, size_t y, const UTF8Char& utf8Char, IFont& font) const;
 
+        /**
+         * @brief Draws UTF-8 text on the canvas with the specified anchor alignment.
+         *
+         * Renders a  string on the canvas using the provided font,
+         * with the given (x, y) coordinate interpreted according to the specified anchor.
+         * The anchor defines how the text is aligned relative to (x, y), allowing precise
+         * positioning in various layouts (e.g., top-left, center, bottom-right, etc.).
+         *
+         * @param x The horizontal position, interpreted based on the anchor.
+         * @param y The vertical position, interpreted based on the anchor.
+         * @param text The text to draw.
+         * @param font The font used to render the text.
+         * @param anchor The anchor point that determines how the text is aligned
+         *               relative to (x, y). Defaults to Anchor::TopLeft.
+         *
+         * @return DrawMetrics containing the width and height of the rendered text.
+         *
+         * @see Anchor for available alignment options.
+         */
+        DrawMetrics drawText(size_t x, size_t y, const std::string& text, IFont& font, Anchor anchor = Anchor::TopLeft) const;
+
     private:
 
         /**
@@ -132,28 +173,36 @@ namespace PiAlarm::gfx {
          */
         std::pair<size_t, size_t> measureText(const std::vector<PositionedGlyph>& glyphs, const IFont& font) const;
 
-    public:
+        /**
+         * @brief Gets the maximum bearing Y value from the laid-out glyphs.
+         * This method finds the maximum vertical offset (bearing Y) of the glyphs,
+         * which is used to adjust the vertical position of the text.
+         * @param glyphs The vector of PositionedGlyphs representing the laid-out text.
+         * @return The maximum bearing Y value among the glyphs.
+         */
+        int getMaxBearingY(const std::vector<PositionedGlyph>& glyphs) const;
 
         /**
-         * @brief Draws text at the specified coordinates using the provided font.
+         * @brief Calculates the anchor position for text based on the specified anchor type.
+         * This method determines the starting position for drawing text based on the anchor point.
          * @param x The x-coordinate where the text will be drawn.
          * @param y The y-coordinate where the text will be drawn.
-         * @param text The text to draw, represented as a standard string.
+         * @param textWidth The width of the text to be drawn.
+         * @param maxBearingY The maximum bearing Y value of the glyphs in the text.
+         *                   This is used to adjust the vertical position of the text.
          * @param font The Font used to render the text.
-         * @return DrawMetrics containing the width and height of the drawn text.
+         * @param anchor The Anchor type that specifies how to align the text.
+         * @return A pair containing the adjusted x and y coordinates for drawing the text.
          */
-        DrawMetrics drawText(size_t x, size_t y, const std::string& text, IFont& font) const;
+        std::pair<size_t, size_t> getTextAnchorPosition(
+            size_t x, size_t y,
+            size_t textWidth,
+            int maxBearingY,
+            const IFont& font,
+            Anchor anchor
+        ) const;
 
-        /**
-         * @brief Draws text centered at the specified coordinates using the provided font.
-         * This method calculates the starting position to center the text based on its width and height.
-         * @param centerX The x-coordinate of the center point where the text will be drawn.
-         * @param centerY The y-coordinate of the center point where the text will be drawn.
-         * @param text The text to draw, represented as a standard string.
-         * @param font The Font used to render the text.
-         * @return DrawMetrics containing the width and height of the drawn text.
-         */
-        DrawMetrics drawTextCentered(size_t centerX, size_t centerY, const std::string& text, IFont& font) const;
+    public:
 
         /**
          * @brief Gets the buffer used for drawing.

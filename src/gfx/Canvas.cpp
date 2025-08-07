@@ -1,4 +1,5 @@
 #include <utility>
+#include <algorithm>
 #include "utf8.h"
 
 #include "gfx/Canvas.h"
@@ -51,27 +52,19 @@ namespace PiAlarm::gfx {
         drawBitmap(drawX, drawY, glyph.bitmap);
     }
 
-    Canvas::DrawMetrics Canvas::drawText(size_t x, size_t y, const std::string& text, IFont& font) const {
-        auto glyphs = layoutText(text, font);
-        size_t baselineY = y + font.getAscender();
+    Canvas::DrawMetrics Canvas::drawText(size_t x, size_t y, const std::string& text, IFont& font, Anchor anchor) const {
+        const auto glyphs = layoutText(text, font);
 
-        for (const auto& g : glyphs) {
-            drawGlyph(x + g.xOffset, baselineY, g.glyph);
-        }
-
+        // get measures of the text
         auto [textWidth, textHeight] = measureText(glyphs, font);
-        return {textWidth, textHeight};
-    }
+        auto maxBearingY = getMaxBearingY(glyphs);
 
-    Canvas::DrawMetrics Canvas::drawTextCentered(size_t centerX, size_t centerY, const std::string& text, IFont& font) const {
-        auto glyphs = layoutText(text, font);
+        // Adjust the x and y coordinates based on the anchor
+        auto [drawX, baselineY] = getTextAnchorPosition(x, y, textWidth, maxBearingY, font, anchor);
 
-        auto [textWidth, textHeight] = measureText(glyphs, font);
-        size_t startX = centerX - textWidth / 2;
-        size_t baselineY = centerY - textHeight / 2 + font.getAscender();
-
+        // Draw the text
         for (const auto& g : glyphs) {
-            drawGlyph(startX + g.xOffset, baselineY, g.glyph);
+            drawGlyph(drawX + g.xOffset, baselineY, g.glyph);
         }
 
         return {textWidth, textHeight};
@@ -100,6 +93,67 @@ namespace PiAlarm::gfx {
         size_t width = glyphs.back().xOffset + glyphs.back().glyph.advance; // offset of the last glyph + its advance
         size_t height = font.getLineHeight();
         return {width, height};
+    }
+
+    int Canvas::getMaxBearingY(const std::vector<PositionedGlyph>& glyphs) const {
+        if (glyphs.empty()) return 0;
+
+        return std::ranges::max_element(
+            glyphs,
+            [](const PositionedGlyph& a, const PositionedGlyph& b) {
+                return a.glyph.bearingY < b.glyph.bearingY;
+            })->glyph.bearingY;
+    }
+
+    std::pair<size_t, size_t> Canvas::getTextAnchorPosition(
+        size_t x, size_t y,
+        size_t textWidth,
+        int maxBearingY,
+        const IFont& font,
+        Anchor anchor) const
+    {
+        size_t drawX = x;
+        size_t baselineY = y;
+        auto ascender = font.getAscender();
+        auto descender = font.getDescender();
+
+        // horizontal offset
+        switch (anchor) {
+            case Anchor::TopCenter:
+            case Anchor::Center:
+            case Anchor::BottomCenter:
+                drawX -= textWidth / 2;
+                break;
+
+            case Anchor::TopRight:
+            case Anchor::MiddleRight:
+            case Anchor::BottomRight:
+                drawX -= textWidth;
+                break;
+
+            default:
+                break; // left = unchanged x
+        }
+
+        // vertical offset
+        switch (anchor) {
+            case Anchor::TopLeft:
+            case Anchor::TopCenter:
+            case Anchor::TopRight:
+                baselineY += maxBearingY;
+                break;
+
+            case Anchor::MiddleLeft:
+            case Anchor::Center:
+            case Anchor::MiddleRight:
+                baselineY += (ascender + descender) / 2; // descender is negative
+                break;
+
+            default:
+                break; // bottom = unchanged y
+        }
+
+        return {drawX, baselineY};
     }
 
 } // namespace PiAlarm::gfx
