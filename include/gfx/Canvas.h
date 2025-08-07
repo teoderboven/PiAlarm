@@ -100,7 +100,7 @@ namespace PiAlarm::gfx {
          * @param baselineY The y-coordinate of the baseline for the glyph.
          * @param glyph The RenderedGlyph object containing the glyph data to draw.
          */
-        void drawGlyph(size_t x, size_t baselineY, const IFont::RenderedGlyph& glyph) const;
+        void drawGlyph(size_t x, size_t baselineY, const RenderedGlyph& glyph) const;
 
     public:
 

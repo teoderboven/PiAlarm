@@ -32,7 +32,7 @@ namespace PiAlarm::gfx {
         }
     }
 
-    const TrueTypeFont::RenderedGlyph TrueTypeFont::renderChar(const UTF8Char& utf8Char) {
+    const RenderedGlyph TrueTypeFont::renderChar(const UTF8Char& utf8Char) {
         auto it = utf8Char.begin();
         auto end = utf8Char.end();
         uint32_t codepoint = utf8::next(it, end); // Decode first char
@@ -40,7 +40,7 @@ namespace PiAlarm::gfx {
         return renderChar(codepoint);
     }
 
-    const TrueTypeFont::RenderedGlyph TrueTypeFont::renderChar(UnicodeChar codepoint) {
+    const RenderedGlyph TrueTypeFont::renderChar(UnicodeChar codepoint) {
 
         if (FT_Load_Char(face, codepoint, FT_LOAD_RENDER)) {
             throw std::runtime_error("Error when loading character. Codepoint = " + std::to_string(codepoint));
