@@ -51,4 +51,22 @@ namespace PiAlarm::gfx {
         drawBitmap(drawX, drawY, glyph.bitmap);
     }
 
+    void Canvas::drawText(size_t x, size_t y, const std::string &text, IFont &font) const {
+        size_t cursorX = x;
+        const size_t baselineY = y + font.getAscender();
+
+        auto it = text.begin();
+        const auto end = text.end();
+
+        while (it != end) {
+            IFont::UnicodeChar codepoint = utf8::next(it, end); // Decode the next UTF-8 character
+            auto glyph = font.renderChar(codepoint);
+
+            drawGlyph(cursorX, baselineY, glyph);
+
+            cursorX += glyph.advance; // Move the cursor to the right by the advance of the glyph. Used to calculate the next character position
+        }
+    }
+
+
 } // namespace PiAlarm::gfx

@@ -105,6 +105,15 @@ namespace PiAlarm::gfx {
     public:
 
         /**
+         * @brief Draws text at the specified coordinates using the provided font.
+         * @param x The x-coordinate where the text will be drawn.
+         * @param y The y-coordinate where the text will be drawn.
+         * @param text The text to draw, represented as a standard string.
+         * @param font The Font used to render the text.
+         */
+        void drawText(size_t x, size_t y, const std::string& text, IFont& font) const;
+
+        /**
          * @brief Gets the buffer used for drawing.
          * @return A constant reference to the IBuffer instance.
          * @note The returned buffed cannot be stored in a variable as the return type is a reference to the Interface.
