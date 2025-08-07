@@ -37,8 +37,13 @@ namespace PiAlarm::gfx {
         auto end = utf8Char.end();
         uint32_t codepoint = utf8::next(it, end); // Decode first char
 
-        if (FT_Load_Char(face, codepoint, FT_LOAD_RENDER)) { // FreeType uses codepoint to load the character
-            throw std::runtime_error("Error when loading character: " + utf8Char);
+        return renderChar(codepoint);
+    }
+
+    const TrueTypeFont::RenderedGlyph TrueTypeFont::renderChar(UnicodeChar codepoint) {
+
+        if (FT_Load_Char(face, codepoint, FT_LOAD_RENDER)) {
+            throw std::runtime_error("Error when loading character. Codepoint = " + std::to_string(codepoint));
         }
 
         FT_GlyphSlot g = face->glyph;

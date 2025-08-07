@@ -91,6 +91,19 @@ namespace PiAlarm::gfx {
          */
         void drawChar(size_t x, size_t y, const IFont::UTF8Char& utf8Char, IFont& font) const;
 
+    private:
+
+        /**
+         * @brief Draws a glyph at the specified coordinates.
+         * This method is used internally to draw a rendered glyph on the canvas.
+         * @param x The x-coordinate where the glyph will be drawn.
+         * @param baselineY The y-coordinate of the baseline for the glyph.
+         * @param glyph The RenderedGlyph object containing the glyph data to draw.
+         */
+        void drawGlyph(size_t x, size_t baselineY, const IFont::RenderedGlyph& glyph) const;
+
+    public:
+
         /**
          * @brief Gets the buffer used for drawing.
          * @return A constant reference to the IBuffer instance.

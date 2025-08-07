@@ -1,4 +1,5 @@
 #include <utility>
+#include "utf8.h"
 
 #include "gfx/Canvas.h"
 
@@ -40,6 +41,10 @@ namespace PiAlarm::gfx {
 
         const size_t baselineY = y + font.getAscender();
 
+        drawGlyph(x, baselineY, glyph);
+    }
+
+    void Canvas::drawGlyph(size_t x, size_t baselineY, const IFont::RenderedGlyph &glyph) const {
         const size_t drawX = x + glyph.bearingX;
         const size_t drawY = baselineY - glyph.bearingY;
 

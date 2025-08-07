@@ -16,6 +16,7 @@ namespace PiAlarm::gfx {
      */
     class IFont {
     public:
+        using UnicodeChar = uint32_t; ///< Alias for Unicode character representation
         using UTF8Char = std::string; ///< Alias for UTF-8 encoded character representation
 
         /**
@@ -54,6 +55,13 @@ namespace PiAlarm::gfx {
          * @return A GlyphBitmap containing the rendered character's bitmap data.
          */
         virtual const RenderedGlyph renderChar(const UTF8Char& utf8Char) = 0;
+
+        /**
+         * @brief Renders a character and returns its bitmap representation.
+         * @param codepoint The Unicode codepoint of the character to render.
+         * @return A RenderedGlyph containing the rendered character's bitmap data.
+         */
+        virtual const RenderedGlyph renderChar(UnicodeChar codepoint) = 0;
 
         /**
          * @brief Gets the ascender of the font.

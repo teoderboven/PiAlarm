@@ -49,6 +49,14 @@ namespace PiAlarm::gfx {
          */
         const RenderedGlyph renderChar(const UTF8Char& utf8Char) override;
 
+        /**
+         * @brief Renders a character and returns its bitmap representation.
+         * @param codepoint The Unicode codepoint of the character to render.
+         * @return A RenderedGlyph containing the rendered character's bitmap data.
+         * @throws std::runtime_error if the character cannot be loaded or rendered.
+         */
+        const RenderedGlyph renderChar(UnicodeChar codepoint) override;
+
         [[nodiscard]]
         inline int getAscender() const override;
         [[nodiscard]]
