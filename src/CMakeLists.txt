@@ -47,6 +47,7 @@ add_executable(${PROJECT_NAME}
 # link project libraries
 target_link_libraries(${PROJECT_NAME} PRIVATE
         PiAlarm_view_manager
+        PiAlarm_view         # Contains the abstract view class and common functionality
         PiAlarm_controller
         PiAlarm_service
         PiAlarm_provider

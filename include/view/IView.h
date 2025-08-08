@@ -5,9 +5,9 @@
 
 /**
  * @namespace PiAlarm::view
- * @brief Namespace for the PiAlarm view system.
+ * @brief Namespace for views in the PiAlarm application.
  *
- * This namespace contains classes and interfaces related to the view management in the PiAlarm application.
+ * This namespace contains interfaces and classes related to the views of the PiAlarm application.
  */
 namespace PiAlarm::view {
 
