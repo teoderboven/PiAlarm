@@ -52,7 +52,7 @@ namespace PiAlarm::gfx {
         drawBitmap(drawX, drawY, glyph.bitmap);
     }
 
-    Canvas::DrawMetrics Canvas::drawText(size_t x, size_t y, const std::string& text, IFont& font, Anchor anchor) const {
+    Canvas::DrawMetrics Canvas::drawText(size_t x, size_t y, const std::string& text, const std::shared_ptr<IFont>& font, Anchor anchor) const {
         const auto glyphs = layoutText(text, font);
 
         // get measures of the text
@@ -70,7 +70,7 @@ namespace PiAlarm::gfx {
         return {textWidth, textHeight};
     }
 
-    std::vector<PositionedGlyph> Canvas::layoutText(const std::string& text, IFont& font) const {
+    std::vector<PositionedGlyph> Canvas::layoutText(const std::string& text, const std::shared_ptr<IFont>& font) const {
         std::vector<PositionedGlyph> glyphs;
         size_t cursorX = 0;
 
@@ -79,7 +79,7 @@ namespace PiAlarm::gfx {
 
         while (it != end) {
             UnicodeChar codepoint = utf8::next(it, end);
-            RenderedGlyph glyph = font.renderChar(codepoint);
+            RenderedGlyph glyph = font->renderChar(codepoint);
             glyphs.emplace_back(std::move(glyph), cursorX);
             cursorX += glyphs.back().glyph.advance;
         }
@@ -87,11 +87,11 @@ namespace PiAlarm::gfx {
         return glyphs;
     }
 
-    std::pair<size_t, size_t> Canvas::measureText(const std::vector<PositionedGlyph>& glyphs, const IFont& font) const {
+    std::pair<size_t, size_t> Canvas::measureText(const std::vector<PositionedGlyph>& glyphs, const std::shared_ptr<IFont>& font) const {
         if (glyphs.empty()) return {0, 0};
 
         size_t width = glyphs.back().xOffset + glyphs.back().glyph.advance; // offset of the last glyph + its advance
-        size_t height = font.getLineHeight();
+        size_t height = font->getLineHeight();
         return {width, height};
     }
 
@@ -109,13 +109,13 @@ namespace PiAlarm::gfx {
         size_t x, size_t y,
         size_t textWidth,
         int maxBearingY,
-        const IFont& font,
+        const std::shared_ptr<IFont>& font,
         Anchor anchor) const
     {
         size_t drawX = x;
         size_t baselineY = y;
-        auto ascender = font.getAscender();
-        auto descender = font.getDescender();
+        auto ascender = font->getAscender();
+        auto descender = font->getDescender();
 
         // horizontal offset
         switch (anchor) {

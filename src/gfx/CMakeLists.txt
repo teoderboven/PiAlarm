@@ -9,6 +9,7 @@ set(SOURCES
         Canvas.cpp
         SDD1322Buffer.cpp
         TrueTypeFont.cpp
+        TrueTypeFontCache.cpp
 )
 
 add_library(${PROJECT_NAME} STATIC

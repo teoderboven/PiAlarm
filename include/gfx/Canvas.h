@@ -141,7 +141,7 @@ namespace PiAlarm::gfx {
          *
          * @see Anchor for available alignment options.
          */
-        DrawMetrics drawText(size_t x, size_t y, const std::string& text, IFont& font, Anchor anchor = Anchor::TopLeft) const;
+        DrawMetrics drawText(size_t x, size_t y, const std::string& text, const std::shared_ptr<IFont>& font, Anchor anchor = Anchor::TopLeft) const;
 
     private:
 
@@ -162,7 +162,7 @@ namespace PiAlarm::gfx {
          * @param font The Font used to render the text.
          * @return A vector of PositionedGlyphs representing the laid-out text.
          */
-        std::vector<PositionedGlyph> layoutText(const std::string& text, IFont& font) const;
+        std::vector<PositionedGlyph> layoutText(const std::string& text, const std::shared_ptr<IFont>& font) const;
 
         /**
          * @brief Measures the width and height of the laid-out text.
@@ -171,7 +171,7 @@ namespace PiAlarm::gfx {
          * @param font The Font used to render the text.
          * @return A pair containing the width and height of the text in pixels.
          */
-        std::pair<size_t, size_t> measureText(const std::vector<PositionedGlyph>& glyphs, const IFont& font) const;
+        std::pair<size_t, size_t> measureText(const std::vector<PositionedGlyph>& glyphs, const std::shared_ptr<IFont>& font) const;
 
         /**
          * @brief Gets the maximum bearing Y value from the laid-out glyphs.
@@ -198,7 +198,7 @@ namespace PiAlarm::gfx {
             size_t x, size_t y,
             size_t textWidth,
             int maxBearingY,
-            const IFont& font,
+            const std::shared_ptr<IFont>& font,
             Anchor anchor
         ) const;
 
