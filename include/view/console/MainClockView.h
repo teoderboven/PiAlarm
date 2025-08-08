@@ -17,10 +17,10 @@ namespace PiAlarm::view::console {
 
     /**
      * @class MainClockView
-     * @brief Console view for displaying the main clock information.
+     * @brief Concrete implementation of the main clock view for the console.
      *
-     * This class implements the main clock view for the console, displaying the current time,
-     * alarm status, and weather information in a formatted manner.
+     * This class extends AbstractMainClockView and provides the rendering logic for the main clock view,
+     * including displaying the current time, alarm information, and weather data in a console format.
      */
     class MainClockView final : public AbstractMainClockView {
         public:
