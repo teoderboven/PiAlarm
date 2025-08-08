@@ -108,10 +108,10 @@ namespace PiAlarm::gfx {
     int Canvas::getMaxDescender(const std::vector<PositionedGlyph>& glyphs) const {
         if (glyphs.empty()) return 0;
 
-        auto glyphWithMax = std::ranges::max_element(
+        auto glyphWithMax = std::ranges::min_element(
             glyphs,
             [](const PositionedGlyph& a, const PositionedGlyph& b) {
-                return (a.glyph.bitmap.height - a.glyph.bearingY) < (b.glyph.bitmap.height - b.glyph.bearingY);
+                return (a.glyph.bearingY - a.glyph.bitmap.height) < (b.glyph.bearingY - b.glyph.bitmap.height);
             });
 
         return glyphWithMax->glyph.bearingY - glyphWithMax->glyph.bitmap.height; // return descender as negative value
