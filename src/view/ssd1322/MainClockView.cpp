@@ -1,5 +1,5 @@
 #include "view/ssd1322/MainClockView.h"
-#include "utils/ViewUtils.hpp"
+#include "utils/ViewFormatUtils.hpp"
 
 namespace PiAlarm::view::ssd1322 {
 

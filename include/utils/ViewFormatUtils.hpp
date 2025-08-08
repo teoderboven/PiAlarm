@@ -1,11 +1,12 @@
-#ifndef PIALARM_VIEWUTILS_H
-#define PIALARM_VIEWUTILS_H
+#ifndef PIALARM_VIEWFORMATUTILS_H
+#define PIALARM_VIEWFORMATUTILS_H
 
 #include <string>
 #include <sstream>
 #include <iomanip>
 
 #include "model/Time.h"
+#include "utils/WeatherUtils.hpp"
 
 namespace PiAlarm::utils {
 
@@ -63,6 +64,65 @@ namespace PiAlarm::utils {
     }
 
     /**
+     * @brief Formats the temperature for display.
+     *
+     * If the temperature data is valid, it returns the formatted temperature value with "°C" suffix.
+     * If not valid, it returns a placeholder string.
+     *
+     * @param temperature The temperature value to format.
+     * @param valid Indicates whether the temperature data is valid or not.
+     * @return A formatted string representing the temperature value or a placeholder if invalid.
+     */
+    inline std::string formattedTemperature(float temperature, bool valid) {
+        return formatValue(temperature, valid, 1, "°C", "--.-°C");
+    }
+
+    /**
+     * @brief Formats the humidity for display.
+     *
+     * If the humidity data is valid, it returns the formatted humidity value with a percentage sign.
+     * If not valid, it returns a placeholder string.
+     *
+     * @param humidity The humidity value to format.
+     * @param valid Indicates whether the humidity data is valid or not.
+     * @return A formatted string representing the humidity value or a placeholder if invalid.
+     */
+    inline std::string formattedHumidity(float humidity, bool valid) {
+        return formatValue(humidity, valid, 0, "%", "--%");
+    }
+
+    /**
+     * @brief Formats the atmospheric pressure for display.
+     *
+     * If the pressure data is valid, it returns the formatted pressure value with " hPa" suffix.
+     * If not valid, it returns a placeholder string.
+     *
+     * @param pressure The atmospheric pressure value to format.
+     * @param valid Indicates whether the pressure data is valid or not.
+     * @return A formatted string representing the pressure value or a placeholder if invalid.
+     */
+    inline std::string formattedPressure(float pressure, bool valid) {
+        return formatValue(pressure, valid, 1, " hPa", "----.- hPa");
+    }
+
+    /**
+     * @brief Formats the weather condition for display.
+     *
+     * If the weather condition is valid, it returns a localized string representation of the condition.
+     * If not valid, it returns "???" as a placeholder.
+     *
+     * @param condition The weather condition to format.
+     * @param valid Indicates whether the weather data is valid or not.
+     * @param locale The locale for the weather condition string (default is "fr").
+     * @return A formatted string representing the weather condition or a placeholder if invalid.
+     */
+    inline std::string formattedWeatherCondition(common::WeatherCondition condition, bool valid, const std::string& locale = "fr") {
+        if (!valid) return "???";
+
+        return getLocalizedWeatherCondition(condition, locale);
+    }
+
+    /**
      * @brief Formats an integer value with leading zeros to a specified minimum number of digits.
      *
      * This function converts the integer to a string, ensuring it has at least `minDigits` digits,
@@ -80,4 +140,4 @@ namespace PiAlarm::utils {
 
 } // namespace PiAlarm::utils
 
-#endif //PIALARM_VIEWUTILS_H
+#endif //PIALARM_VIEWFORMATUTILS_H

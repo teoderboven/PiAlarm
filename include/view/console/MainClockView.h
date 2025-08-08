@@ -62,7 +62,7 @@ namespace PiAlarm::view::console {
          * @param renderer The renderer used to output the labels.
          * @param labels A vector of pairs containing label names and their corresponding values.
          */
-        void displayLabels(RenderType& renderer, const std::vector<std::pair<std::string, std::string>>& labels);
+        void displayLabels(RenderType& renderer, const std::vector<std::pair<std::string, std::string>>& labels) const;
 
         /**
          * @brief Gets the current alarm status.
@@ -71,39 +71,6 @@ namespace PiAlarm::view::console {
          */
         [[nodiscard]]
         std::string getAlarmStatus() const;
-
-        /**
-         * @brief Formats the temperature for display.
-         * @param temperature The temperature to format.
-         * @param valid Flag indicating whether the temperature data is valid.
-         * @return Formatted temperature string.
-         */
-        static std::string formattedTemperature(float temperature, bool valid);
-
-        /**
-         * @brief Formats the humidity for display.
-         * @param humidity The humidity to format.
-         * @param valid Flag indicating whether the humidity data is valid.
-         * @return Formatted humidity string.
-         */
-        static std::string formattedHumidity(float humidity, bool valid);
-
-        /**
-         * @brief Formats the pressure for display.
-         * @param pressure The pressure to format.
-         * @param valid Flag indicating whether the pressure data is valid.
-         * @return Formatted pressure string.
-         */
-        static std::string formattedPressure(float pressure, bool valid);
-
-        /**
-         * @brief Formats the weather condition for display.
-         * @param condition The weather condition to format.
-         * @param valid Flag indicating whether the weather data is valid.
-         * @param locale The locale for the weather condition string (default is "fr").
-         * @return Formatted weather condition string.
-         */
-        static std::string formattedWeatherCondition(common::WeatherCondition condition, bool valid, const std::string& locale = "fr");
 
     };
 
