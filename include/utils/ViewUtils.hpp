@@ -62,6 +62,22 @@ namespace PiAlarm::utils {
         return displayTime ? time.toString(includeSeconds) : includeSeconds ? "--:--:--" : "--:--";
     }
 
+    /**
+     * @brief Formats an integer value with leading zeros to a specified minimum number of digits.
+     *
+     * This function converts the integer to a string, ensuring it has at least `minDigits` digits,
+     * padding with leading zeros if necessary.
+     *
+     * @param value The integer value to format.
+     * @param minDigits The minimum number of digits in the formatted string.
+     * @return A string representation of the integer with leading zeros as needed.
+     */
+    inline std::string formatInt(int value, int minDigits) {
+        std::ostringstream oss;
+        oss << std::setfill('0') << std::setw(minDigits) << value;
+        return oss.str();
+    }
+
 } // namespace PiAlarm::utils
 
 #endif //PIALARM_VIEWUTILS_H
