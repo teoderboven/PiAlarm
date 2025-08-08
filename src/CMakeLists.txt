@@ -59,6 +59,7 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
 
 if(DISPLAY_SSD1322)
     target_link_libraries(${PROJECT_NAME} PRIVATE
+            PiAlarm_view_ssd1322
             PiAlarm_gfx
             PiAlarm_hardware
     )

@@ -21,6 +21,7 @@
     #include "hardware/SSD1322.h"
     #include "gfx/SDD1322Buffer.h"
     #include "gfx/Canvas.h"
+    #include "view/ssd1322/MainClockView.h"
 #endif
 
 namespace PiAlarm {
@@ -86,7 +87,15 @@ int main(int argc, char *argv[]) {
 
     // Add views to the view manager
 #ifdef DISPLAY_SSD1322
-
+    viewManager.addView(
+        std::make_unique<view::ssd1322::MainClockView>(
+            alarms_data,
+            alarmManager.getAlarmState(),
+            clock_data,
+            currentWeather_data,
+            temperatureSensor_data
+        )
+    );
 #elif defined(DISPLAY_CONSOLE)
     viewManager.addView(
         std::make_unique<view::console::MainClockView>(
