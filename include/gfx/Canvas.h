@@ -207,7 +207,6 @@ namespace PiAlarm::gfx {
         /**
          * @brief Gets the buffer used for drawing.
          * @return A constant reference to the IBuffer instance.
-         * @note The returned buffed cannot be stored in a variable as the return type is a reference to the Interface.
          */
         [[nodiscard]]
         inline const IBuffer& buffer() const;

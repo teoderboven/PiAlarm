@@ -81,7 +81,7 @@ namespace PiAlarm::view {
     // Inline methods implementation
 
     inline void ViewManager::clearRenderer() const {
-#ifdef SSD1322_DISPLAY
+#ifdef DISPLAY_SSD1322
         renderer_.clear();
 #elif defined(DISPLAY_CONSOLE)
         renderer_.str(""); // Clear the string stream
@@ -92,8 +92,9 @@ namespace PiAlarm::view {
     }
 
     inline void ViewManager::flushDisplay() const {
-#ifdef SSD1322_DISPLAY
-        screen_.flush(renderer_.getBuffer());
+#ifdef DISPLAY_SSD1322
+        const gfx::IBuffer& buffer = renderer_.buffer();
+        screen_.flush(buffer.data(), buffer.size());
 #elif defined(DISPLAY_CONSOLE)
         // screen is typically std::cout
         screen_ << renderer_.str();
