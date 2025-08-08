@@ -13,18 +13,18 @@
 #include "model/TemperatureSensorData.hpp"
 
 /**
- * @namespace PiAlarm::view::cli
- * @brief Namespace for CLI views in the PiAlarm application.
+ * @namespace PiAlarm::view::console
+ * @brief Namespace for console views in the PiAlarm application.
  *
- * This namespace contains classes that represent different views in the command-line interface of the PiAlarm application.
+ * This namespace contains classes and functions related to the console views of the PiAlarm application.
  */
-namespace PiAlarm::view::cli {
+namespace PiAlarm::view::console {
 
     /**
      * @class MainClockView
-     * @brief Represents the main clock view in the CLI application.
+     * @brief Represents the main clock view in the console application.
      *
-     * This class is responsible for displaying the current time, alarm time, and temperature.
+     * This class is responsible for displaying the current time, alarm time, weather and temperature information.
      */
     class MainClockView final : public AbstractObserverView {
         const model::AlarmsData& alarmsData_; ///< Reference to the alarms data model
@@ -131,6 +131,6 @@ namespace PiAlarm::view::cli {
 
     };
 
-} // namespace PiAlarm::view::cli
+} // namespace PiAlarm::view::console
 
 #endif //MAINCLOCKVIEW_H

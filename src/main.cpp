@@ -9,7 +9,7 @@
 #include "model/manager/AlarmManager.h"
 #include "controller/AlarmController.h"
 #include "view/manager/ViewManager.h"
-#include "view/cli/MainClockView.h"
+#include "view/console/MainClockView.h"
 #include "service/TimeUpdateService.h"
 #include "service/WeatherApiService.h"
 #include "media/MusicService.h"
@@ -89,7 +89,7 @@ int main(int argc, char *argv[]) {
 
 #elif defined(DISPLAY_CONSOLE)
     viewManager.addView(
-        std::make_unique<view::cli::MainClockView>(
+        std::make_unique<view::console::MainClockView>(
             alarms_data,
             alarmManager.getAlarmState(),
             clock_data,

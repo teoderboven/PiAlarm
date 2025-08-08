@@ -1,12 +1,12 @@
 #include <iomanip>
 #include <ranges>
 
-#include "view/cli/MainClockView.h"
+#include "view/console/MainClockView.h"
 #include "utils/consoleDisplayUtils.hpp"
 #include "utils/WeatherUtils.hpp"
 #include "utils/ViewUtils.hpp"
 
-namespace PiAlarm::view::cli {
+namespace PiAlarm::view::console {
 
     MainClockView::MainClockView(
         const model::AlarmsData& alarmsData,
@@ -136,4 +136,4 @@ namespace PiAlarm::view::cli {
         return "???";
     }
 
-} // namespace PiAlarm::view::cli
+} // namespace PiAlarm::view::console

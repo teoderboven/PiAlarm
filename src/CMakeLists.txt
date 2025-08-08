@@ -63,7 +63,7 @@ if(DISPLAY_SSD1322)
     )
 else()
     target_link_libraries(${PROJECT_NAME} PRIVATE
-            PiAlarm_view_cli
+            PiAlarm_view_console
     )
 endif ()
 
