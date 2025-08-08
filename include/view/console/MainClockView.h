@@ -52,7 +52,7 @@ namespace PiAlarm::view::console {
          * This method displays the current time, alarm status, and weather information in the console.
          * @param renderer The renderer used to output the view.
          */
-        void render(RenderType& renderer) override;
+        void render(RenderType& renderer) const override;
 
     private:
 

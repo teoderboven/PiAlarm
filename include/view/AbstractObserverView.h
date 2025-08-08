@@ -41,7 +41,7 @@ namespace PiAlarm::view {
         // Inherited from IView
         // Still needs to be implemented by derived classes.
         virtual void refresh() override = 0;
-        virtual void render(RenderType& renderer) override = 0;
+        virtual void render(RenderType& renderer) const override = 0;
 
         // Inherited from IView
         // Is implemented here to avoid code duplication in derived classes.

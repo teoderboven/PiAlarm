@@ -37,7 +37,7 @@ namespace PiAlarm::view {
          * This method should be implemented to draw the view's content on the screen.
          * @param renderer The renderer used to draw the view.
          */
-        virtual void render(RenderType& renderer) = 0;
+        virtual void render(RenderType& renderer) const = 0;
 
         /**
          * Checks if the view has undisplayed changes.

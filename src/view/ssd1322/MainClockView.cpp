@@ -21,11 +21,11 @@ namespace PiAlarm::view::ssd1322 {
         secondClockDigitFont_{gfx::TrueTypeFontCache::getFont("assets/fonts/MozillaText-Regular.ttf", 18)}
     {}
 
-    void MainClockView::render(RenderType &renderer) {
+    void MainClockView::render(RenderType &renderer) const {
         drawClock(renderer);
     }
 
-    void MainClockView::drawClock(const RenderType &renderer) {
+    void MainClockView::drawClock(const RenderType &renderer) const {
         auto middleY = renderer.getHeight() / 2;
         auto dimensions = renderer.drawText(
             0, middleY,

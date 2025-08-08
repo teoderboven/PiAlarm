@@ -25,7 +25,7 @@ namespace PiAlarm::view::console {
         {}
 
 
-    void MainClockView::render(RenderType& renderer) {
+    void MainClockView::render(RenderType& renderer) const {
         std::vector<std::pair<std::string, std::string>> labels = {
             { "Heure actuelle", utils::formattedTime(currentTime_, true, true) },
             { "Etat de l'alarme", getAlarmStatus() },

@@ -80,7 +80,7 @@ namespace PiAlarm::view {
          *
          * @param renderer The renderer to use for displaying the view.
          */
-        virtual void render(RenderType& renderer) override = 0;
+        virtual void render(RenderType& renderer) const override = 0;
 
     };
 

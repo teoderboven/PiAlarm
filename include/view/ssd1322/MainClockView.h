@@ -47,7 +47,7 @@ namespace PiAlarm::view::ssd1322 {
          * This method draws the current time, alarm information, and weather data on the screen.
          * @param renderer The renderer used to draw the view.
          */
-        void render(RenderType& renderer) override;
+        void render(RenderType& renderer) const override;
 
     private:
 
@@ -56,7 +56,7 @@ namespace PiAlarm::view::ssd1322 {
          * This method is responsible for rendering the current time in a specific format.
          * @param renderer The renderer used to draw the clock.
          */
-        void drawClock(const RenderType& renderer);
+        void drawClock(const RenderType& renderer) const;
 
     };
 
