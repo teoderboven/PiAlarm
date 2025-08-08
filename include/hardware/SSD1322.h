@@ -141,6 +141,15 @@ namespace PiAlarm::hardware {
         void flush(const uint8_t* buffer, size_t size) const;
 
         /**
+         * Sets the contrast of the SSD1322 display.
+         * @param contrast The contrast value to set (0-255).
+         * @note This method sends a command to set the contrast level of the display.
+         * @note Try to use values between 0x00 and Ox80 to avoid long-term damages to the display.
+         * @note The recommended default value is 0x50.
+         */
+        void setContrast(uint8_t contrast) const;
+
+        /**
          * Turns on all pixels on the SSD1322 display.
          * This method sends a command to turn on all pixels, making the display fully lit.
          * @note Call `setNormalDisplay()` to return to normal mode after this.

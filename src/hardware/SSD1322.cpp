@@ -101,9 +101,6 @@ namespace PiAlarm::hardware {
         sendData(0xA0);                             // Enable external VSL
         sendData(0xFD);                             // Enhanced low GS display quality
 
-        sendCommand(SSD1322_SETCONTRAST);      // 0xC1 - Set Contrast Current
-        sendData(0x05);                             // Recommended default
-
         sendCommand(SSD1322_MASTERCONTRAST);   // 0xC7 - Master Contrast
         sendData(0x0F);                             // Maximum contrast
 
@@ -123,11 +120,18 @@ namespace PiAlarm::hardware {
         sendCommand(SSD1322_SETVCOM);          // 0xBE - VCOMH Voltage
         sendData(0x07);                             // 0.86 x VCC
 
-        sendCommand(SSD1322_NORMALDISPLAY);    // 0xA6 - Normal Display (non-inverted)
+        setNormalDisplay(); // Set normal display mode
 
         sendCommand(SSD1322_EXITPARTDISPLAY);  // 0xA9 - Exit Partial Display mode
 
+        setContrast(0x50); // Set default contrast
+
         sendCommand(SSD1322_DISPLAYON);        // 0xAF - Display ON
+    }
+
+    void SSD1322::setContrast(uint8_t contrast) const {
+        sendCommand(SSD1322_SETCONTRAST);
+        sendData(contrast);
     }
 
     void SSD1322::allPixelsOn() const {
