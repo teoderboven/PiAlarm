@@ -57,7 +57,7 @@ namespace PiAlarm::gfx {
 
         // get measures of the text
         auto [textWidth, textHeight] = measureText(glyphs, font);
-        auto maxBearingY = getMaxBearingY(glyphs);
+        auto maxBearingY = getMaxAscender(glyphs);
 
         // Adjust the x and y coordinates based on the anchor
         auto [drawX, baselineY] = getTextAnchorPosition(x, y, textWidth, maxBearingY, font, anchor);
@@ -91,11 +91,11 @@ namespace PiAlarm::gfx {
         if (glyphs.empty()) return {0, 0};
 
         size_t width = glyphs.back().xOffset + glyphs.back().glyph.advance; // offset of the last glyph + its advance
-        size_t height = font->getLineHeight();
+        size_t height = getMaxAscender(glyphs) - getMaxDescender(glyphs);
         return {width, height};
     }
 
-    int Canvas::getMaxBearingY(const std::vector<PositionedGlyph>& glyphs) const {
+    int Canvas::getMaxAscender(const std::vector<PositionedGlyph>& glyphs) const {
         if (glyphs.empty()) return 0;
 
         return std::ranges::max_element(
@@ -103,6 +103,18 @@ namespace PiAlarm::gfx {
             [](const PositionedGlyph& a, const PositionedGlyph& b) {
                 return a.glyph.bearingY < b.glyph.bearingY;
             })->glyph.bearingY;
+    }
+
+    int Canvas::getMaxDescender(const std::vector<PositionedGlyph>& glyphs) const {
+        if (glyphs.empty()) return 0;
+
+        auto glyphWithMax = std::ranges::max_element(
+            glyphs,
+            [](const PositionedGlyph& a, const PositionedGlyph& b) {
+                return (a.glyph.bitmap.height - a.glyph.bearingY) < (b.glyph.bitmap.height - b.glyph.bearingY);
+            });
+
+        return glyphWithMax->glyph.bearingY - glyphWithMax->glyph.bitmap.height; // return descender as negative value
     }
 
     std::pair<size_t, size_t> Canvas::getTextAnchorPosition(

@@ -174,13 +174,27 @@ namespace PiAlarm::gfx {
         std::pair<size_t, size_t> measureText(const std::vector<PositionedGlyph>& glyphs, const std::shared_ptr<IFont>& font) const;
 
         /**
-         * @brief Gets the maximum bearing Y value from the laid-out glyphs.
-         * This method finds the maximum vertical offset (bearing Y) of the glyphs,
+         * @brief Gets the maximum ascender value from the laid-out glyphs.
+         * This method finds the maximum ascender value (bearing Y) of the glyphs,
          * which is used to adjust the vertical position of the text.
          * @param glyphs The vector of PositionedGlyphs representing the laid-out text.
-         * @return The maximum bearing Y value among the glyphs.
+         * @return The maximum ascender value among the glyphs, as a positive integer.
          */
-        int getMaxBearingY(const std::vector<PositionedGlyph>& glyphs) const;
+        int getMaxAscender(const std::vector<PositionedGlyph>& glyphs) const;
+
+        /**
+         * @brief Gets the maximum descender value from the laid-out glyphs.
+         * This method finds the maximum descender value of the glyphs,
+         * calculated as a negative integer representing the distance below the baseline.
+         * It corresponds to the minimal (most negative) value of (bearingY - bitmap height).
+         * This value is used to adjust the vertical position of the text.
+         * @param glyphs The vector of PositionedGlyphs representing the laid-out text.
+         * @return The maximum descender value among the glyphs, as a negative integer.
+         * @warning In this context, "maximum descender" means the glyph that extends the furthest below the baseline,
+         *          so it is the smallest (most negative) value.
+         *          For example, between -1 and -2, the maximum descender is -2.
+         */
+        int getMaxDescender(const std::vector<PositionedGlyph>& glyphs) const;
 
         /**
          * @brief Calculates the anchor position for text based on the specified anchor type.
