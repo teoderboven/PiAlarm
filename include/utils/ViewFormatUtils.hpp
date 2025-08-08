@@ -59,7 +59,7 @@ namespace PiAlarm::utils {
      * @param includeSeconds Indicates whether to include seconds in the formatted time.
      * @return A formatted string representing the time or a placeholder if not displaying time.
      */
-    inline std::string formattedTime(model::Time time, bool displayTime = true, bool includeSeconds = false) {
+    inline std::string formatTime(model::Time time, bool displayTime = true, bool includeSeconds = false) {
         return displayTime ? time.toString(includeSeconds) : includeSeconds ? "--:--:--" : "--:--";
     }
 
@@ -73,7 +73,7 @@ namespace PiAlarm::utils {
      * @param valid Indicates whether the temperature data is valid or not.
      * @return A formatted string representing the temperature value or a placeholder if invalid.
      */
-    inline std::string formattedTemperature(float temperature, bool valid) {
+    inline std::string formatTemperature(float temperature, bool valid) {
         return formatValue(temperature, valid, 1, "°C", "--.-°C");
     }
 
@@ -87,7 +87,7 @@ namespace PiAlarm::utils {
      * @param valid Indicates whether the humidity data is valid or not.
      * @return A formatted string representing the humidity value or a placeholder if invalid.
      */
-    inline std::string formattedHumidity(float humidity, bool valid) {
+    inline std::string formatHumidity(float humidity, bool valid) {
         return formatValue(humidity, valid, 0, "%", "--%");
     }
 
@@ -101,7 +101,7 @@ namespace PiAlarm::utils {
      * @param valid Indicates whether the pressure data is valid or not.
      * @return A formatted string representing the pressure value or a placeholder if invalid.
      */
-    inline std::string formattedPressure(float pressure, bool valid) {
+    inline std::string formatPressure(float pressure, bool valid) {
         return formatValue(pressure, valid, 1, " hPa", "----.- hPa");
     }
 
