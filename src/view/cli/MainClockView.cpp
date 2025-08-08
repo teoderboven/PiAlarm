@@ -1,10 +1,10 @@
-#include <sstream>
 #include <iomanip>
 #include <ranges>
 
 #include "view/cli/MainClockView.h"
 #include "utils/consoleDisplayUtils.hpp"
 #include "utils/WeatherUtils.hpp"
+#include "utils/ViewUtils.hpp"
 
 namespace PiAlarm::view::cli {
 
@@ -15,7 +15,7 @@ namespace PiAlarm::view::cli {
         const model::CurrentWeatherData &currentWeatherData,
         const model::TemperatureSensorData& temperatureSensorData
         )
-        : BaseCliView{true},
+        : AbstractObserverView{true},
         alarmsData_{alarmsData},
         alarmStateData_{alarmStateData},
         clockData_{clockData},
@@ -58,7 +58,7 @@ namespace PiAlarm::view::cli {
 
     void MainClockView::render(RenderType& renderer) {
         std::vector<std::pair<std::string, std::string>> labels = {
-            { "Heure actuelle", formattedTime(currentTime_) },
+            { "Heure actuelle", utils::formattedTime(currentTime_, true, true) },
             { "Etat de l'alarme", getAlarmStatus() },
             { "Nombre d'alarmes actives", std::to_string(enabledAlarmCount_) },
             { "", "" },
@@ -102,29 +102,16 @@ namespace PiAlarm::view::cli {
         }
     }
 
-
-    std::string MainClockView::formattedTime(const model::Time& time, bool displayTime) {
-        return displayTime ? time.toString() : "--:--";
-    }
-
-    std::string MainClockView::formatValue(float value, bool valid, int precision, const std::string& unit, const std::string& placeholder) {
-        if (!valid) return placeholder;
-
-        std::ostringstream oss;
-        oss << std::fixed << std::setprecision(precision) << value << unit;
-        return oss.str();
-    }
-
     std::string MainClockView::formattedTemperature(float temperature, bool valid) {
-        return formatValue(temperature, valid, 1, "°C", "--.-°C");
+        return utils::formatValue(temperature, valid, 1, "°C", "--.-°C");
     }
 
     std::string MainClockView::formattedHumidity(float humidity, bool valid) {
-        return formatValue(humidity, valid, 0, "%", "--%");
+        return utils::formatValue(humidity, valid, 0, "%", "--%");
     }
 
     std::string MainClockView::formattedPressure(float pressure, bool valid) {
-        return formatValue(pressure, valid, 1, " hPa", "----.- hPa");
+        return utils::formatValue(pressure, valid, 1, " hPa", "----.- hPa");
     }
 
     std::string MainClockView::formattedWeatherCondition(common::WeatherCondition condition, bool valid, const std::string& locale) {

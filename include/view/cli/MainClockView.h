@@ -5,7 +5,7 @@
 #include <vector>
 #include <utility>
 
-#include "view/cli/BaseCliView.h"
+#include "view/AbstractObserverView.h"
 #include "model/AlarmsData.hpp"
 #include "model/AlarmState.hpp"
 #include "model/ClockData.hpp"
@@ -26,7 +26,7 @@ namespace PiAlarm::view::cli {
      *
      * This class is responsible for displaying the current time, alarm time, and temperature.
      */
-    class MainClockView final : public BaseCliView {
+    class MainClockView final : public AbstractObserverView {
         const model::AlarmsData& alarmsData_; ///< Reference to the alarms data model
         const model::AlarmState& alarmStateData_; ///< Reference to the alarm state data model
         const model::ClockData& clockData_; ///< Reference to the clock data model
@@ -95,25 +95,6 @@ namespace PiAlarm::view::cli {
          */
         [[nodiscard]]
         std::string getAlarmStatus() const;
-
-        /**
-         * @brief Formats a value for display.
-         * @param value The value to format.
-         * @param valid Flag indicating whether the value is valid.
-         * @param precision The number of decimal places to include in the formatted string.
-         * @param unit The unit of measurement for the value (e.g., "°C", "%").
-         * @param placeholder The placeholder string to use if the value is not valid.
-         * @return Formatted string representation of the value.
-         */
-        static std::string formatValue(float value, bool valid, int precision, const std::string& unit, const std::string& placeholder);
-
-        /**
-         * @brief Formats the time for display.
-         * @param time The time to format.
-         * @param displayTime Flag indicating whether to display the time or a placeholder.
-         * @return Formatted time string.
-         */
-        static std::string formattedTime(const model::Time& time, bool displayTime = true);
 
         /**
          * @brief Formats the temperature for display.

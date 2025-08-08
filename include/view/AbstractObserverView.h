@@ -1,25 +1,26 @@
-#ifndef BASECLIVIEW_H
-#define BASECLIVIEW_H
+#ifndef ABSTRACTOBSERVERVIEW_H
+#define ABSTRACTOBSERVERVIEW_H
 
 #include <atomic>
 
 #include "common/Observer.h"
 #include "view/IView.h"
 
-namespace PiAlarm::view::cli {
+namespace PiAlarm::view {
 
     /**
-     * @class BaseCliView
-     * @brief Base class for CLI views in the PiAlarm application.
+     * @class AbstractObserverView
+     * @brief Base class for views that observe changes in the model.
      *
-     * This class serves as a base for all CLI views, providing common functionality
-     * and ensuring that derived classes implement the necessary methods.
+     * This class implements the IView interface and extends the Observer class.
+     * It provides a mechanism to mark the view as dirty when the model changes,
+     * indicating that the view needs to be refreshed.
      *
-     * @note Don't forget to implement the refresh() and render() methods in derived classes.
+     * @note Still needs to implement the refresh() and render() methods in derived classes.
      */
-    class BaseCliView : public IView, public common::Observer {
-
+    class AbstractObserverView : public IView, public common::Observer {
         std::atomic<bool> dirty_; ///< Flag indicating if the view is dirty (needs to be refreshed)
+
     public:
 
         /**
@@ -27,7 +28,7 @@ namespace PiAlarm::view::cli {
          * Initializes the dirty state to true by default.
          * @param isDirty Initial dirty state of the view.
          */
-        explicit BaseCliView(bool isDirty = true)
+        explicit AbstractObserverView(bool isDirty = true)
             : dirty_(isDirty)
         {}
 
@@ -35,7 +36,7 @@ namespace PiAlarm::view::cli {
          * Virtual destructor for the BaseCliView.
          * Ensures proper cleanup of derived classes.
          */
-        virtual ~BaseCliView() override = default;
+        virtual ~AbstractObserverView() override = default;
 
         // Inherited from IView
         // Still needs to be implemented by derived classes.
@@ -57,18 +58,18 @@ namespace PiAlarm::view::cli {
 
     // inline methods implementation
 
-    inline bool BaseCliView::isDirty() const {
+    inline bool AbstractObserverView::isDirty() const {
         return dirty_.load();
     }
 
-    inline void BaseCliView::clearDirty() {
+    inline void AbstractObserverView::clearDirty() {
         dirty_.store(false);
     }
 
-    inline void BaseCliView::update() {
+    inline void AbstractObserverView::update() {
         dirty_.store(true); // The model has changed, the view needs to be refreshed
     }
 
-} // namespace PiAlarm::view::cli
+} // namespace PiAlarm::view
 
-#endif //BASECLIVIEW_H
+#endif //ABSTRACTOBSERVERVIEW_H
