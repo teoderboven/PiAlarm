@@ -18,11 +18,14 @@ namespace PiAlarm::view::ssd1322 {
         std::shared_ptr<gfx::IFont> mainClockDigitFont_;       ///< Font for the main clock digits.
         std::shared_ptr<gfx::IFont> secondClockDigitFont_;     ///< Font for the seconds in the clock.
         std::shared_ptr<gfx::IFont> rightListFont_;            ///< Font for the right list elements (alarm & conditions).
+        std::shared_ptr<gfx::IFont> noAlarmFont_;              ///< Font for displaying "No Alarm" text.
+        std::shared_ptr<gfx::IFont> snoozeUntilFont_;          ///< Font for displaying the snooze until time.
         std::shared_ptr<gfx::IFont> temperatureIndicatorFont_; ///< Font for the temperature indicator.
 
         ssize_t temperatureHumiditySpacing {5};                ///< Spacing between temperature and humidity text.
         ssize_t indicatorTemperatureSpacing {1};               ///< Spacing between temperature and indicator text.
         ssize_t listElementBorderScreenVerticalSpacing {7};    ///< Vertical spacing for list elements from the screen border.
+        ssize_t snoozeStatusSnoozeUntilSpacing {3};            ///< Spacing between snooze status and snooze until text.
         ssize_t conditionVerticalSpacing {4};                  ///< Vertical spacing between different conditions (indoor/outdoor).
 
     public:
@@ -64,6 +67,22 @@ namespace PiAlarm::view::ssd1322 {
          * @param renderer The renderer used to draw the clock.
          */
         void drawClock(const RenderType& renderer) const;
+
+        /**
+         * @brief Draws the alarm status on the screen.
+         * This method displays the current alarm status, including whether the alarm is active,
+         * snoozed, or disabled. It also handles the display of snooze until time if applicable.
+         * @param renderer The renderer used to draw the alarm status.
+         */
+        void drawAlarmStatus(const RenderType& renderer) const;
+
+        /**
+         * @brief Gets the current alarm status as a string.
+         * This method checks the alarm state and returns a string representation of the current
+         * alarm status, such as "No Alarm", "Alarm Active", or "Alarm Snoozed".
+         * @return A string representing the current alarm status.
+         */
+        std::string getAlarmStatus() const;
 
         /**
          * @brief Draws the conditions (temperature and humidity) on the screen.

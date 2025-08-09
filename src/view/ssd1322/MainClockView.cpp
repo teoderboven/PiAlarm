@@ -3,6 +3,10 @@
 #include "view/ssd1322/MainClockView.h"
 #include "utils/ViewFormatUtils.hpp"
 
+// Fonts used in the view
+#define FONT_MozillaText_Regular "assets/fonts/MozillaText-Regular.ttf"
+#define FONT_MozillaText_Light "assets/fonts/MozillaText-Light.ttf"
+
 namespace PiAlarm::view::ssd1322 {
 
     MainClockView::MainClockView(
@@ -19,14 +23,17 @@ namespace PiAlarm::view::ssd1322 {
             currentWeatherData,
             temperatureSensorData
         ),
-        mainClockDigitFont_{gfx::TrueTypeFontCache::getFont("assets/fonts/MozillaText-Regular.ttf", 48)},
-        secondClockDigitFont_{gfx::TrueTypeFontCache::getFont("assets/fonts/MozillaText-Regular.ttf", 18)},
-        rightListFont_{gfx::TrueTypeFontCache::getFont("assets/fonts/MozillaText-Light.ttf", 13)},
-        temperatureIndicatorFont_{gfx::TrueTypeFontCache::getFont("assets/fonts/MozillaText-Light.ttf", 7)}
+        mainClockDigitFont_{gfx::TrueTypeFontCache::getFont(FONT_MozillaText_Light, 48)},
+        secondClockDigitFont_{gfx::TrueTypeFontCache::getFont(FONT_MozillaText_Light, 18)},
+        rightListFont_{gfx::TrueTypeFontCache::getFont(FONT_MozillaText_Light, 13)},
+        noAlarmFont_{gfx::TrueTypeFontCache::getFont(FONT_MozillaText_Light, 12)},
+        snoozeUntilFont_{gfx::TrueTypeFontCache::getFont(FONT_MozillaText_Light, 10)},
+        temperatureIndicatorFont_{gfx::TrueTypeFontCache::getFont(FONT_MozillaText_Light, 7)}
     {}
 
     void MainClockView::render(RenderType &renderer) const {
         drawClock(renderer);
+        drawAlarmStatus(renderer);
         drawConditions(renderer);
     }
 
@@ -46,6 +53,53 @@ namespace PiAlarm::view::ssd1322 {
             secondClockDigitFont_,
             gfx::Canvas::Anchor::BottomLeft
         );
+    }
+
+    void MainClockView::drawAlarmStatus(const RenderType &renderer) const {
+        auto rightBorder = renderer.getWidth();
+        auto topY = listElementBorderScreenVerticalSpacing;
+        size_t snoozeOffset {0}; // width of the potential snooze until text
+        auto statusFont = rightListFont_;
+
+        std::string statusText = getAlarmStatus();
+
+        if (!hasAlarmEnabled_)
+            statusFont = noAlarmFont_; // Text overlaps with clock digits with rightlistFont
+
+        if (alarmStateData_.isAlarmSnoozed()) {
+            // first draw snooze until time if snooze is active
+
+            auto snoozeUntilDimensions = renderer.drawText(
+                rightBorder, topY + (3/2), // 3/2 to center the snooze until text vertically
+                '(' + alarmStateData_.getSnoozeUntil()->toString() + ')',
+                snoozeUntilFont_,
+                gfx::Canvas::Anchor::TopRight
+            );
+            snoozeOffset = snoozeUntilDimensions.width + snoozeStatusSnoozeUntilSpacing;
+        }
+
+        auto statusTextDimensions = renderer.drawText(
+            rightBorder - snoozeOffset, topY,
+            statusText,
+            statusFont,
+            gfx::Canvas::Anchor::TopRight
+        );
+    }
+
+    std::string MainClockView::getAlarmStatus() const {
+        if (!hasAlarmEnabled_)
+            return "Pas d'alarme activée";
+
+        if (!alarmStateData_.hasTriggeredAlarm())
+            return  nextAlarmTime_.toString(false);
+
+        if (alarmStateData_.isAlarmRinging())
+            return "DRIIIING !";
+
+        if (alarmStateData_.isAlarmSnoozed())
+            return "Snooze";
+
+        return "???";
     }
 
     void MainClockView::drawConditions(const RenderType &renderer) const {
