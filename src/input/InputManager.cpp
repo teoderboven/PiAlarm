@@ -33,11 +33,23 @@ namespace PiAlarm::input {
             hardware::GPIOEvent event = button.gpio.readEvent();
             bool pressed = (event.type == hardware::GPIOEvent::Type::RisingEdge);
 
+            if (button.pressed == pressed) {
+                // If the button state hasn't changed, skip generating an event
+                continue;
+            }
+
             button.pressed = pressed;
+
+            if (now - button.lastEventTime < DEBOUNCE_DURATION) {
+                // If the event is too close to the last event, skip it to avoid flooding
+                continue;
+            }
+
             if (pressed) {
                 button.lastPressTime = now;
                 button.lastRepeatTime = now;
             }
+            button.lastEventTime = now;
 
             events.push_back({ button.type, pressed });
         }

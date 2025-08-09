@@ -56,6 +56,7 @@ namespace PiAlarm::input {
             bool generateRepeats; ///< Whether to generate auto-repeat events for this button
             std::chrono::steady_clock::time_point lastPressTime; ///< The last time the button was pressed
             std::chrono::steady_clock::time_point lastRepeatTime; ///< The last time the button was repeated for auto-repeat
+            std::chrono::steady_clock::time_point lastEventTime; ///< The last time an event was generated for this button
 
             /**
              * @brief Constructs a Button from a ButtonMapping.
