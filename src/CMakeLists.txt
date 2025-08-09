@@ -31,6 +31,8 @@ endif()
 
 add_subdirectory(controller)
 add_subdirectory(gfx)
+add_subdirectory(hardware)
+add_subdirectory(input)
 add_subdirectory(logging)
 add_subdirectory(media)
 add_subdirectory(model)
@@ -38,7 +40,6 @@ add_subdirectory(provider)
 add_subdirectory(service)
 add_subdirectory(trigger)
 add_subdirectory(view)
-add_subdirectory(hardware)
 
 add_executable(${PROJECT_NAME}
         main.cpp
@@ -61,6 +62,7 @@ if(DISPLAY_SSD1322)
     target_link_libraries(${PROJECT_NAME} PRIVATE
             PiAlarm_view_ssd1322
             PiAlarm_gfx
+            PiAlarm_input
             PiAlarm_hardware
     )
 else()
