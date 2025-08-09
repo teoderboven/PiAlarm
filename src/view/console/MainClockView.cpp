@@ -26,18 +26,18 @@ namespace PiAlarm::view::console {
 
     void MainClockView::render(RenderType& renderer) const {
         std::vector<std::pair<std::string, std::string>> labels = {
-            { "Heure actuelle", utils::formattedTime(currentTime_, true, true) },
+            { "Heure actuelle", utils::formatTime(currentTime_, true, true) },
             { "Etat de l'alarme", getAlarmStatus() },
             { "Nombre d'alarmes actives", std::to_string(enabledAlarmCount_) },
             { "", "" },
 
-            { "Température pièce", utils::formattedTemperature(currentIndoorTemperature_, sensorDataValid_) },
-            { "Humidité pièce", utils::formattedHumidity(currentIndoorHumidity_, sensorDataValid_) },
+            { "Température pièce", utils::formatTemperature(currentIndoorTemperature_, sensorDataValid_) },
+            { "Humidité pièce", utils::formatHumidity(currentIndoorHumidity_, sensorDataValid_) },
             { "", "" },
 
-            { "Température ext.", utils::formattedTemperature(currentOutdoorTemperature_, currentWeatherDataValid_) },
-            { "Humidité ext.", utils::formattedHumidity(currentOutdoorHumidity_, currentWeatherDataValid_) },
-            { "Pression atm.", utils::formattedPressure(currentOutdoorPressure_, currentWeatherDataValid_) },
+            { "Température ext.", utils::formatTemperature(currentOutdoorTemperature_, currentWeatherDataValid_) },
+            { "Humidité ext.", utils::formatHumidity(currentOutdoorHumidity_, currentWeatherDataValid_) },
+            { "Pression atm.", utils::formatPressure(currentOutdoorPressure_, currentWeatherDataValid_) },
             { "Condition météo", utils::formattedWeatherCondition(currentWeatherCondition_, currentWeatherDataValid_) }
         };
 
