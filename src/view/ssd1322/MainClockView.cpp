@@ -52,8 +52,9 @@ namespace PiAlarm::view::ssd1322 {
             gfx::Canvas::Anchor::MiddleLeft
         );
 
+        auto secondsY = middleY + (HMDimensions.height / 2) - 1; // -1 to align the seconds digits with the baseline of the clock digits
         renderer.drawText(
-            HMDimensions.width, (middleY + HMDimensions.height / 2),
+            HMDimensions.width, secondsY,
             utils::formatInt(currentTime_.second(), 2),
             secondClockDigitFont_,
             gfx::Canvas::Anchor::BottomLeft
