@@ -4,6 +4,7 @@
 #ifdef __linux__
 
 #include <gpiod.h>
+#include <chrono>
 #include <string>
 
 /**
@@ -13,6 +14,32 @@
  * This namespace includes classes for interacting with hardware components such as GPIO pins.
  */
 namespace PiAlarm::hardware {
+
+    /**
+     * @struct GPIOEvent
+     * @brief Represents an event on a GPIO pin.
+     *
+     * This struct is used to encapsulate information about a GPIO event,
+     * including the type of edge detected (rising or falling) and the timestamp
+     * when the event occurred.
+     */
+    struct GPIOEvent {
+        /**
+         * @enum Type
+         * @brief Represents the type of edge detected on a GPIO pin.
+         *
+         * This enum defines the possible types of edges that can be detected:
+         * - RisingEdge: Indicates a rising edge event (transition from low to high).
+         * - FallingEdge: Indicates a falling edge event (transition from high to low).
+         */
+        enum class Type {
+            RisingEdge,
+            FallingEdge
+        };
+
+        Type type; ///< The type of edge detected (rising or falling)
+        std::chrono::steady_clock::time_point timestamp; ///< The timestamp when the event occurred
+    };
 
     /**
      * @class GPIO
@@ -43,9 +70,26 @@ namespace PiAlarm::hardware {
             OUTPUT = 1  ///< GPIO line is set as output
         };
 
+        /**
+         * @enum EdgeType
+         * @brief Represents the edge detection type for GPIO lines.
+         *
+         * This enum defines the possible edge detection types:
+         * - NONE: No edge detection
+         * - RISING: Detect rising edges
+         * - FALLING: Detect falling edges
+         * - BOTH: Detect both rising and falling edges
+         */
+        enum class EdgeType : int8_t {
+            NONE,
+            RISING,
+            FALLING,
+            BOTH
+        };
+
     private:
-        struct gpiod_chip* chip_; ///< Pointer to the GPIO chip
-        struct gpiod_line* line_; ///< Pointer to the GPIO line
+        gpiod_chip* chip_; ///< Pointer to the GPIO chip
+        gpiod_line* line_; ///< Pointer to the GPIO line
         GPIOMode mode_ = GPIOMode::NONE; ///< Current mode of the GPIO line (input or output)
 
     public:
@@ -102,6 +146,13 @@ namespace PiAlarm::hardware {
         void setInput();
 
         /**
+         * Sets the GPIO line as an input with edge detection.
+         * @param edge The type of edge detection to set (EdgeType).
+         * @throws std::runtime_error if the line cannot be set with edge detection.
+         */
+        void setInputWithEdgeDetection(EdgeType edge);
+
+        /**
          * Sets the GPIO line to a specific value.
          * @param value The value to set (0 or 1).
          * @throws std::runtime_error if the line value cannot be set.
@@ -129,6 +180,22 @@ namespace PiAlarm::hardware {
          */
         [[nodiscard]]
         inline bool isLow() const;
+
+        /**
+         * Waits for an event on the GPIO line.
+         * This method blocks until an event occurs or the timeout is reached.
+         * @param timeoutMs The maximum time to wait for an event in milliseconds (default is 1000 ms).
+         * @return true if an event occurred, false if the timeout was reached.
+         */
+        [[nodiscard]]
+        bool waitForEvent(int timeoutMs = 1000) const;
+
+        /**
+         * Reads the last event that occurred on the GPIO line.
+         * @return A GPIOEvent struct containing the type of edge and timestamp of the event.
+         * @throws std::runtime_error if no event has occurred or if the line is not set for edge detection.
+         */
+        GPIOEvent readEvent() const;
 
     };
 
