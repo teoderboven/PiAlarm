@@ -4,6 +4,7 @@
 #include "view/AbstractMainClockView.h"
 #include "gfx/TrueTypeFont.h"
 #include "gfx/TrueTypeFontCache.h"
+#include "gfx/Pictogram.h"
 
 namespace PiAlarm::view::ssd1322 {
 
@@ -15,18 +16,24 @@ namespace PiAlarm::view::ssd1322 {
      * including displaying the current time, alarm information, and weather data.
      */
     class MainClockView final : public AbstractMainClockView {
-        std::shared_ptr<gfx::IFont> mainClockDigitFont_;       ///< Font for the main clock digits.
-        std::shared_ptr<gfx::IFont> secondClockDigitFont_;     ///< Font for the seconds in the clock.
-        std::shared_ptr<gfx::IFont> rightListFont_;            ///< Font for the right list elements (alarm & conditions).
-        std::shared_ptr<gfx::IFont> noAlarmFont_;              ///< Font for displaying "No Alarm" text.
-        std::shared_ptr<gfx::IFont> snoozeUntilFont_;          ///< Font for displaying the snooze until time.
-        std::shared_ptr<gfx::IFont> temperatureIndicatorFont_; ///< Font for the temperature indicator.
+        const std::shared_ptr<gfx::IFont> mainClockDigitFont_;       ///< Font for the main clock digits.
+        const std::shared_ptr<gfx::IFont> secondClockDigitFont_;     ///< Font for the seconds in the clock.
+        const std::shared_ptr<gfx::IFont> rightListFont_;            ///< Font for the right list elements (alarm & conditions).
+        const std::shared_ptr<gfx::IFont> noAlarmFont_;              ///< Font for displaying "No Alarm" text.
+        const std::shared_ptr<gfx::IFont> snoozeUntilFont_;          ///< Font for displaying the snooze until time.
+        const std::shared_ptr<gfx::IFont> temperatureIndicatorFont_; ///< Font for the temperature indicator.
 
-        ssize_t temperatureHumiditySpacing {5};                ///< Spacing between temperature and humidity text.
-        ssize_t indicatorTemperatureSpacing {1};               ///< Spacing between temperature and indicator text.
-        ssize_t listElementBorderScreenVerticalSpacing {7};    ///< Vertical spacing for list elements from the screen border.
-        ssize_t snoozeStatusSnoozeUntilSpacing {3};            ///< Spacing between snooze status and snooze until text.
-        ssize_t conditionVerticalSpacing {4};                  ///< Vertical spacing between different conditions (indoor/outdoor).
+        const gfx::Pictogram pictoBell_;                              ///< Pictogram for the bell icon, used when indicating the next alarm.
+        const gfx::Pictogram pictoBellFilled_;                        ///< Pictogram for the filled bell icon, used when an alarm is ringing.
+        const gfx::Pictogram pictoBellSnooze_;                        ///< Pictogram for the snooze bell icon, used when an alarm is snoozed.
+        const gfx::Pictogram pictoBellSlash_;                         ///< Pictogram for the bell slash icon, used when an alarm is disabled.
+
+        const ssize_t temperatureHumiditySpacing_ {5};                ///< Spacing between temperature and humidity text.
+        const ssize_t indicatorTemperatureSpacing_ {1};               ///< Spacing between temperature and indicator text.
+        const ssize_t listElementBorderScreenVerticalSpacing_ {7};    ///< Vertical spacing for list elements from the screen border.
+        const ssize_t snoozeStatusSnoozeUntilSpacing_ {3};            ///< Spacing between snooze status and snooze until text.
+        const ssize_t pictogramStatusSpacing_ {2};                    ///< Spacing between the alarm status pictogram and the status text.
+        const ssize_t conditionVerticalSpacing_ {4};                  ///< Vertical spacing between different conditions (indoor/outdoor).
 
     public:
 
@@ -74,7 +81,7 @@ namespace PiAlarm::view::ssd1322 {
          * snoozed, or disabled. It also handles the display of snooze until time if applicable.
          * @param renderer The renderer used to draw the alarm status.
          */
-        void drawAlarmStatus(const RenderType& renderer) const;
+        void drawAlarmStatus(RenderType &renderer) const;
 
         /**
          * @brief Gets the current alarm status as a string.
@@ -83,6 +90,14 @@ namespace PiAlarm::view::ssd1322 {
          * @return A string representing the current alarm status.
          */
         std::string getAlarmStatus() const;
+
+        /**
+         * @brief Gets the pictogram representing the current alarm status.
+         * This method returns a pictogram based on the current alarm state, such as a bell icon
+         * for an active alarm, a filled bell for a ringing alarm, or a bell slash for a disabled alarm.
+         * @return A reference to the pictogram representing the current alarm status.const
+         */
+        const gfx::Pictogram& getAlarmStatusPictogram() const;
 
         /**
          * @brief Draws the conditions (temperature and humidity) on the screen.
