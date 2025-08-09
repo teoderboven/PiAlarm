@@ -5,6 +5,7 @@
 
 #include "gfx/Types.h"
 #include "gfx/Bitmap.h"
+#include "gfx/Pictogram.h"
 #include "gfx/IBuffer.h"
 #include "gfx/IFont.h"
 
@@ -112,6 +113,14 @@ namespace PiAlarm::gfx {
          * @param bitmap The Bitmap object to draw on the canvas.
          */
         void drawBitmap(size_t x, size_t y, const Bitmap& bitmap) const;
+
+        /**
+         * @brief Draws a pictogram at the specified coordinates on the canvas.
+         * @param x The x-coordinate where the pictogram will be drawn.
+         * @param y The y-coordinate where the pictogram will be drawn.
+         * @param pictogram The Pictogram object to draw on the canvas.
+         */
+        void drawPictogram(size_t x, size_t y, const Pictogram& pictogram) const;
 
         /**
          * @brief Draws a character at the specified coordinates using the provided font.
@@ -268,6 +277,10 @@ namespace PiAlarm::gfx {
 
     inline void Canvas::drawPixel(size_t x, size_t y, Pixel grayscale) const {
         setPixel(x, y, grayscale);
+    }
+
+    inline void Canvas::drawPictogram(size_t x, size_t y, const Pictogram& pictogram) const {
+        drawBitmap(x, y, pictogram.getBitmap());
     }
 
     inline const IBuffer& Canvas::buffer() const {

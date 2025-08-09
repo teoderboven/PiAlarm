@@ -41,3 +41,13 @@ FetchContent_Declare(
         GIT_TAG        v3.2.5
 )
 FetchContent_MakeAvailable(utf8cpp)
+
+FetchContent_Declare(
+        lodepng
+        GIT_REPOSITORY https://github.com/lvandeve/lodepng.git
+        GIT_TAG        344b4b442d0de0787a999724dd6569461a00c92c  # Commit from 2025-07-01
+)
+FetchContent_MakeAvailable(lodepng)
+
+add_library(lodepng STATIC ${lodepng_SOURCE_DIR}/lodepng.cpp)
+target_include_directories(lodepng PUBLIC ${lodepng_SOURCE_DIR})

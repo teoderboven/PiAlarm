@@ -53,7 +53,7 @@ namespace PiAlarm::gfx {
             g->bitmap_left,
             g->bitmap_top,
             g->advance.x >> 6,
-            {bmp.width, bmp.rows}
+            Bitmap{bmp.width, bmp.rows}
         };
 
         // copy FT_Bitmap pixels to glyph bitmap

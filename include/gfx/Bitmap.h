@@ -26,7 +26,7 @@ namespace PiAlarm::gfx {
          * @param width The width of the bitmap in pixels
          * @param height The height of the bitmap in pixels
          */
-        Bitmap(size_t width, size_t height);
+        explicit Bitmap(size_t width = 0, size_t height = 0);
 
         /**
          * @brief Gets the pixel value at the specified coordinates.
