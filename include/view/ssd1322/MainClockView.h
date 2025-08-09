@@ -15,8 +15,15 @@ namespace PiAlarm::view::ssd1322 {
      * including displaying the current time, alarm information, and weather data.
      */
     class MainClockView final : public AbstractMainClockView {
-        std::shared_ptr<gfx::IFont> mainClockDigitFont_;
-        std::shared_ptr<gfx::IFont> secondClockDigitFont_;
+        std::shared_ptr<gfx::IFont> mainClockDigitFont_;       ///< Font for the main clock digits.
+        std::shared_ptr<gfx::IFont> secondClockDigitFont_;     ///< Font for the seconds in the clock.
+        std::shared_ptr<gfx::IFont> rightListFont_;            ///< Font for the right list elements (alarm & conditions).
+        std::shared_ptr<gfx::IFont> temperatureIndicatorFont_; ///< Font for the temperature indicator.
+
+        ssize_t temperatureHumiditySpacing {5};                ///< Spacing between temperature and humidity text.
+        ssize_t indicatorTemperatureSpacing {1};               ///< Spacing between temperature and indicator text.
+        ssize_t listElementBorderScreenVerticalSpacing {7};    ///< Vertical spacing for list elements from the screen border.
+        ssize_t conditionVerticalSpacing {4};                  ///< Vertical spacing between different conditions (indoor/outdoor).
 
     public:
 
@@ -57,6 +64,34 @@ namespace PiAlarm::view::ssd1322 {
          * @param renderer The renderer used to draw the clock.
          */
         void drawClock(const RenderType& renderer) const;
+
+        /**
+         * @brief Draws the conditions (temperature and humidity) on the screen.
+         * This method is responsible for rendering the indoor and outdoor temperature and humidity
+         * conditions at the bottom right of the screen.
+         * @param renderer The renderer used to draw the conditions.
+         */
+        void drawConditions(const RenderType &renderer) const;
+
+        /**
+         * @brief Draws the condition (temperature, humidity, and indicator) on the screen.
+         * This method is responsible for rendering the temperature, humidity, and an indicator
+         * at the right of the screen.
+         * The vertical position is determined by the baseline parameter.
+         * @param renderer The renderer used to draw the condition.
+         * @param baseline The baseline Y-coordinate for drawing the condition.
+         * @param temperatureText The text representation of the temperature.
+         * @param humidityText The text representation of the humidity.
+         * @param indicator The text representation of the temperature indicator.
+         * @return The height of the drawn condition, which can be used for further layout adjustments.
+         */
+        ssize_t drawSingleCondition(
+            const RenderType &renderer,
+            size_t baseline,
+            const std::string &temperatureText,
+            const std::string &humidityText,
+            const std::string &indicator
+        ) const;
 
     };
 
