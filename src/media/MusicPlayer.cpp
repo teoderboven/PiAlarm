@@ -14,37 +14,40 @@ namespace PiAlarm::media {
         stop();
     }
 
-    void MusicPlayer::start(const Playlist& playlist) {
-        if (running_) return;
+    void MusicPlayer::start(std::shared_ptr<const Playlist> playlist) {
+        if (running_.load()) return;
 
-        running_ = true;
+        if (playerThread_.joinable() && std::this_thread::get_id() != playerThread_.get_id()) {
+            playerThread_.join();
+        }
+        running_.store(true);
         playerThread_ = std::thread(&MusicPlayer::playerLoop, this, playlist);
     }
 
     void MusicPlayer::stop() {
-        if (!running_) return;
+        if (!running_.load()) return;
 
-        running_ = false;
+        running_.store(false);
 
-        if (playerThread_.joinable()) {
+        if (playerThread_.joinable() && std::this_thread::get_id() != playerThread_.get_id()) {
             playerThread_.join();
         }
     }
 
-    void MusicPlayer::playerLoop(Playlist playlist) {
+    void MusicPlayer::playerLoop(std::shared_ptr<const Playlist> playlist) {
 
-        if (playlist.empty()) {
+        if (playlist->empty()) {
             logger().warn("Playlist is empty.");
             return;
         }
 
-        if (playlist.size() == 1) {
-            playSingleTrackLooped(playlist[0]);
+        if (playlist->size() == 1) {
+            playSingleTrackLooped(playlist->at(0));
         } else {
             playPlaylistWithCrossfade(playlist);
         }
 
-        running_ = false; // Ensure the running flag is reset when playback ends
+        running_.store(false); // Ensure the running flag is reset when playback ends
         logger().info("Music playback stopped.");
     }
 
@@ -62,14 +65,14 @@ namespace PiAlarm::media {
         std::thread fadeInThread(&MusicPlayer::fadeIn, this, stream);
         fadeInThread.join();
 
-        while (running_) {
+        while (running_.load()) {
             std::this_thread::sleep_for(std::chrono::milliseconds(500));
         }
 
         cleanupStream(stream);
     }
 
-    void MusicPlayer::playPlaylistWithCrossfade(const Playlist& playlist) {
+    void MusicPlayer::playPlaylistWithCrossfade(const std::shared_ptr<const Playlist>& playlist) {
         logger().info("Playing playlist with crossfade.");
 
         const auto currentResult = findNextPlayableTrack(playlist, 0);
@@ -85,12 +88,12 @@ namespace PiAlarm::media {
         fadeInThread.join();
 
         do {
-            logger().info("Playing track: {}", playlist[currentIndex].string());
+            logger().info("Playing track: {}", playlist->at(currentIndex).string());
 
             waitBeforeTransition(current);
-            if (!running_) break;
+            if (!running_.load()) break;
 
-            auto nextResult = findNextPlayableTrack(playlist, (currentIndex + 1) % playlist.size());
+            auto nextResult = findNextPlayableTrack(playlist, (currentIndex + 1) % playlist->size());
             if (!nextResult) {
                 logger().error("No playable next track found. Stopping playback.");
                 break;
@@ -105,7 +108,7 @@ namespace PiAlarm::media {
             current = next;
             currentIndex = nextIndex;
 
-        } while (running_);
+        } while (running_.load());
 
         cleanupStream(current);
     }
@@ -125,19 +128,19 @@ namespace PiAlarm::media {
     }
 
     std::optional<std::pair<size_t, AudioStream>> MusicPlayer::findNextPlayableTrack(
-        const Playlist& playlist, size_t startIndex
+        const std::shared_ptr<const Playlist>& playlist, size_t startIndex
     ) {
         size_t index {startIndex};
         size_t attempts {0};
 
-        while (attempts < playlist.size() && running_) {
-            AudioStream stream = playTrack(playlist[index]);
+        while (attempts < playlist->size() && running_.load()) {
+            AudioStream stream = playTrack(playlist->at(index));
             if (stream) {
                 return std::make_pair(index, stream);
             }
 
-            logger().warn("Skipping unplayable track: {}", playlist[index].string());
-            index = (index + 1) % playlist.size(); // wrap around to the start
+            logger().warn("Skipping unplayable track: {}", playlist->at(index).string());
+            index = (index + 1) % playlist->size(); // wrap around to the start
             ++attempts;
         }
 
@@ -149,7 +152,7 @@ namespace PiAlarm::media {
         const double totalSecs = BASS_ChannelBytes2Seconds(stream, length);
 
         // while the current position is less than totalSecs - 5 seconds
-        while (running_
+        while (running_.load()
         && BASS_ChannelBytes2Seconds(stream, BASS_ChannelGetPosition(stream, BASS_POS_BYTE)) < totalSecs - 5.0)
         {
             // wait and release when we are close to the end of the track
@@ -161,7 +164,7 @@ namespace PiAlarm::media {
         if (!channel) return;
 
         constexpr int steps = 20;
-        for (int i = 0; i <= steps && running_; ++i) {
+        for (int i = 0; i <= steps && running_.load(); ++i) {
 
             const float vol = start + (end - start) * (static_cast<float>(i) / steps);
             BASS_ChannelSetAttribute(channel, BASS_ATTRIB_VOL, vol);
@@ -207,11 +210,11 @@ namespace PiAlarm::media {
         });
     }
 
-    MusicPlayer::Playlist MusicPlayer::loadPlaylist(const fs::path& folder) {
+    std::shared_ptr<MusicPlayer::Playlist> MusicPlayer::loadPlaylist(const fs::path& folder) {
         Playlist files;
 
         if (!fs::exists(folder)) {
-            return files;
+            return std::make_shared<Playlist>(files);
         }
 
         for (const auto& entry : fs::directory_iterator(folder)) {
@@ -221,7 +224,7 @@ namespace PiAlarm::media {
             }
         }
 
-        return files;
+        return std::make_shared<Playlist>(files);
     }
 
     void MusicPlayer::shufflePlaylist(Playlist& playlist) {

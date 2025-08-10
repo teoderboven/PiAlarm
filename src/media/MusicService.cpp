@@ -9,17 +9,17 @@ namespace PiAlarm::media {
     void MusicService::start() {
         auto playlist = MusicPlayer::loadPlaylist(folder_);
 
-        if (!MusicPlayer::hasAtLeastOnePlayable(playlist)) {
+        if (!MusicPlayer::hasAtLeastOnePlayable(*playlist)) {
             logger().warn("No valid tracks found in primary folder ({}), falling back to {}", folder_.string(), fallbackFolder_.string());
             playlist = MusicPlayer::loadPlaylist(fallbackFolder_);
 
-            if (!MusicPlayer::hasAtLeastOnePlayable(playlist)) {
+            if (!MusicPlayer::hasAtLeastOnePlayable(*playlist)) {
                 logger().error("No valid tracks found in both folders.");
                 return;
             }
         }
 
-        MusicPlayer::shufflePlaylist(playlist);
+        MusicPlayer::shufflePlaylist(*playlist);
 
         musicPlayer_.start(playlist);
     }

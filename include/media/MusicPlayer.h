@@ -6,6 +6,7 @@
 #include <utility>
 #include <vector>
 #include <thread>
+#include <memory>
 #include <atomic>
 
 #include "media/AudioTypes.h"
@@ -53,7 +54,7 @@ namespace PiAlarm::media {
          * If multiple tracks are available, it plays them with crossfade transitions.
          * @param playlist A vector of strings containing paths to audio files.
          */
-        void start(const Playlist& playlist);
+        void start(std::shared_ptr<const Playlist> playlist);
 
         /**
          * @brief Stops the music playback loop and releases audio resources.
@@ -89,7 +90,7 @@ namespace PiAlarm::media {
          * @param folder Path to the folder containing audio files.
          * @return A vector of strings containing paths to audio files.
          */
-        static Playlist loadPlaylist(const fs::path& folder);
+        static std::shared_ptr<MusicPlayer::Playlist> loadPlaylist(const fs::path& folder);
 
         /**
          * @brief Shuffles a playlist in place.
@@ -106,7 +107,7 @@ namespace PiAlarm::media {
          * It plays tracks in a loop or with crossfade transitions as needed.
          * @param playlist The playlist to play, represented as a vector of Track paths.
          */
-        void playerLoop(Playlist playlist);
+        void playerLoop(std::shared_ptr<const Playlist> playlist);
 
         /**
          * @brief Plays a single track in a loop.
@@ -121,7 +122,7 @@ namespace PiAlarm::media {
          * This method handles the playback of multiple tracks with smooth volume transitions.
          * @param playlist The playlist to play, represented as a vector of Track paths.
          */
-        void playPlaylistWithCrossfade(const Playlist& playlist);
+        void playPlaylistWithCrossfade(const std::shared_ptr<const Playlist>& playlist);
 
         /**
          * @brief Starts playback of the track at the given index.
@@ -141,7 +142,7 @@ namespace PiAlarm::media {
          * @return A pair containing the index and AudioStream of the playable track, or an empty optional if none found.
          */
         std::optional<std::pair<size_t, AudioStream>> findNextPlayableTrack(
-            const Playlist& playlist, size_t startIndex
+            const std::shared_ptr<const Playlist>& playlist, size_t startIndex
         );
 
         /**
