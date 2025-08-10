@@ -84,11 +84,11 @@ namespace PiAlarm::provider {
          *
          * This constructor initializes the client with the base API URL and the city name for which to fetch weather data.
          *
-         * @param cityName The name of the city for which to fetch weather data. Defaults to "Brussel-1".
+         * @param cityName The name of the city for which to fetch weather data.
          *
          * @note You can find the list of available cities at https://www.prevision-meteo.ch/services/json/cities
          */
-        explicit WeatherApiClient(const std::string& cityName = "Brussel-1");
+        explicit WeatherApiClient(const std::string& cityName);
 
         /**
          * @brief Fetches the current weather data.

@@ -43,6 +43,7 @@ add_subdirectory(view)
 
 add_executable(${PROJECT_NAME}
         main.cpp
+        Application.cpp
 )
 
 # link project libraries
