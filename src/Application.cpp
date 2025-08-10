@@ -66,7 +66,7 @@ namespace PiAlarm {
 
         inputManager{
             {
-                {mainButtonPin, input::ButtonId::Main},
+                {mainButtonPin, input::ButtonId::Main, false},
                 {backButtonPin, input::ButtonId::Back, true},
                 {nextButtonPin, input::ButtonId::Next, true},
                 {previousButtonPin, input::ButtonId::Previous, true}
@@ -100,7 +100,7 @@ namespace PiAlarm {
 #endif // INPUT_GPIO
 
             viewManager.loop();
-            std::this_thread::sleep_for(std::chrono::milliseconds(333));
+            std::this_thread::sleep_for(std::chrono::milliseconds(100));
         }
 
         stopServices(); // will never be reached, but good practice to have it here

@@ -44,7 +44,7 @@ namespace PiAlarm {
         : public input::HasInputEventHandler // Inherit from HasInputEventHandler to handle input events
 #endif
     {
-        static constexpr int BACK_BUTTON_LONG_PRESS_COUNT {3}; ///< Number of back button presses to trigger a long press action
+        static constexpr int BACK_BUTTON_LONG_PRESS_COUNT {4}; ///< Number of back button repeat event to trigger a long press action
 
     public:
 
