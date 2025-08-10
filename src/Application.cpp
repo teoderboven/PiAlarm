@@ -8,6 +8,8 @@
     #include "view/console/MainClockView.h"
 #endif
 
+#include <iostream>
+
 namespace PiAlarm {
 
     Application::Application(
@@ -88,16 +90,24 @@ namespace PiAlarm {
         initViews();
     }
 
+
+
+
+
+    //////////// Application methods ////////////
+
     void Application::run() {
         startServices();
 
         while (true) {
-#ifdef INPUT_GPIO
-            auto events {inputManager.pollEvents()};
-            for (const auto& event : events) {
-                handleInputEvent(event);
-            }
-#endif // INPUT_GPIO
+            #ifdef INPUT_GPIO
+
+                auto events {inputManager.pollEvents()};
+                for (const auto& event : events) {
+                    handleInputEvent(event);
+                }
+
+            #endif // INPUT_GPIO
 
             viewManager.loop();
             std::this_thread::sleep_for(std::chrono::milliseconds(100));
@@ -117,33 +127,33 @@ namespace PiAlarm {
     }
 
     void Application::initViews() {
-#ifdef DISPLAY_SSD1322
+        #ifdef DISPLAY_SSD1322
 
-        screen.initialize();
+            screen.initialize();
 
-        viewManager.addView(
-            std::make_unique<view::ssd1322::MainClockView>(
-                alarms_data,
-                alarmState,
-                clock_data,
-                currentWeather_data,
-                temperatureSensor_data
-            )
-        );
+            viewManager.addView(
+                std::make_unique<view::ssd1322::MainClockView>(
+                    alarms_data,
+                    alarmState,
+                    clock_data,
+                    currentWeather_data,
+                    temperatureSensor_data
+                )
+            );
 
-#elif defined(DISPLAY_CONSOLE)
+        #elif defined(DISPLAY_CONSOLE)
 
-        viewManager.addView(
-            std::make_unique<view::console::MainClockView>(
-                alarms_data,
-                alarmManager.getAlarmState(),
-                clock_data,
-                currentWeather_data,
-                temperatureSensor_data
-            )
-        );
+            viewManager.addView(
+                std::make_unique<view::console::MainClockView>(
+                    alarms_data,
+                    alarmManager.getAlarmState(),
+                    clock_data,
+                    currentWeather_data,
+                    temperatureSensor_data
+                )
+            );
 
-#endif // DISPLAY_SSD1322 DISPLAY_CONSOLE
+        #endif // DISPLAY_SSD1322 DISPLAY_CONSOLE
     }
 
 #ifdef INPUT_GPIO
@@ -156,6 +166,8 @@ namespace PiAlarm {
     }
 
     bool Application::handleAlarmControlInput(const input::InputEvent& event) {
+        std::cout << "Handling input event: " << static_cast<int>(event.button) << " pressed: " << event.pressed << std::endl;
+
         if (!alarmState.hasTriggeredAlarm()) {
             if (backButtonPressedCount) backButtonPressedCount = 0; // Reset back button count if no alarm is active
 
@@ -173,6 +185,8 @@ namespace PiAlarm {
             case input::ButtonId::Back:
                 if (event.pressed) {
                     ++backButtonPressedCount;
+
+                    std::cout << "Back button pressed " << backButtonPressedCount << " times." << std::endl;
 
                     if (backButtonPressedCount >= BACK_BUTTON_LONG_PRESS_COUNT) {
                         alarmController.stopAlarm();
