@@ -12,6 +12,7 @@ set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -static-libstdc++ -stati
 
 option(DISPLAY_SSD1322 "Use SSD1322 display" OFF)
 option(DISPLAY_CONSOLE "Use console display" OFF)
+option(INPUT_GPIO "Use GPIO pin for user inputs" OFF)
 set(LOG_LEVEL "info" CACHE STRING "Log level (trace, debug, info, warn, error, critical)")
 
 if(DISPLAY_SSD1322 AND DISPLAY_CONSOLE)
@@ -22,12 +23,22 @@ elseif(DISPLAY_SSD1322 AND NOT (UNIX AND NOT APPLE))
     message(FATAL_ERROR "DISPLAY_SSD1322 is only supported on Linux, more specifically on Raspberry Pi.")
 endif()
 
+if(INPUT_GPIO AND NOT (UNIX AND NOT APPLE))
+    message(FATAL_ERROR "INPUT_GPIO is only supported on Linux, more specifically on Raspberry Pi.")
+endif()
+
 # global definitions based on display options
 if(DISPLAY_SSD1322)
     add_compile_definitions(DISPLAY_SSD1322)
 elseif(DISPLAY_CONSOLE)
     add_compile_definitions(DISPLAY_CONSOLE)
 endif()
+
+if(INPUT_GPIO)
+    add_compile_definitions(INPUT_GPIO)
+else()
+    add_compile_definitions(INPUT_NONE)
+endif ()
 
 add_subdirectory(controller)
 add_subdirectory(gfx)

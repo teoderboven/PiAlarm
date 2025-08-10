@@ -25,6 +25,7 @@ namespace PiAlarm {
 
         // manager
         alarmManager{clock_data, alarms_data, snoozeDuration, ringDuration},
+        alarmState{alarmManager.getAlarmState()}, // Current state of the alarm, retrieved from the AlarmManager
 
         // controller
         alarmController{alarms_data, alarmManager},
@@ -55,6 +56,25 @@ namespace PiAlarm {
         // view
         viewManager{screen, renderer},
 
+#ifdef INPUT_GPIO
+
+        // input manager
+        mainButtonPin{13},
+        backButtonPin{12},
+        nextButtonPin{6},
+        previousButtonPin{5},
+
+        inputManager{
+            {
+                {mainButtonPin, input::ButtonId::Main},
+                {backButtonPin, input::ButtonId::Back, true},
+                {nextButtonPin, input::ButtonId::Next, true},
+                {previousButtonPin, input::ButtonId::Previous, true}
+            }
+        },
+
+#endif // INPUT_GPIO
+
         // service
         timeUpdateService{clock_data},
         weatherApiService{currentWeather_data, apiClient},
@@ -72,6 +92,13 @@ namespace PiAlarm {
         startServices();
 
         while (true) {
+#ifdef INPUT_GPIO
+            auto events {inputManager.pollEvents()};
+            for (const auto& event : events) {
+                handleInputEvent(event);
+            }
+#endif // INPUT_GPIO
+
             viewManager.loop();
             std::this_thread::sleep_for(std::chrono::milliseconds(333));
         }
@@ -97,7 +124,7 @@ namespace PiAlarm {
         viewManager.addView(
             std::make_unique<view::ssd1322::MainClockView>(
                 alarms_data,
-                alarmManager.getAlarmState(),
+                alarmState,
                 clock_data,
                 currentWeather_data,
                 temperatureSensor_data
@@ -118,5 +145,51 @@ namespace PiAlarm {
 
 #endif // DISPLAY_SSD1322 DISPLAY_CONSOLE
     }
+
+#ifdef INPUT_GPIO
+
+    void Application::handleInputEvent(const input::InputEvent& event) {
+        auto eventConsumed = handleAlarmControlInput(event);
+        if (eventConsumed) return; // If the event was consumed by the alarm control, do not propagate further
+
+
+    }
+
+    bool Application::handleAlarmControlInput(const input::InputEvent& event) {
+        if (!alarmState.hasTriggeredAlarm()) {
+            if (backButtonPressedCount) backButtonPressedCount = 0; // Reset back button count if no alarm is active
+
+            return false; // No alarm is currently active, ignore the event
+        }
+
+        switch (event.button) {
+            case input::ButtonId::Main:
+                if (event.pressed && !alarmState.isAlarmSnoozed()) {
+                    alarmController.snoozeAlarm();
+                    return true;
+                }
+                break;
+
+            case input::ButtonId::Back:
+                if (event.pressed) {
+                    ++backButtonPressedCount;
+
+                    if (backButtonPressedCount >= BACK_BUTTON_LONG_PRESS_COUNT) {
+                        alarmController.stopAlarm();
+                        return true;
+                    }
+                }else {
+                    backButtonPressedCount = 0; // Reset count on release
+                }
+                break;
+
+            default:
+                // Unhandled button event
+                break;
+        }
+        return false; // No action taken
+    }
+
+#endif
 
 }

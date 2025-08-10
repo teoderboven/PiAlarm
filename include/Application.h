@@ -19,6 +19,11 @@
     #include "hardware/SPI.h"
 #endif
 
+#ifdef INPUT_GPIO
+    #include "input/InputManager.h"
+    #include "input/HasInputEventHandler.h"
+#endif
+
 /**
  * @namespace PiAlarm
  * @brief The main namespace for the PiAlarm application.
@@ -34,7 +39,13 @@ namespace PiAlarm {
      * This class initializes the models, controllers, providers, views, and services,
      * and starts the main application loop.
      */
-    class Application {
+    class Application
+#ifdef INPUT_GPIO
+        : public input::HasInputEventHandler // Inherit from HasInputEventHandler to handle input events
+#endif
+    {
+        static constexpr int BACK_BUTTON_LONG_PRESS_COUNT {3}; ///< Number of back button presses to trigger a long press action
+
     public:
 
         /**
@@ -58,6 +69,13 @@ namespace PiAlarm {
         );
 
         /**
+         * @brief Destructor for the Application class.
+         *
+         * Cleans up resources used by the application.
+         */
+        ~Application() override = default;
+
+        /**
          * @brief Starts the main application loop.
          *
          * This method runs the application, handling input events, updating the display,
@@ -65,6 +83,32 @@ namespace PiAlarm {
          */
         [[noreturn]]
         void run();
+
+#ifdef INPUT_GPIO
+
+        /**
+         * @brief Handles input events from the input manager.
+         *
+         * This method is called when an input event occurs, allowing the application to respond
+         * to user inputs such as button presses.
+         *
+         * @param event The input event to handle.
+         */
+        void handleInputEvent(const input::InputEvent& event) override;
+
+        /**
+         * @brief Handles specific input events related to alarm control.
+         *
+         * This method processes input events to control the alarm, such as snoozing or stopping the alarm.
+         * It checks the current state of the alarm and performs actions based on the button pressed.
+         *
+         * @param event The input event to handle.
+         * @return True if the event was handled, false otherwise.
+         */
+        bool handleAlarmControlInput(const input::InputEvent& event);
+
+#endif // INPUT_GPIO
+
 
     private:
 
@@ -96,13 +140,14 @@ namespace PiAlarm {
         // Definition of types used in the application
 
         // model
-        model::ClockData clock_data;                             ///< Clock data model
+        model::ClockData clock_data;                            ///< Clock data model
         model::AlarmsData alarms_data;                          ///< Alarms data model
         model::CurrentWeatherData currentWeather_data;          ///< Current weather data model
         model::TemperatureSensorData temperatureSensor_data;    ///< Temperature sensor data model
 
         // model manager
         model::manager::AlarmManager alarmManager;              ///< Alarm manager to handle alarm states and operations
+        const model::AlarmState& alarmState;                    ///< Current state of the alarm. Retrieved from the AlarmManager
 
         // controller
         controller::AlarmController alarmController;            ///< Controller to manage alarm operations and interactions
@@ -114,6 +159,7 @@ namespace PiAlarm {
         RenderType renderer;                                    ///< Renderer type for the display output
 
 #ifdef DISPLAY_SSD1322
+        // screen and hardware
         hardware::SPI screenSpi;                                ///< SPI interface for the SSD1322 display
         hardware::GPIO screenDcPin;                             ///< Data/Command pin for the SSD1322 display
         hardware::GPIO screenResetPin;                          ///< Reset pin for the SSD1322 display
@@ -125,6 +171,21 @@ namespace PiAlarm {
 
         // view manager
         view::ViewManager viewManager;                          ///< Manages the views in the application
+
+#ifdef INPUT_GPIO
+
+        // input manager and hardware
+        hardware::GPIO mainButtonPin;                           ///< GPIO pin for the main button input
+        hardware::GPIO backButtonPin;                           ///< GPIO pin for the back button input
+        hardware::GPIO nextButtonPin;                           ///< GPIO pin for the next button input
+        hardware::GPIO previousButtonPin;                       ///< GPIO pin for the previous button input
+
+        input::InputManager inputManager;                       ///< Manages user input events
+
+        // input event state
+        unsigned backButtonPressedCount = 0;                    ///< Counter for back button presses. Used to handle long presses
+
+#endif // INPUT_GPIO
 
         // services
         service::TimeUpdateService timeUpdateService;           ///< Service to update the time regularly

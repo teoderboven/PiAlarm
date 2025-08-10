@@ -43,6 +43,12 @@ le type d’affichage cible et le niveau de log.
 
 Une seule de ces options doit être activée. Activer les deux ou aucune provoquera une erreur à la compilation.
 
+### Option de source d'entrées utilisateur
+
+- `INPUT_GPIO` (par défaut : OFF)
+
+  Active le support pour les boutons physiques via GPIO (uniquement sur Linux (raspberry pi)).
+
 ### Option de niveau de log
 
 `LOG_LEVEL` (par défaut : `info`)
@@ -67,7 +73,7 @@ Via la ligne de commande CMake, active simplement l’option souhaitée :
 
 ```bash
 # exemples
-cmake -DDISPLAY_SSD1322=ON -DLOG_LEVEL=info
+cmake -DDISPLAY_SSD1322=ON -DINPUT_GPIO=ON -DLOG_LEVEL=info
 cmake -DDISPLAY_CONSOLE=ON -DLOG_LEVEL=debug
 ```
 
