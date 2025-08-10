@@ -8,8 +8,6 @@
     #include "view/console/MainClockView.h"
 #endif
 
-#include <iostream>
-
 namespace PiAlarm {
 
     Application::Application(
@@ -166,8 +164,6 @@ namespace PiAlarm {
     }
 
     bool Application::handleAlarmControlInput(const input::InputEvent& event) {
-        std::cout << "Handling input event: " << static_cast<int>(event.button) << " pressed: " << event.pressed << std::endl;
-
         if (!alarmState.hasTriggeredAlarm()) {
             if (backButtonPressedCount) backButtonPressedCount = 0; // Reset back button count if no alarm is active
 
@@ -185,8 +181,6 @@ namespace PiAlarm {
             case input::ButtonId::Back:
                 if (event.pressed) {
                     ++backButtonPressedCount;
-
-                    std::cout << "Back button pressed " << backButtonPressedCount << " times." << std::endl;
 
                     if (backButtonPressedCount >= BACK_BUTTON_LONG_PRESS_COUNT) {
                         alarmController.stopAlarm();
