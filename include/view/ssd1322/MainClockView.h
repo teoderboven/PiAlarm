@@ -6,6 +6,12 @@
 #include "gfx/TrueTypeFontCache.h"
 #include "gfx/Pictogram.h"
 
+/**
+ * @namespace PiAlarm::view::ssd1322
+ * @brief Namespace for the SSD1322 display views in the PiAlarm application.
+ *
+ * This namespace contains classes related to the SSD1322 display views.
+ */
 namespace PiAlarm::view::ssd1322 {
 
     /**

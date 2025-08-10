@@ -12,7 +12,7 @@
 
 /**
  * @namespace PiAlarm::model::manager
- * @brief
+ * @brief Namespace for managing alarm functionalities in the PiAlarm application.
  */
 namespace PiAlarm::model::manager {
 
