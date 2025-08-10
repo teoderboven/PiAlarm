@@ -13,8 +13,8 @@ namespace PiAlarm::input {
     enum class ButtonId {
         Main, ///< The main button, typically used for primary actions
         Back, ///< The back button, typically used to navigate back in the UI
-        Left, ///< The left button, typically used for navigation or selection
-        Right ///< The right button, typically used for navigation or selection
+        Previous, ///< The previous button, typically used for navigation or selection
+        Next ///< The next button, typically used for navigation or selection
     };
 
     /**
