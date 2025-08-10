@@ -29,6 +29,11 @@ namespace PiAlarm::model::manager {
         const AlarmsData& alarmsData_; ///< Reference to the alarms data model.
         AlarmState state_; ///< The state data for the current alarm.
 
+        // Variables to track the last stopped alarm and its time
+        const Alarm* lastStoppedAlarm_ {nullptr}; ///< Pointer to the last stopped alarm, if any.
+        Time lastStoppedAlarmTime_; ///< The time of the last stopped alarm, if any.
+        Time lastStopTime_; ///< The time when the last alarm was stopped.
+
         const std::chrono::minutes snoozeDuration_; ///< Duration for which the alarm can be snoozed.
         const std::chrono::minutes ringDuration_; ///< Effective duration for which the alarm rings when triggered
 
@@ -84,6 +89,14 @@ namespace PiAlarm::model::manager {
     private:
 
         /**
+         * @brief Checks and resets the last stopped alarm if necessary.
+         *
+         * This method checks if the last stopped alarm has exceeded its ring duration or if its time has changed.
+         * If either condition is met, it resets the last stopped alarm to nullptr.
+         */
+        void checkAndResetLastStoppedAlarm();
+
+        /**
          * @brief Detects if there is a currently triggered alarm.
          *
          * This method searches through the enabled alarms and checks if any of them should be ringing
@@ -112,6 +125,17 @@ namespace PiAlarm::model::manager {
          * @see detectTriggeredAlarm()
          */
         void processTriggeredAlarm();
+
+        /**
+         * @brief Checks if the alarm is currently inhibited.
+         * This method checks if the alarm is currently inhibited, meaning it should not ring
+         * even if it is enabled and within its active window.
+         * @param alarm The alarm to check against.
+         * @param currentTime
+         * @return True if the alarm is inhibited, false otherwise.
+         */
+        [[nodiscard]]
+        bool isAlarmInhibited(const Alarm& alarm, Time currentTime) const;
 
         /**
          * @brief Checks if the current time is within the alarm's active window.

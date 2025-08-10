@@ -37,13 +37,34 @@ namespace PiAlarm::model::manager {
     }
 
     void AlarmManager::stopAlarm() {
+        if (state_.hasTriggeredAlarm()) {
+            lastStoppedAlarm_ = state_.getTriggeredAlarm();
+            lastStoppedAlarmTime_ = lastStoppedAlarm_->getTime();
+            lastStopTime_ = clockData_.getCurrentTime();
+        }
+
         state_.stop();
     }
 
     void AlarmManager::update() {
+        checkAndResetLastStoppedAlarm();
+
         if (!state_.hasTriggeredAlarm()) detectTriggeredAlarm(); // may set a triggered alarm
 
         if (state_.hasTriggeredAlarm()) processTriggeredAlarm();
+    }
+
+    void AlarmManager::checkAndResetLastStoppedAlarm() {
+        if (!lastStoppedAlarm_) return;
+
+        const auto& currentTime = clockData_.getCurrentTime();
+        auto elapsed = currentTime.secondsSince(lastStopTime_);
+
+        // if the elapsed time since the last stop exceeds the ring duration,
+        // or if the last stopped alarm's time has changed, reset the last stopped alarm.
+        if (elapsed >= ringDuration_ || lastStoppedAlarm_->getTime() != lastStoppedAlarmTime_) {
+            lastStoppedAlarm_ = nullptr;
+        }
     }
 
     void AlarmManager::detectTriggeredAlarm() {
@@ -53,6 +74,8 @@ namespace PiAlarm::model::manager {
 
         for (const auto& alarm : alarmsData_) {
             if (!alarm.isEnabled()) continue;
+
+            if (isAlarmInhibited(alarm, currentTime)) continue;
 
             auto diff {currentTime.secondsSince(alarm.getTime())};
 
@@ -81,6 +104,18 @@ namespace PiAlarm::model::manager {
         if (shouldRingAfterSnooze(currentTime)) {
             state_.ring();
         }
+    }
+
+    bool AlarmManager::isAlarmInhibited(const Alarm& alarm, Time currentTime) const {
+        if (!lastStoppedAlarm_) return false;
+
+        if (&alarm != lastStoppedAlarm_) return false; // alarms are stored in AlarmsData and their addresses are stable
+
+        if (alarm.getTime() != lastStoppedAlarmTime_) return false; // the alarm time has changed
+
+        auto elapsed = currentTime.secondsSince(lastStopTime_);
+
+        return elapsed < ringDuration_;
     }
 
     bool AlarmManager::isInAlarmWindow(const Alarm& alarm, const Time& currentTime) const {
