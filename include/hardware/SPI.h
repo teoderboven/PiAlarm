@@ -14,7 +14,7 @@ namespace PiAlarm::hardware {
      * @brief Represents a Serial Peripheral Interface (SPI) device.
      *
      * This class provides methods to interact with an SPI device,
-     * allowing for reading and writing data over the SPI bus.
+     * allowing for writing data over the SPI bus.
      *
      * SPI (Serial Peripheral Interface) is a synchronous serial communication protocol
      * used for short-distance communication, primarily in embedded systems.
