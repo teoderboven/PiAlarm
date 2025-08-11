@@ -54,6 +54,11 @@ namespace PiAlarm::view {
         // Inherited from Observer
         inline void update() override;
 
+        // Inherited from HasInputEventHandler
+        void handleInputEvent(const input::InputEvent& event) override {
+            // Default implementation does nothing, can be overridden in derived classes
+        }
+
     };
 
     // inline methods implementation

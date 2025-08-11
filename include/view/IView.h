@@ -2,6 +2,7 @@
 #define IVIEW_H
 
 #include "display/ViewOutputConfig.h"
+#include "input/HasInputEventHandler.h"
 
 /**
  * @namespace PiAlarm::view
@@ -17,7 +18,7 @@ namespace PiAlarm::view {
      *
      * This interface defines the methods that any view must implement to update and render itself.
      */
-    class IView {
+    class IView : public input::HasInputEventHandler {
     public:
 
         /**
@@ -51,6 +52,13 @@ namespace PiAlarm::view {
          * Clears the dirty state of the view.
          */
         virtual void clearDirty() = 0;
+
+        /**
+         * Handles input events specific to the view.
+         * This method should be implemented to respond to user inputs such as button presses.
+         * @param event The input event to handle.
+         */
+        virtual void handleInputEvent(const input::InputEvent& event) override = 0;
 
     };
 
