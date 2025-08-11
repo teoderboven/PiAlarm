@@ -50,6 +50,7 @@ namespace PiAlarm::model {
          * @param index The index of the alarm to set.
          * @param alarmTime The time to set for the alarm.
          * @param enabled True to enable the alarm, false to disable it.
+         * @throw std::out_of_range if the index is invalid.
          */
         void setAlarm(std::size_t index, Time alarmTime, bool enabled);
 
