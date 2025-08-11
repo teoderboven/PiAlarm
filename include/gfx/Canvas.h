@@ -107,6 +107,17 @@ namespace PiAlarm::gfx {
         inline void drawPixel(size_t x, size_t y, Pixel grayscale) const;
 
         /**
+         * @brief Draws a rectangle on the canvas at the specified coordinates.
+         * @param x The x-coordinate of the top-left corner of the rectangle.
+         * @param y The y-coordinate of the top-left corner of the rectangle.
+         * @param w The width of the rectangle.
+         * @param h The height of the rectangle.
+         * @param thickness The thickness of the rectangle's border (default is 1 pixel).
+         * @param color The color of the rectangle's border (default is white, represented by 255).
+         */
+        void drawRectangle(size_t x, size_t y, size_t w, size_t h, size_t thickness = 1, Pixel color = 255) const;
+
+        /**
          * @brief Draws a bitmap at the specified coordinates on the canvas.
          * @param x The x-coordinate where the bitmap will be drawn.
          * @param y The y-coordinate where the bitmap will be drawn.

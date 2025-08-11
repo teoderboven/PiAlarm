@@ -29,6 +29,36 @@ namespace PiAlarm::gfx {
         buffer_->setPixel(x, y, finalValue);
     }
 
+    void Canvas::drawRectangle(size_t x, size_t y, size_t w, size_t h, size_t thickness, Pixel color) const {
+        if (w <= 0 || h <= 0 || thickness <= 0) return;
+
+        // Top
+        for (size_t i {x}; i < x + w; ++i) {
+            for (size_t t {0}; t < thickness; ++t) {
+                setPixel(i, y + t, color);
+            }
+        }
+        // Bottom
+        for (size_t i {x}; i < x + w; ++i) {
+            for (size_t t {0}; t < thickness; ++t) {
+                setPixel(i, y + h - 1 - t, color);
+            }
+        }
+        // Left
+        for (size_t j {y}; j < y + h; ++j) {
+            for (size_t t {0}; t < thickness; ++t) {
+                setPixel(x + t, j, color);
+            }
+        }
+        // Right
+        for (size_t j {y}; j < y + h; ++j) {
+            for (size_t t {0}; t < thickness; ++t) {
+                setPixel(x + w - 1 - t, j, color);
+            }
+        }
+    }
+
+
     void Canvas::drawBitmap(size_t x, size_t y, const Bitmap &bitmap) const {
         for (size_t row = 0; row < bitmap.height; row++) {
             for (size_t col = 0; col < bitmap.width; col++) {
