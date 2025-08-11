@@ -29,7 +29,7 @@ namespace PiAlarm::view {
          * @param isDirty Initial dirty state of the view.
          */
         explicit AbstractObserverView(bool isDirty = true)
-            : dirty_(isDirty)
+            : IView{}, dirty_(isDirty)
         {}
 
         /**
