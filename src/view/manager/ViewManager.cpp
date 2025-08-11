@@ -9,10 +9,6 @@ namespace PiAlarm::view {
 
     void ViewManager::addView(std::unique_ptr<IView> view) {
         views_.push_back(std::move(view));
-
-        if (currentViewIndex_ == -1) {
-            currentViewIndex_ = 0; // Set the first view as active if none is set
-        }
     }
 
     void ViewManager::nextView() {
@@ -20,7 +16,8 @@ namespace PiAlarm::view {
             return; // No views to switch to
         }
 
-        currentViewIndex_ = (currentViewIndex_ + 1) % static_cast<int>(views_.size());
+        currentViewIndex_ = (currentViewIndex_ + 1) % views_.size();
+        forceRefresh_ = true; // Force refresh the view after switching
     }
 
     void ViewManager::previousView() {
@@ -28,25 +25,64 @@ namespace PiAlarm::view {
             return;
         }
 
-        auto size = static_cast<int>(views_.size());
-
-        currentViewIndex_ = (currentViewIndex_ + size - 1) % size;
+        currentViewIndex_ = (currentViewIndex_ + views_.size() - 1) % views_.size();
+        forceRefresh_ = true;
     }
 
     void ViewManager::loop() {
-        if (currentViewIndex_ < 0 || currentViewIndex_ >= static_cast<int>(views_.size())) {
-            return; // No active view
+        if (!hasValidActiveView()) {
+            return;
         }
 
         IView* activeView = views_[currentViewIndex_].get();
-        if (activeView->isDirty()) {
+        if (activeView->isDirty() || forceRefresh_) {
+            forceRefresh_ = false; // Reset the force refresh flag
+
             clearRenderer(); // Clear the renderer before rendering the new view
+
+            if (viewInControl_) {
+                #ifdef DISPLAY_SSD1322
+                    // Draw a border around the view
+                    renderer_.drawRectangle(0,0, renderer_.getWidth(), renderer_.getHeight(), 1, 0x80);
+                #endif // DISPLAY_SSD1322
+            }
 
             activeView->refresh();
             activeView->render(renderer_);
             activeView->clearDirty();
 
             flushDisplay(); // Flush the display to show the rendered view
+        }
+    }
+
+    void ViewManager::handleInputEvent(const input::InputEvent &event) {
+        if (!event.pressed) return;
+
+        if (viewInControl_) {
+            if (event.button == input::ButtonId::Back) {
+                viewInControl_ = false; // Exit view control mode
+                forceRefresh_ = true;
+            } else {
+                // If the view is in control, delegate the input event to the current view
+                views_[currentViewIndex_]->handleInputEvent(event);
+            }
+            return;
+        }
+
+        // If the view is not in control, handle navigation
+        switch (event.button) {
+            case input::ButtonId::Next:
+                nextView();
+                break;
+            case input::ButtonId::Previous:
+                previousView();
+                break;
+            case input::ButtonId::Main:
+                viewInControl_ = true; // Enter view control mode
+                forceRefresh_ = true;
+                break;
+            default:
+                break; // Ignore other buttons
         }
     }
 

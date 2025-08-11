@@ -108,7 +108,7 @@ namespace PiAlarm {
             #endif // INPUT_GPIO
 
             viewManager.loop();
-            std::this_thread::sleep_for(std::chrono::milliseconds(100));
+            std::this_thread::sleep_for(std::chrono::milliseconds(170));
         }
 
         stopServices(); // will never be reached, but good practice to have it here
@@ -160,7 +160,7 @@ namespace PiAlarm {
         auto eventConsumed = handleAlarmControlInput(event);
         if (eventConsumed) return; // If the event was consumed by the alarm control, do not propagate further
 
-
+        viewManager.handleInputEvent(event);
     }
 
     bool Application::handleAlarmControlInput(const input::InputEvent& event) {
