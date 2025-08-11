@@ -26,7 +26,7 @@ namespace PiAlarm::view::ssd1322 {
         mainClockDigitFont_{gfx::TrueTypeFontCache::getFont(FONT_MozillaText_Light, 48)},
         secondClockDigitFont_{gfx::TrueTypeFontCache::getFont(FONT_MozillaText_Light, 18)},
         rightListFont_{gfx::TrueTypeFontCache::getFont(FONT_MozillaText_Light, 13)},
-        noAlarmFont_{gfx::TrueTypeFontCache::getFont(FONT_MozillaText_Light, 12)},
+        noAlarmFont_{gfx::TrueTypeFontCache::getFont(FONT_MozillaText_Light, 11)},
         snoozeUntilFont_{gfx::TrueTypeFontCache::getFont(FONT_MozillaText_Light, 10)},
         temperatureIndicatorFont_{gfx::TrueTypeFontCache::getFont(FONT_MozillaText_Light, 7)},
 
@@ -62,7 +62,7 @@ namespace PiAlarm::view::ssd1322 {
     }
 
     void MainClockView::drawAlarmStatus(RenderType &renderer) const {
-        auto rightBorder = renderer.getWidth();
+        auto rightBorder = renderer.getWidth() - listElementBorderHorizontalSpacing_;
         auto topY = listElementBorderScreenVerticalSpacing_;
         size_t snoozeOffset {0}; // width of the potential snooze until text
         auto statusFont = rightListFont_;
@@ -163,7 +163,7 @@ namespace PiAlarm::view::ssd1322 {
         const std::string &humidityText,
         const std::string &indicator) const
     {
-        const auto rightBorder = renderer.getWidth();
+        const auto rightBorder = renderer.getWidth() - listElementBorderHorizontalSpacing_;
 
         // draw humidity at bottom right of the screen
         const auto humiditySize = renderer.drawText(

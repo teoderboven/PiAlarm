@@ -37,6 +37,7 @@ namespace PiAlarm::view::ssd1322 {
         const ssize_t temperatureHumiditySpacing_ {5};                ///< Spacing between temperature and humidity text.
         const ssize_t indicatorTemperatureSpacing_ {1};               ///< Spacing between temperature and indicator text.
         const ssize_t listElementBorderScreenVerticalSpacing_ {7};    ///< Vertical spacing for list elements from the screen border.
+        const ssize_t listElementBorderHorizontalSpacing_ {2};        ///< Horizontal spacing for list elements from the screen border.
         const ssize_t snoozeStatusSnoozeUntilSpacing_ {3};            ///< Spacing between snooze status and snooze until text.
         const ssize_t pictogramStatusSpacing_ {2};                    ///< Spacing between the alarm status pictogram and the status text.
         const ssize_t conditionVerticalSpacing_ {4};                  ///< Vertical spacing between different conditions (indoor/outdoor).
