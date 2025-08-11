@@ -1,6 +1,9 @@
 #ifndef ALARMCONTROLLER_H
 #define ALARMCONTROLLER_H
 
+#include <optional>
+#include <string>
+
 #include "model/AlarmsData.hpp"
 #include "model/manager/AlarmManager.h"
 
@@ -48,6 +51,17 @@ namespace PiAlarm::controller {
          * @note Do nothing if no alarm is currently ringing.
          */
         inline void stopAlarm() const;
+
+        /**
+         * @brief Sets an alarm at the specified index with the given time and enabled state.
+         * @param index The index of the alarm to set.
+         * @param hour The hour for the alarm (0-23).
+         * @param minute The minute for the alarm (0-59).
+         * @param enabled Whether the alarm should be enabled or not.
+         * @return An optional string containing an error message if the operation fails,
+         *         or an empty optional if successful.
+         */
+        std::optional<std::string> setAlarm(size_t index, int hour, int minute, bool enabled) const;
 
     };
 
