@@ -1,4 +1,5 @@
 #include "utils/consoleUtils.hpp"
+#include "utils/argsUtils.hpp"
 #include "Application.h"
 
 /**
@@ -9,9 +10,9 @@
  *
  * @param argc unused.
  * @param argv unused.
- * @return Exit code (never returns)
+ * @return Exit code (never returns except for help)
  */
-[[noreturn]]
+// [[noreturn]]
 int main(int argc, char *argv[]) {
     using namespace PiAlarm;
 
@@ -19,6 +20,21 @@ int main(int argc, char *argv[]) {
     utils::setup_console();
 #endif
 
-    Application app{};
+    if (utils::hasHelpFlag(argc, argv)) {
+        utils::printHelp(argv[0]);
+        return 0;
+    }
+
+    auto alarmCount = utils::getAlarmCount(argc, argv, 3);
+    auto weatherCityName = utils::getWeatherLocation(argc, argv, "Brussel-1");
+    auto customMusicFolderPath = utils::getMusicFolderPath(argc, argv, "");
+
+    Application app{
+        static_cast<size_t>(alarmCount), // Number of alarms from command line arguments
+        std::chrono::minutes(5), // Default snooze duration
+        std::chrono::minutes(60), // Default ring duration
+        weatherCityName, // Weather location from command line arguments
+        customMusicFolderPath // Custom music folder path from command line arguments
+    };
     app.run();
 }
