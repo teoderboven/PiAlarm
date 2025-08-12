@@ -32,7 +32,9 @@ namespace PiAlarm::view {
         ScreenType& screen_; ///< Reference to the screen for rendering views
         RenderType& renderer_; ///< Reference to the renderer for drawing views
 
+#ifdef DISPLAY_SSD1322
         const gfx::Pixel highlightBorderColor_ {0x30}; ///< Color used for highlighting the active view
+#endif // DISPLAY_SSD1322
 
     public:
 
