@@ -3,10 +3,6 @@
 #include "view/ssd1322/MainClockView.h"
 #include "utils/ViewFormatUtils.hpp"
 
-// Fonts used in the view
-#define FONT_MozillaText_Regular "assets/fonts/MozillaText-Regular.ttf"
-#define FONT_MozillaText_Light "assets/fonts/MozillaText-Light.ttf"
-
 namespace PiAlarm::view::ssd1322 {
 
     MainClockView::MainClockView(

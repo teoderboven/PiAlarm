@@ -8,6 +8,10 @@
 
 #include "gfx/IFont.h"
 
+// available font paths
+#define FONT_MozillaText_Regular "assets/fonts/MozillaText-Regular.ttf"
+#define FONT_MozillaText_Light "assets/fonts/MozillaText-Light.ttf"
+
 namespace PiAlarm::gfx {
 
     /**
