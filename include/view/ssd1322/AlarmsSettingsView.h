@@ -52,6 +52,7 @@ namespace PiAlarm::view::ssd1322 {
 
         const std::shared_ptr<gfx::IFont> alarmTimeFont_;       ///< Font used for rendering alarm times
         const std::shared_ptr<gfx::IFont> alarmActivationFont_; ///< Font used for rendering alarm activation status
+        const std::shared_ptr<gfx::IFont> alarmIndexFont_;      ///< Font used for rendering the index of the alarm being displayed
 
         const ssize_t borderScreenVerticalSpacing_ {3};         ///< Vertical spacing for the alarm settings from the screen border
         const ssize_t colonSeparatorOffsetY {-3};               ///< Offset for the colon separator from the center Y position
@@ -136,6 +137,13 @@ namespace PiAlarm::view::ssd1322 {
          * @return True if the input was handled, false otherwise.
          */
         bool handleActivationStateInput(const input::InputEvent &event);
+
+        /**
+         * @brief Draws the index of the currently selected alarm.
+         * This method renders the index of the alarm being edited on the display.
+         * @param renderer The renderer to use for drawing.
+         */
+        void drawAlarmIndex(const RenderType &renderer) const;
 
         /**
          * @brief Draws the current alarm settings on the display.

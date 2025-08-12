@@ -13,7 +13,8 @@ namespace PiAlarm::view::ssd1322 {
 
         // render attributes
         alarmTimeFont_{gfx::TrueTypeFontCache::getFont(FONT_MozillaText_Regular, 48)},
-        alarmActivationFont_{gfx::TrueTypeFontCache::getFont(FONT_MozillaText_Light, 14)}
+        alarmActivationFont_{gfx::TrueTypeFontCache::getFont(FONT_MozillaText_Light, 14)},
+        alarmIndexFont_{gfx::TrueTypeFontCache::getFont(FONT_MozillaText_Light, 10)}
     {}
 
     void AlarmsSettingsView::refresh() {
@@ -29,6 +30,8 @@ namespace PiAlarm::view::ssd1322 {
     }
 
     void AlarmsSettingsView::render(RenderType &renderer) const {
+        drawAlarmIndex(renderer);
+
         auto centerX = renderer.getWidth() / 2;
         auto centerY = renderer.getHeight() / 2;
         auto colonSeparatorDimensions = renderer.drawText(
@@ -43,6 +46,17 @@ namespace PiAlarm::view::ssd1322 {
         drawHour(renderer, centerX - digitSpacingFromCenter, digitBaseline);
         drawMinute(renderer, centerX + digitSpacingFromCenter, digitBaseline);
         drawActivation(renderer);
+    }
+
+    void AlarmsSettingsView::drawAlarmIndex(const RenderType &renderer) const {
+        auto leftX = borderScreenVerticalSpacing_;
+        auto topY = borderScreenVerticalSpacing_;
+        renderer.drawText(
+            leftX, topY,
+            "Alarme " + std::to_string(currentSelectedAlarm_ + 1),
+            alarmIndexFont_,
+            gfx::Canvas::Anchor::TopLeft
+        );
     }
 
     void AlarmsSettingsView::drawHour(const RenderType &renderer, size_t x, size_t baseline) const {
