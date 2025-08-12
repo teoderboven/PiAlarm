@@ -53,6 +53,7 @@ namespace PiAlarm::view::ssd1322 {
         const std::shared_ptr<gfx::IFont> alarmTimeFont_;       ///< Font used for rendering alarm times
         const std::shared_ptr<gfx::IFont> alarmActivationFont_; ///< Font used for rendering alarm activation status
 
+        const ssize_t borderScreenVerticalSpacing_ {3};         ///< Vertical spacing for the alarm settings from the screen border
         const ssize_t colonSeparatorOffsetY {-3};               ///< Offset for the colon separator from the center Y position
         const ssize_t digitColonSpacing_ {2};                   ///< Spacing between hour/minute digits and the colon separator
         const ssize_t digitActivationSpacing_ {5};              ///< Spacing between the hour/minute digits and the activation status
@@ -129,18 +130,6 @@ namespace PiAlarm::view::ssd1322 {
         bool handleMinuteStateInput(const input::InputEvent &event);
 
         /**
-         * @brief Highlights the content of the current alarm part being edited.
-         * This method draws a highlight around the currently edited part of the alarm settings.
-         * @param renderer The renderer to use for drawing the highlight.
-         * @param topLeftX The X coordinate of the top-left corner of the highlight.
-         * @param topLeftY The Y coordinate of the top-left corner of the highlight.
-         * @param contentWidth The width of the content to highlight.
-         * @param contentHeight The height of the content to highlight.
-         * @note This method is used to visually indicate which part of the alarm settings is currently being edited.
-         */
-        void highlightContent(const RenderType &renderer, size_t topLeftX, size_t topLeftY, size_t contentWidth, size_t contentHeight) const;
-
-        /**
          * @brief Handles input events when the activation state of the alarm is being edited.
          * This method allows the user to toggle the activation status and confirm the change.
          * @param event The input event to handle.
@@ -170,9 +159,20 @@ namespace PiAlarm::view::ssd1322 {
          * @brief Draws the activation status of the current alarm.
          * This method renders whether the alarm is active or inactive.
          * @param renderer The renderer to use for drawing.
-         * @param topY The top Y coordinate for rendering the activation status.
          */
-        void drawActivation(const RenderType &renderer, size_t topY) const;
+        void drawActivation(const RenderType &renderer) const;
+
+        /**
+          * @brief Highlights the content of the current alarm part being edited.
+          * This method draws a highlight around the currently edited part of the alarm settings.
+          * @param renderer The renderer to use for drawing the highlight.
+          * @param topLeftX The X coordinate of the top-left corner of the highlight.
+          * @param topLeftY The Y coordinate of the top-left corner of the highlight.
+          * @param contentWidth The width of the content to highlight.
+          * @param contentHeight The height of the content to highlight.
+          * @note This method is used to visually indicate which part of the alarm settings is currently being edited.
+          */
+        void highlightContent(const RenderType &renderer, size_t topLeftX, size_t topLeftY, size_t contentWidth, size_t contentHeight) const;
 
         /**
          * @brief Determines the next edit state based on the current state.

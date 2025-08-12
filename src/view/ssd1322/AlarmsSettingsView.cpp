@@ -42,7 +42,7 @@ namespace PiAlarm::view::ssd1322 {
         auto digitBaseline = centerY + colonSeparatorDimensions.height / 2;
         drawHour(renderer, centerX - digitSpacingFromCenter, digitBaseline);
         drawMinute(renderer, centerX + digitSpacingFromCenter, digitBaseline);
-        drawActivation(renderer, digitBaseline + digitActivationSpacing_);
+        drawActivation(renderer);
     }
 
     void AlarmsSettingsView::drawHour(const RenderType &renderer, size_t x, size_t baseline) const {
@@ -77,19 +77,21 @@ namespace PiAlarm::view::ssd1322 {
         }
     }
 
-    void AlarmsSettingsView::drawActivation(const RenderType &renderer, size_t topY) const {
+    void AlarmsSettingsView::drawActivation(const RenderType &renderer) const {
         auto centerX = renderer.getWidth() / 2;
+        auto bottomY = renderer.getHeight() - borderScreenVerticalSpacing_;
         auto dimensions = renderer.drawText(
-            centerX, topY,
+            centerX, bottomY,
             std::string("Alarme ") + std::string(currentActivation_ ? "activée" : "désactivée"),
             alarmActivationFont_,
-            gfx::Canvas::Anchor::TopCenter
+            gfx::Canvas::Anchor::BottomCenter
         );
 
         if (editState_.currentEdited == AlarmEditState::Part::Activation) {
             auto topLeftX = centerX - dimensions.width / 2;
+            auto topLeftY = bottomY - dimensions.height;
 
-            highlightContent(renderer, topLeftX, topY, dimensions.width, dimensions.height);
+            highlightContent(renderer, topLeftX, topLeftY, dimensions.width, dimensions.height);
         }
     }
 
