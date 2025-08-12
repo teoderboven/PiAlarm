@@ -56,6 +56,8 @@ namespace PiAlarm::view::ssd1322 {
         const ssize_t colonSeparatorOffsetY {-3};               ///< Offset for the colon separator from the center Y position
         const ssize_t digitColonSpacing_ {2};                   ///< Spacing between hour/minute digits and the colon separator
         const ssize_t digitActivationSpacing_ {5};              ///< Spacing between the hour/minute digits and the activation status
+        const ssize_t highlightedContentPadding_ {2};           ///< Padding around the highlighted content
+        const size_t highlightBorderWidth_ {1};                 ///< Width of the highlight border around the edited part
 
     public:
 
@@ -102,6 +104,42 @@ namespace PiAlarm::view::ssd1322 {
     private:
 
         /**
+         * @brief Handles input events when no part of the alarm is being edited.
+         * This method allows the user to select an alarm and enter edit mode.
+         * @param event The input event to handle.
+         * @return True if the input was handled, false otherwise.
+         */
+        bool handleNoneStateInput(const input::InputEvent &event);
+
+        /**
+         * @brief Handles input events when the hour part of the alarm is being edited.
+         * This method allows the user to increment or decrement the hour and confirm the change.
+         * @param event The input event to handle.
+         * @return True if the input was handled, false otherwise.
+         */
+        bool handleHourStateInput(const input::InputEvent &event);
+
+        /**
+         * @brief Handles input events when the minute part of the alarm is being edited.
+         * This method allows the user to increment or decrement the minute and confirm the change.
+         * @param event The input event to handle.
+         * @return True if the input was handled, false otherwise.
+         */
+        bool handleMinuteStateInput(const input::InputEvent &event);
+
+        /**
+         * @brief Highlights the content of the current alarm part being edited.
+         * This method draws a highlight around the currently edited part of the alarm settings.
+         * @param renderer The renderer to use for drawing the highlight.
+         * @param topLeftX The X coordinate of the top-left corner of the highlight.
+         * @param topLeftY The Y coordinate of the top-left corner of the highlight.
+         * @param contentWidth The width of the content to highlight.
+         * @param contentHeight The height of the content to highlight.
+         * @note This method is used to visually indicate which part of the alarm settings is currently being edited.
+         */
+        void highlightContent(const RenderType &renderer, size_t topLeftX, size_t topLeftY, size_t contentWidth, size_t contentHeight) const;
+
+        /**
          * @brief Handles input events when the activation state of the alarm is being edited.
          * This method allows the user to toggle the activation status and confirm the change.
          * @param event The input event to handle.
@@ -116,7 +154,7 @@ namespace PiAlarm::view::ssd1322 {
          * @param x The X coordinate for rendering the alarm settings.
          * @param baseline The baseline Y coordinate for rendering the alarm settings.
          */
-        void drawHour(RenderType &renderer, size_t x, size_t baseline) const;
+        void drawHour(const RenderType &renderer, size_t x, size_t baseline) const;
 
         /**
          * @brief Draws the current minute settings on the display.
@@ -125,7 +163,7 @@ namespace PiAlarm::view::ssd1322 {
          * @param x The X coordinate for rendering the minute settings.
          * @param baseline The baseline Y coordinate for rendering the minute settings.
          */
-        void drawMinute(RenderType &renderer, size_t x, size_t baseline) const;
+        void drawMinute(const RenderType &renderer, size_t x, size_t baseline) const;
 
         /**
          * @brief Draws the activation status of the current alarm.
@@ -133,7 +171,7 @@ namespace PiAlarm::view::ssd1322 {
          * @param renderer The renderer to use for drawing.
          * @param topY The top Y coordinate for rendering the activation status.
          */
-        void drawActivation(RenderType &renderer, size_t topY) const;
+        void drawActivation(const RenderType &renderer, size_t topY) const;
 
         /**
          * @brief Determines the next edit state based on the current state.

@@ -19,9 +19,11 @@ namespace PiAlarm::view::ssd1322 {
     void AlarmsSettingsView::refresh() {
         auto currentAlarmTime {alarmsData_.getAlarm(currentSelectedAlarm_).getTime()};
 
-        currentHour_ = currentAlarmTime.hour();
-        currentMinute_ = currentAlarmTime.minute();
-        currentActivation_ = alarmsData_.getAlarm(currentSelectedAlarm_).isEnabled();
+        if (editState_.currentEdited == AlarmEditState::Part::None) { // only refresh if not editing
+            currentHour_ = currentAlarmTime.hour();
+            currentMinute_ = currentAlarmTime.minute();
+            currentActivation_ = alarmsData_.getAlarm(currentSelectedAlarm_).isEnabled();
+        }
 
         dirty_ = true;
     }
@@ -43,35 +45,160 @@ namespace PiAlarm::view::ssd1322 {
         drawActivation(renderer, digitBaseline + digitActivationSpacing_);
     }
 
-    void AlarmsSettingsView::drawHour(RenderType &renderer, size_t x, size_t baseline) const {
+    void AlarmsSettingsView::drawHour(const RenderType &renderer, size_t x, size_t baseline) const {
         auto dimensions = renderer.drawText(
             x, baseline,
             utils::formatInt(currentHour_, 2),
             alarmTimeFont_,
             gfx::Canvas::Anchor::BottomRight
         );
+
+        if (editState_.currentEdited == AlarmEditState::Part::Hour) {
+            // Highlight the hour part if it is being edited
+            auto topLeftX = x - dimensions.width;
+            auto topLeftY = baseline - dimensions.height;
+
+            highlightContent(renderer, topLeftX, topLeftY, dimensions.width, dimensions.height);
+        }
     }
 
-    void AlarmsSettingsView::drawMinute(RenderType &renderer, size_t x, size_t baseline) const {
+    void AlarmsSettingsView::drawMinute(const RenderType &renderer, size_t x, size_t baseline) const {
         auto dimensions = renderer.drawText(
             x, baseline,
             utils::formatInt(currentMinute_, 2),
             alarmTimeFont_,
             gfx::Canvas::Anchor::BottomLeft
         );
+
+        if (editState_.currentEdited == AlarmEditState::Part::Minute) {
+            auto topLeftY = baseline - dimensions.height;
+
+            highlightContent(renderer, x, topLeftY, dimensions.width, dimensions.height);
+        }
     }
 
-    void AlarmsSettingsView::drawActivation(RenderType &renderer, size_t topY) const {
+    void AlarmsSettingsView::drawActivation(const RenderType &renderer, size_t topY) const {
+        auto centerX = renderer.getWidth() / 2;
         auto dimensions = renderer.drawText(
-            renderer.getWidth()/2, topY,
+            centerX, topY,
             std::string("Alarme ") + std::string(currentActivation_ ? "activée" : "désactivée"),
             alarmActivationFont_,
             gfx::Canvas::Anchor::TopCenter
         );
+
+        if (editState_.currentEdited == AlarmEditState::Part::Activation) {
+            auto topLeftX = centerX - dimensions.width / 2;
+
+            highlightContent(renderer, topLeftX, topY, dimensions.width, dimensions.height);
+        }
+    }
+
+    void AlarmsSettingsView::highlightContent(const RenderType &renderer, size_t topLeftX, size_t topLeftY, size_t contentWidth, size_t contentHeight) const {
+        auto borderAreaWidth = highlightBorderWidth_ + highlightedContentPadding_;
+
+        renderer.drawRectangle(
+            topLeftX - borderAreaWidth,
+            topLeftY - borderAreaWidth,
+            contentWidth + 2 * borderAreaWidth,
+            contentHeight + 2 * borderAreaWidth,
+            highlightBorderWidth_
+        );
     }
 
     void AlarmsSettingsView::handleInputEvent(const input::InputEvent &event) {
+        bool effectivelyHandled = false;
 
+        switch (editState_.currentEdited) {
+            case AlarmEditState::Part::None:
+                effectivelyHandled = handleNoneStateInput(event);
+                break;
+            case AlarmEditState::Part::Hour:
+                effectivelyHandled = handleHourStateInput(event);
+                break;
+            case AlarmEditState::Part::Minute:
+                effectivelyHandled = handleMinuteStateInput(event);
+                break;
+            case AlarmEditState::Part::Activation:
+                effectivelyHandled = handleActivationStateInput(event);
+                break;
+        }
+
+        dirty_ = effectivelyHandled;
+    }
+
+    bool AlarmsSettingsView::handleNoneStateInput(const input::InputEvent &event) {
+        if (!event.pressed) return false;
+
+        switch (event.button) {
+            case input::ButtonId::Main: // enter edit mode
+                editState_.currentEdited = nextEditState();
+                break;
+            case input::ButtonId::Previous:
+                currentSelectedAlarm_ = (currentSelectedAlarm_ + alarmCount_ - 1) % alarmCount_;
+                break;
+            case input::ButtonId::Next:
+                currentSelectedAlarm_ = (currentSelectedAlarm_ + 1) % alarmCount_;
+                break;
+            default:
+                return false; // Not handled
+        }
+        return true; // Input was handled
+    }
+
+    bool AlarmsSettingsView::handleHourStateInput(const input::InputEvent &event) {
+        if (!event.pressed) return false;
+
+        switch (event.button) {
+            case input::ButtonId::Main: // confirm hour and move to next part
+                editState_.currentEdited = nextEditState();
+                break;
+            case input::ButtonId::Previous: // decrement hour
+                currentHour_ = (currentHour_ + 23) % 24;
+                break;
+            case input::ButtonId::Next: // increment hour
+                currentHour_ = (currentHour_ + 1) % 24;
+                break;
+            default:
+                return false; // Not handled
+        }
+        return true; // Input was handled
+    }
+
+    bool AlarmsSettingsView::handleMinuteStateInput(const input::InputEvent &event) {
+        if (!event.pressed) return false;
+
+        switch (event.button) {
+            case input::ButtonId::Main: // confirm minute and move to activation state
+                editState_.currentEdited = nextEditState();
+                break;
+            case input::ButtonId::Previous: // decrement minute
+                currentMinute_ = (currentMinute_ + 59) % 60;
+                break;
+            case input::ButtonId::Next: // increment minute
+                currentMinute_ = (currentMinute_ + 1) % 60;
+                break;
+            default:
+                return false; // Not handled
+        }
+        return true; // Input was handled
+    }
+
+    bool AlarmsSettingsView::handleActivationStateInput(const input::InputEvent &event) {
+        if (!event.pressed) return false;
+
+        switch (event.button) {
+            case input::ButtonId::Main: // confirm activation and exit edit mode
+                alarmController_.setAlarm(currentSelectedAlarm_, currentHour_, currentMinute_, currentActivation_);
+                editState_.currentEdited = nextEditState();
+                break;
+            case input::ButtonId::Previous:
+            case input::ButtonId::Next:
+                currentActivation_ = !currentActivation_; // toggle
+                break;
+            default:
+                return false; // Not handled
+        }
+        return true;
     }
 
     AlarmsSettingsView::AlarmEditState::Part AlarmsSettingsView::nextEditState() const {
