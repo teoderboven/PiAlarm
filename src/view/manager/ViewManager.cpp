@@ -43,7 +43,7 @@ namespace PiAlarm::view {
             if (viewInControl_) {
                 #ifdef DISPLAY_SSD1322
                     // Draw a border around the view
-                    renderer_.drawRectangle(0,0, renderer_.getWidth(), renderer_.getHeight(), 1, 0x80);
+                    renderer_.drawRectangle(0,0, renderer_.getWidth(), renderer_.getHeight(), 1, highlightBorderColor_);
                 #endif // DISPLAY_SSD1322
             }
 

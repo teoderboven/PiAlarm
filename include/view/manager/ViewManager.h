@@ -32,6 +32,8 @@ namespace PiAlarm::view {
         ScreenType& screen_; ///< Reference to the screen for rendering views
         RenderType& renderer_; ///< Reference to the renderer for drawing views
 
+        const gfx::Pixel highlightBorderColor_ {0x30}; ///< Color used for highlighting the active view
+
     public:
 
         /**

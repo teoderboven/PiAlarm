@@ -101,7 +101,8 @@ namespace PiAlarm::view::ssd1322 {
             topLeftY - borderAreaWidth,
             contentWidth + 2 * borderAreaWidth,
             contentHeight + 2 * borderAreaWidth,
-            highlightBorderWidth_
+            highlightBorderWidth_,
+            highlightBorderColor_
         );
     }
 

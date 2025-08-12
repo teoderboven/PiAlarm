@@ -58,6 +58,7 @@ namespace PiAlarm::view::ssd1322 {
         const ssize_t digitActivationSpacing_ {5};              ///< Spacing between the hour/minute digits and the activation status
         const ssize_t highlightedContentPadding_ {2};           ///< Padding around the highlighted content
         const size_t highlightBorderWidth_ {1};                 ///< Width of the highlight border around the edited part
+        const gfx::Pixel highlightBorderColor_ {0x30};          ///< Color of the highlight border
 
     public:
 
