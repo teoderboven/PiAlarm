@@ -23,7 +23,7 @@ int main() {
     // GFX
 
     int fontSize = 12;
-    gfx::TrueTypeFont font("assets/fonts/Roboto-Regular.ttf", fontSize);
+    std::shared_ptr<gfx::IFont> font = std::make_shared<gfx::TrueTypeFont>("assets/fonts/Roboto-Regular.ttf", fontSize);
 
     gfx::Canvas canvas{std::make_unique<gfx::SDD1322Buffer>(), gfx::Canvas::DrawMode::IgnoreBlack}; // Create a canvas with the SSD1322 buffer
 
