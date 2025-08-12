@@ -4,6 +4,7 @@
 #ifdef DISPLAY_SSD1322
     #include "gfx/SDD1322Buffer.h"
     #include "view/ssd1322/MainClockView.h"
+    #include "view/ssd1322/AlarmsSettingsView.h"
 #elif defined(DISPLAY_CONSOLE)
     #include "view/console/MainClockView.h"
 #endif
@@ -136,6 +137,12 @@ namespace PiAlarm {
                     clock_data,
                     currentWeather_data,
                     temperatureSensor_data
+                )
+            );
+            viewManager.addView(
+                std::make_unique<view::ssd1322::AlarmsSettingsView>(
+                    alarms_data,
+                    alarmController
                 )
             );
 

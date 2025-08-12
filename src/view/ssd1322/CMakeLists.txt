@@ -7,6 +7,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(SOURCES
         MainClockView.cpp
+        AlarmsSettingsView.cpp
 )
 
 add_library(${PROJECT_NAME} STATIC
