@@ -69,13 +69,6 @@ namespace PiAlarm {
         );
 
         /**
-         * @brief Destructor for the Application class.
-         *
-         * Cleans up resources used by the application.
-         */
-        ~Application() override = default;
-
-        /**
          * @brief Starts the main application loop.
          *
          * This method runs the application, handling input events, updating the display,
