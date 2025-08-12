@@ -35,9 +35,9 @@ namespace PiAlarm::view {
         currentTime_ = clockData_.getCurrentTime();
 
         enabledAlarmCount_ = alarmsData_.enabledAlarmCount();
+        hasAlarmEnabled_ = enabledAlarmCount_ > 0;
         const auto nextAlarm {alarmsData_.getNextAlarm(currentTime_)};
         nextAlarmTime_ = nextAlarm ? nextAlarm->getTime() : model::Time(0);
-        hasAlarmEnabled_ = nextAlarm ? nextAlarm->isEnabled() : false;
 
         currentIndoorTemperature_ = temperatureSensorData_.getTemperature();
         currentIndoorHumidity_ = temperatureSensorData_.getHumidity();

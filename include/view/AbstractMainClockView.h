@@ -29,8 +29,8 @@ namespace PiAlarm::view {
         model::Time currentTime_; ///< Current time
 
         size_t enabledAlarmCount_; ///< Number of enabled alarms
-        model::Time nextAlarmTime_;  ///< Next alarm time
         bool hasAlarmEnabled_;       ///< Flag indicating if there is an enabled alarm
+        model::Time nextAlarmTime_;  ///< Next alarm time
 
         float currentIndoorTemperature_; ///< Current indoor temperature
         float currentIndoorHumidity_;    ///< Current indoor humidity
