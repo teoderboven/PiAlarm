@@ -1,4 +1,4 @@
-#ifdef __linux__
+#ifdef RASPBERRY_PI
 
 #include "hardware/SSD1322.h"
 #include <thread>
@@ -148,4 +148,4 @@ namespace PiAlarm::hardware {
 
 } // namespace PiAlarm::hardware
 
-#endif // __linux__
+#endif // RASPBERRY_PI

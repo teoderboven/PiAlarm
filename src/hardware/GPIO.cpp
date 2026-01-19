@@ -1,4 +1,4 @@
-#ifdef __linux__
+#ifdef RASPBERRY_PI
 
 #include <stdexcept>
 #include <cerrno>
@@ -123,4 +123,4 @@ namespace PiAlarm::hardware {
 
 } // namespace PiAlarm::hardware
 
-#endif // __linux__
+#endif // RASPBERRY_PI

@@ -1,7 +1,7 @@
 #ifndef SSD1322_H
 #define SSD1322_H
 
-#ifdef __linux__
+#ifdef RASPBERRY_PI
 
 #include <cstdint>
 #include <array>
@@ -186,5 +186,5 @@ namespace PiAlarm::hardware {
 
 } // namespace PiAlarm::hardware
 
-#endif // __linux__
+#endif // RASPBERRY_PI
 #endif //SSD1322_H

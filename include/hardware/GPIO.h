@@ -1,7 +1,7 @@
 #ifndef GPIO_H
 #define GPIO_H
 
-#ifdef __linux__
+#ifdef RASPBERRY_PI
 
 #include <gpiod.h>
 #include <chrono>
@@ -218,5 +218,5 @@ namespace PiAlarm::hardware {
 
 } // namespace PiAlarm::hardware
 
-#endif // __linux__
+#endif // RASPBERRY_PI
 #endif //GPIO_H

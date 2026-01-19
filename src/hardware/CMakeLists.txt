@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.27)
 
-if(NOT CMAKE_SYSTEM_NAME STREQUAL "Linux")
+if(NOT IS_RASPBERRY_PI)
     return()
 endif()
 

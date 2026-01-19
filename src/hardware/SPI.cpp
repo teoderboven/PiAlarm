@@ -1,4 +1,4 @@
-#ifdef __linux__
+#ifdef RASPBERRY_PI
 
 #include <fcntl.h>
 #include <unistd.h>
@@ -75,4 +75,4 @@ namespace PiAlarm::hardware {
 
 } // namespace PiAlarm::hardware
 
-#endif // __linux__
+#endif // RASPBERRY_PI
