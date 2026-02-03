@@ -57,7 +57,9 @@ namespace PiAlarm::service {
          *
          * @return The duration until the next alignment in milliseconds.
          */
-        std::chrono::milliseconds updateInterval() const override;
+        std::chrono::milliseconds updateInterval() const override {
+            return getDurationUntilNextAlignment(WEATHER_API_SERVICE_MINUTE_ALIGNMENT);
+        }
 
     private:
 

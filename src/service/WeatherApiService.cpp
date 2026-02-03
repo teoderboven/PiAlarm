@@ -54,10 +54,6 @@ namespace PiAlarm::service {
         );
     }
 
-    std::chrono::milliseconds WeatherApiService::updateInterval() const {
-        return getDurationUntilNextAlignment(WEATHER_API_SERVICE_MINUTE_ALIGNMENT);
-    }
-
     std::chrono::milliseconds WeatherApiService::getDurationUntilNextAlignment(const int& minuteAlignment){
         using namespace std::chrono;
 
