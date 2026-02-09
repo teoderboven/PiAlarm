@@ -30,6 +30,7 @@ endif()
 
 option(DISPLAY_SSD1322 "Use SSD1322 display (Raspberry Pi only)" OFF)
 option(DISPLAY_CONSOLE "Use console display" OFF)
+option(SENSOR_BME280 "Use BME280 sensor to display interior temperature & humidity (Raspberry Pi only)" OFF)
 option(SENSOR_SCD41 "Use SCD41 sensor to display interior temperature, humidity & CO2 (Raspberry Pi only)" OFF)
 option(INPUT_GPIO "Use GPIO pin for user inputs (Raspberry Pi only)" OFF)
 set(LOG_LEVEL "info" CACHE STRING "Log level (trace, debug, info, warn, error, critical)")
@@ -42,6 +43,10 @@ endif()
 
 if(DISPLAY_SSD1322 AND NOT IS_RASPBERRY_PI)
     message(FATAL_ERROR "DISPLAY_SSD1322 is only supported on Raspberry Pi.")
+endif()
+
+if(SENSOR_BME280 AND NOT IS_RASPBERRY_PI)
+    message(FATAL_ERROR "SENSOR_BME280 is only supported on Raspberry Pi.")
 endif()
 
 if(SENSOR_SCD41 AND NOT IS_RASPBERRY_PI)
@@ -63,6 +68,9 @@ elseif(DISPLAY_CONSOLE)
     add_compile_definitions(DISPLAY_CONSOLE)
 endif()
 
+if(SENSOR_BME280)
+    add_compile_definitions(SENSOR_BME280)
+endif()
 if(SENSOR_SCD41)
     add_compile_definitions(SENSOR_SCD41)
 endif()
@@ -107,12 +115,20 @@ if(DISPLAY_SSD1322)
     target_link_libraries(${PROJECT_NAME} PRIVATE
             PiAlarm_view_ssd1322
             PiAlarm_gfx
-            PiAlarm_input
-            PiAlarm_hardware
     )
 else()
     target_link_libraries(${PROJECT_NAME} PRIVATE
             PiAlarm_view_console
+    )
+endif()
+if(INPUT_GPIO)
+    target_link_libraries(${PROJECT_NAME} PRIVATE
+            PiAlarm_input
+    )
+endif()
+if(DISPLAY_SSD1322 OR SENSOR_BME280 OR SENSOR_SCD41 OR INPUT_GPIO)
+    target_link_libraries(${PROJECT_NAME} PRIVATE
+            PiAlarm_hardware
     )
 endif()
 
