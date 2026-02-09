@@ -21,6 +21,7 @@ set(SOURCES
         SPI.cpp
         I2C.cpp
         SSD1322.cpp
+        SCD41.cpp
 )
 
 add_library(${PROJECT_NAME} STATIC ${SOURCES})

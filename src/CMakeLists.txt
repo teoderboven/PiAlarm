@@ -30,6 +30,7 @@ endif()
 
 option(DISPLAY_SSD1322 "Use SSD1322 display (Raspberry Pi only)" OFF)
 option(DISPLAY_CONSOLE "Use console display" OFF)
+option(SENSOR_SCD41 "Use SCD41 sensor to display interior temperature, humidity & CO2 (Raspberry Pi only)" OFF)
 option(INPUT_GPIO "Use GPIO pin for user inputs (Raspberry Pi only)" OFF)
 set(LOG_LEVEL "info" CACHE STRING "Log level (trace, debug, info, warn, error, critical)")
 
@@ -41,6 +42,10 @@ endif()
 
 if(DISPLAY_SSD1322 AND NOT IS_RASPBERRY_PI)
     message(FATAL_ERROR "DISPLAY_SSD1322 is only supported on Raspberry Pi.")
+endif()
+
+if(SENSOR_SCD41 AND NOT IS_RASPBERRY_PI)
+    message(FATAL_ERROR "SENSOR_SCD41 is only supported on Raspberry Pi.")
 endif()
 
 if(INPUT_GPIO AND NOT IS_RASPBERRY_PI)
@@ -56,6 +61,10 @@ if(DISPLAY_SSD1322)
     add_compile_definitions(DISPLAY_SSD1322)
 elseif(DISPLAY_CONSOLE)
     add_compile_definitions(DISPLAY_CONSOLE)
+endif()
+
+if(SENSOR_SCD41)
+    add_compile_definitions(SENSOR_SCD41)
 endif()
 
 if(INPUT_GPIO)
