@@ -19,6 +19,7 @@ endif()
 set(SOURCES
         GPIO.cpp
         SPI.cpp
+        I2C.cpp
         SSD1322.cpp
 )
 
