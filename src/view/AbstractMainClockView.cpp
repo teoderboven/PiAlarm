@@ -7,20 +7,20 @@ namespace PiAlarm::view {
         const model::AlarmState& alarmStateData,
         const model::ClockData &clockData,
         const model::CurrentWeatherData &currentWeatherData,
-        const model::TemperatureSensorData& temperatureSensorData
+        const model::CurrentIndoorData& temperatureSensorData
         )
         : AbstractObserverView{true},
         alarmsData_{alarmsData},
         alarmStateData_{alarmStateData},
         clockData_{clockData},
         currentWeatherData_{currentWeatherData},
-        temperatureSensorData_{temperatureSensorData}
+        currentIndoorData_{temperatureSensorData}
     {
         alarmsData_.addObserver(this);
         alarmStateData_.addObserver(this);
         clockData_.addObserver(this);
         currentWeatherData_.addObserver(this);
-        temperatureSensorData_.addObserver(this);
+        currentIndoorData_.addObserver(this);
     }
 
     AbstractMainClockView::~AbstractMainClockView() {
@@ -28,7 +28,7 @@ namespace PiAlarm::view {
         alarmStateData_.removeObserver(this);
         clockData_.removeObserver(this);
         currentWeatherData_.removeObserver(this);
-        temperatureSensorData_.removeObserver(this);
+        currentIndoorData_.removeObserver(this);
     }
 
     void AbstractMainClockView::refresh() {
@@ -39,9 +39,9 @@ namespace PiAlarm::view {
         const auto nextAlarm {alarmsData_.getNextAlarm(currentTime_)};
         nextAlarmTime_ = nextAlarm ? nextAlarm->getTime() : model::Time(0);
 
-        currentIndoorTemperature_ = temperatureSensorData_.getTemperature();
-        currentIndoorHumidity_ = temperatureSensorData_.getHumidity();
-        sensorDataValid_ = temperatureSensorData_.isValid();
+        currentIndoorTemperature_ = currentIndoorData_.getTemperature();
+        currentIndoorHumidity_ = currentIndoorData_.getHumidity();
+        indoorDataValid_ = currentIndoorData_.isValid();
 
         currentOutdoorTemperature_ = currentWeatherData_.getTemperature();
         currentOutdoorHumidity_ = currentWeatherData_.getHumidity();

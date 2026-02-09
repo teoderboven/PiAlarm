@@ -57,7 +57,7 @@ namespace PiAlarm::view::ssd1322 {
             const model::AlarmState& alarmStateData,
             const model::ClockData& clockData,
             const model::CurrentWeatherData& currentWeatherData,
-            const model::TemperatureSensorData& temperatureSensorData
+            const model::CurrentIndoorData& temperatureSensorData
         );
 
         /**

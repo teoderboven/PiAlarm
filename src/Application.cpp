@@ -22,7 +22,7 @@ namespace PiAlarm {
       : clock_data{},
         alarms_data{alarmCount},
         currentWeather_data{},
-        temperatureSensor_data{},
+        currentIndoor_data{},
 
         // manager
         alarmManager{clock_data, alarms_data, snoozeDuration, ringDuration},
@@ -90,9 +90,6 @@ namespace PiAlarm {
     }
 
 
-
-
-
     //////////// Application methods ////////////
 
     void Application::run() {
@@ -136,7 +133,7 @@ namespace PiAlarm {
                     alarmState,
                     clock_data,
                     currentWeather_data,
-                    temperatureSensor_data
+                    currentIndoor_data
                 )
             );
             viewManager.addView(
@@ -154,7 +151,7 @@ namespace PiAlarm {
                     alarmManager.getAlarmState(),
                     clock_data,
                     currentWeather_data,
-                    temperatureSensor_data
+                    currentIndoor_data
                 )
             );
 

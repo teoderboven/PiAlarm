@@ -6,7 +6,7 @@
 #include "model/AlarmState.hpp"
 #include "model/ClockData.hpp"
 #include "model/CurrentWeatherData.h"
-#include "model/TemperatureSensorData.hpp"
+#include "model/CurrentIndoorData.hpp"
 
 namespace PiAlarm::view {
 
@@ -23,7 +23,7 @@ namespace PiAlarm::view {
         const model::AlarmState& alarmStateData_; ///< Reference to the alarm state data model
         const model::ClockData& clockData_; ///< Reference to the clock data model
         const model::CurrentWeatherData& currentWeatherData_; ///< Reference to the current weather data model
-        const model::TemperatureSensorData& temperatureSensorData_; ///< Reference to the temperature sensor data model
+        const model::CurrentIndoorData& currentIndoorData_; ///< Reference to the current indoor data model
 
         // Current state variables
         model::Time currentTime_; ///< Current time
@@ -34,7 +34,7 @@ namespace PiAlarm::view {
 
         float currentIndoorTemperature_; ///< Current indoor temperature
         float currentIndoorHumidity_;    ///< Current indoor humidity
-        bool sensorDataValid_; ///< Flag indicating if the temperature sensor data is valid
+        bool indoorDataValid_; ///< Flag indicating if the indoor data is valid
 
         float currentOutdoorTemperature_; ///< Current outdoor temperature
         float currentOutdoorHumidity_;    ///< Current outdoor humidity
@@ -57,7 +57,7 @@ namespace PiAlarm::view {
             const model::AlarmState& alarmStateData,
             const model::ClockData& clockData,
             const model::CurrentWeatherData& currentWeatherData,
-            const model::TemperatureSensorData& temperatureSensorData
+            const model::CurrentIndoorData& temperatureSensorData
         );
 
         /**

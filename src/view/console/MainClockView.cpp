@@ -13,7 +13,7 @@ namespace PiAlarm::view::console {
         const model::AlarmState& alarmStateData,
         const model::ClockData &clockData,
         const model::CurrentWeatherData &currentWeatherData,
-        const model::TemperatureSensorData& temperatureSensorData
+        const model::CurrentIndoorData& temperatureSensorData
         )
         : AbstractMainClockView(
             alarmsData,
@@ -31,8 +31,8 @@ namespace PiAlarm::view::console {
             { "Nombre d'alarmes actives", std::to_string(enabledAlarmCount_) },
             { "", "" },
 
-            { "Température pièce", utils::formatTemperature(currentIndoorTemperature_, sensorDataValid_) },
-            { "Humidité pièce", utils::formatHumidity(currentIndoorHumidity_, sensorDataValid_) },
+            { "Température pièce", utils::formatTemperature(currentIndoorTemperature_, indoorDataValid_) },
+            { "Humidité pièce", utils::formatHumidity(currentIndoorHumidity_, indoorDataValid_) },
             { "", "" },
 
             { "Température ext.", utils::formatTemperature(currentOutdoorTemperature_, currentWeatherDataValid_) },

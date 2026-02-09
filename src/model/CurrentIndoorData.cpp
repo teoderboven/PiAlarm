@@ -1,30 +1,30 @@
-#include "model/TemperatureSensorData.hpp"
+#include "model/CurrentIndoorData.hpp"
 
 namespace PiAlarm::model {
 
-    TemperatureSensorData::TemperatureSensorData(float temperature, float humidity, bool valid)
+    CurrentIndoorData::CurrentIndoorData(float temperature, float humidity, bool valid)
         : temperature_{temperature}, humidity_{humidity}, valid_{valid}
     {}
 
-    void TemperatureSensorData::setTemperature(float temperature) {
+    void CurrentIndoorData::setTemperature(float temperature) {
         bool valueChanged = setIfDifferent(temperature_, temperature);
 
         if (valueChanged) notifyObservers();
     }
 
-    void TemperatureSensorData::setHumidity(float humidity) {
+    void CurrentIndoorData::setHumidity(float humidity) {
         bool valueChanged = setIfDifferent(humidity_, humidity);
 
         if (valueChanged) notifyObservers();
     }
 
-    void TemperatureSensorData::setValid(bool valid) {
+    void CurrentIndoorData::setValid(bool valid) {
         bool valueChanged = setIfDifferent(valid_, valid);
 
         if (valueChanged) notifyObservers();
     }
 
-    void TemperatureSensorData::setValues(float temperature, float humidity, bool valid) {
+    void CurrentIndoorData::setValues(float temperature, float humidity, bool valid) {
         bool valueChanged = false;
 
         {

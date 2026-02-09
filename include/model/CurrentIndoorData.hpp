@@ -1,5 +1,5 @@
-#ifndef TEMPERATURESENSORDATA_HPP
-#define TEMPERATURESENSORDATA_HPP
+#ifndef CURRENT_INDOOR_DATA_HPP
+#define CURRENT_INDOOR_DATA_HPP
 
 #include <mutex>
 
@@ -9,12 +9,12 @@
 namespace PiAlarm::model {
 
     /**
-     * @class TemperatureSensorData
+     * @class CurrentIndoorData
      * @brief Represents the data from a temperature sensor, including temperature, humidity, and validity status.
      *
      * This class extends the Observable class to notify observers of changes in the temperature sensor data.
      */
-    class TemperatureSensorData final : public BaseModelData, public common::Observable {
+    class CurrentIndoorData final : public BaseModelData, public common::Observable {
         float temperature_;
         float humidity_;
         bool valid_ = false;
@@ -23,7 +23,7 @@ namespace PiAlarm::model {
         /**
          * Default constructor for TemperatureSensorData.
          */
-        TemperatureSensorData() = default;
+        CurrentIndoorData() = default;
 
         /**
          * Constructs a TemperatureSensorData object with specified temperature, humidity, and validity status.
@@ -31,7 +31,7 @@ namespace PiAlarm::model {
          * @param humidity The humidity to set.
          * @param valid True if the weather data is valid, false otherwise.
          */
-        TemperatureSensorData(float temperature, float humidity, bool valid);
+        CurrentIndoorData(float temperature, float humidity, bool valid);
 
         /**
          * Sets the temperature and notifies observers of the change.
@@ -88,19 +88,19 @@ namespace PiAlarm::model {
 
     // inline methods implementations
 
-    inline float TemperatureSensorData::getTemperature() const {
+    inline float CurrentIndoorData::getTemperature() const {
         std::lock_guard lock{mutex_};
 
         return temperature_;
     }
 
-    inline float TemperatureSensorData::getHumidity() const {
+    inline float CurrentIndoorData::getHumidity() const {
         std::lock_guard lock{mutex_};
 
         return humidity_;
     }
 
-    inline bool TemperatureSensorData::isValid() const {
+    inline bool CurrentIndoorData::isValid() const {
         std::lock_guard lock{mutex_};
 
         return valid_;
@@ -108,4 +108,4 @@ namespace PiAlarm::model {
 
 } // namespace PiAlarm::model
 
-#endif //TEMPERATURESENSORDATA_HPP
+#endif //CURRENT_INDOOR_DATA_HPP

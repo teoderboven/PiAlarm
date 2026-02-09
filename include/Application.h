@@ -5,7 +5,7 @@
 #include "model/AlarmsData.hpp"
 #include "model/ClockData.hpp"
 #include "model/CurrentWeatherData.h"
-#include "model/TemperatureSensorData.hpp"
+#include "model/CurrentIndoorData.hpp"
 #include "model/manager/AlarmManager.h"
 #include "controller/AlarmController.h"
 #include "view/manager/ViewManager.h"
@@ -136,7 +136,7 @@ namespace PiAlarm {
         model::ClockData clock_data;                            ///< Clock data model
         model::AlarmsData alarms_data;                          ///< Alarms data model
         model::CurrentWeatherData currentWeather_data;          ///< Current weather data model
-        model::TemperatureSensorData temperatureSensor_data;    ///< Temperature sensor data model
+        model::CurrentIndoorData currentIndoor_data;            ///< Current indoor data model
 
         // model manager
         model::manager::AlarmManager alarmManager;              ///< Alarm manager to handle alarm states and operations

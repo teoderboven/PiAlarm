@@ -10,7 +10,7 @@ namespace PiAlarm::view::ssd1322 {
         const model::AlarmState& alarmStateData,
         const model::ClockData &clockData,
         const model::CurrentWeatherData &currentWeatherData,
-        const model::TemperatureSensorData& temperatureSensorData
+        const model::CurrentIndoorData& temperatureSensorData
         )
         : AbstractMainClockView(
             alarmsData,
@@ -146,8 +146,8 @@ namespace PiAlarm::view::ssd1322 {
         drawSingleCondition(
             renderer,
             bottomY - (outdoorTextHeight + conditionVerticalSpacing_),
-            utils::formatTemperature(currentIndoorTemperature_, sensorDataValid_),
-            utils::formatHumidity(currentIndoorHumidity_, sensorDataValid_),
+            utils::formatTemperature(currentIndoorTemperature_, indoorDataValid_),
+            utils::formatHumidity(currentIndoorHumidity_, indoorDataValid_),
             "Int."
         );
     }

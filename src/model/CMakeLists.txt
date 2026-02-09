@@ -13,7 +13,7 @@ set(SOURCES
         AlarmsData.cpp
         AlarmState.cpp
         ClockData.cpp
-        TemperatureSensorData.cpp
+        CurrentIndoorData.cpp
         CurrentWeatherData.cpp
 )
 
