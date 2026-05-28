@@ -23,7 +23,7 @@ namespace PiAlarm::hardware {
      * It allows for reading CO2 levels, temperature, and humidity data.
      */
     class SCD41 {
-        const I2C& i2c_; ///< Reference to the I2C interface used for communication
+        const I2C i2c_; ///< The I2C interface used for communication
 
     public:
         static constexpr uint8_t I2C_ADDRESS = 0x62; ///< I2C address of the SCD41 sensor
@@ -38,10 +38,10 @@ namespace PiAlarm::hardware {
         };
 
         /**
-         * @brief Constructs an SCD41 object with the specified I2C interface.
-         * @param i2c Reference to the I2C interface used for communication.
+         * @brief Constructs an SCD41 object with the specified I2C address.
+         * @param address The address of the I2C device, default is the SCD41 I2C address (0x62).
          */
-        explicit SCD41(I2C& i2c);
+        explicit SCD41(uint8_t address = I2C_ADDRESS);
 
         /**
          * @brief Starts periodic measurement mode on the SCD41 sensor.

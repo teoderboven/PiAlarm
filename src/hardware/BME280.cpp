@@ -6,8 +6,8 @@
 
 namespace PiAlarm ::hardware {
 
-    BME280::BME280(I2C& i2c)
-        : i2c_{i2c} {
+    BME280::BME280(uint8_t address)
+        : i2c_{address} {
         initialize();
     }
 

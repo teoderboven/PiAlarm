@@ -31,7 +31,7 @@ namespace PiAlarm::hardware {
      * and read compensated measurement data.
      */
     class BME280 {
-        const I2C& i2c_; ///< Reference to the I2C interface used for communication
+        const I2C i2c_; ///< The I2C interface used for communication
 
     public:
         static constexpr uint8_t I2C_ADDRESS = 0x76; ///< I2C address of the BME280 sensor
@@ -67,10 +67,10 @@ namespace PiAlarm::hardware {
         };
 
         /**
-         * @brief Constructs a BME280 object with the specified I2C interface.
-         * @param i2c Reference to the I2C interface used for communication.
+         * @brief Constructs a BME280 object with the specified I2C address.
+         * @param address The address of the I2C device, default is the BME280 I2C address (0x76).
          */
-        explicit BME280(I2C& i2c);
+        explicit BME280(uint8_t address = I2C_ADDRESS);
 
         /**
          * @brief Resets the BME280 sensor.
