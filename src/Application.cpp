@@ -38,13 +38,7 @@ namespace PiAlarm {
 
         // display
         renderer{std::make_unique<gfx::SDD1322Buffer>()},
-
-        // screen hardware
-        screenSpi{"/dev/spidev0.0", 10'000'000},
-        screenDcPin{25},
-        screenResetPin{24},
-
-        screen{screenSpi, screenDcPin, screenResetPin}, // SSD1322 OLED display
+        screen{25, 24}, // SSD1322 OLED display
 
 #elif defined(DISPLAY_CONSOLE)
 

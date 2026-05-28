@@ -12,9 +12,12 @@
 
 namespace PiAlarm::hardware {
 
-    SPI::SPI(const std::string& device, uint32_t speed)
-        : fd_{open(device.c_str(), O_RDWR)}
+    SPI::SPI(uint32_t chipSelect, uint32_t speed)
     {
+        const std::string device = "/dev/spidev0." + std::to_string(chipSelect);
+
+        fd_ = open(device.c_str(), O_RDWR);
+
         if (fd_ < 0) {
             throw std::runtime_error("Unable to open SPI device: " + device + " : " + std::strerror(errno));
         }

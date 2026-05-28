@@ -14,12 +14,9 @@
 #include "media/MusicService.h"
 #include "trigger/AlarmSoundTrigger.h"
 
-#ifdef DISPLAY_SSD1322
-    #include "hardware/GPIO.h"
-    #include "hardware/SPI.h"
-#endif
 
 #ifdef INPUT_GPIO
+    #include "hardware/GPIO.h"
     #include "input/InputManager.h"
     #include "input/HasInputEventHandler.h"
 #endif
@@ -152,11 +149,6 @@ namespace PiAlarm {
         RenderType renderer;                                    ///< Renderer type for the display output
 
 #ifdef DISPLAY_SSD1322
-        // screen and hardware
-        hardware::SPI screenSpi;                                ///< SPI interface for the SSD1322 display
-        hardware::GPIO screenDcPin;                             ///< Data/Command pin for the SSD1322 display
-        hardware::GPIO screenResetPin;                          ///< Reset pin for the SSD1322 display
-
         ScreenType screen;                                      ///< The SSD1322 display controller
 #elif defined(DISPLAY_CONSOLE)
         ScreenType& screen;                                     ///< Reference to the console output stream

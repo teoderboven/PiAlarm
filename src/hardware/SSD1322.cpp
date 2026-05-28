@@ -7,8 +7,13 @@
 
 namespace PiAlarm::hardware {
 
-    SSD1322::SSD1322(SPI& spi, GPIO& dcPin, GPIO& resetPin)
-        : spi_{spi}, dcPin_{dcPin}, resetPin_{resetPin}
+    SSD1322::SSD1322(unsigned int dcLineNumber,
+                     unsigned int resetLineNumber,
+                     uint32_t spiChipSelect,
+                     uint32_t spiSpeed)
+        : spi_{spiChipSelect, spiSpeed},
+          dcPin_{dcLineNumber},
+          resetPin_{resetLineNumber}
     {
         // Configure GPIO pins as output
         // DC pin is used to switch between command and data mode

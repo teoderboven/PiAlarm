@@ -27,12 +27,12 @@ namespace PiAlarm::hardware {
     public:
 
         /**
-         * Constructs an SPI object for a specific device.
-         * @param device The path to the SPI device (e.g., "/dev/spidev0.0").
+         * Constructs an SPI object for a specific chip select on SPI0.
+         * @param chipSelect The SPI chip select (0 or 1, default is 0).
          * @param speed The speed of the SPI communication in Hz (default is 10 MHz).
          * @throws std::runtime_error if the SPI device cannot be opened or configured.
          */
-        explicit SPI(const std::string& device, uint32_t speed = 10'000'000);
+        explicit SPI(uint32_t chipSelect = 0, uint32_t speed = 10'000'000);
 
         /**
          * Destructor for the SPI class.

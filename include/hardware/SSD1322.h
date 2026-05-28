@@ -59,9 +59,9 @@ namespace PiAlarm::hardware {
      * Made with the help of ChatGPT and the SSD1322 datasheet.
      */
     class SSD1322 {
-        SPI& spi_; ///< Reference to the SPI interface used for communication
-        GPIO& dcPin_; ///< Data/Command pin for the SSD1322 display
-        GPIO& resetPin_; ///< Reset pin for the SSD1322 display
+        SPI spi_; ///< The SPI interface used for communication
+        GPIO dcPin_; ///< Data/Command pin for the SSD1322 display
+        GPIO resetPin_; ///< Reset pin for the SSD1322 display
 
     public:
         static constexpr size_t DISPLAY_WIDTH = 256; ///< Width of the SSD1322 display in pixels
@@ -83,14 +83,19 @@ namespace PiAlarm::hardware {
         using DataByte = uint8_t; ///< Type alias for data byte
 
         /**
-         * Constructs an SSD1322 object with the specified SPI and GPIO pins.
-         * @param spi Reference to the SPI interface used for communication.
-         * @param dcPin Reference to the GPIO pin used for Data/Command selection.
-         * @param resetPin Reference to the GPIO pin used for resetting the display.
+         * Constructs an SSD1322 object, creating and taking ownership of SPI and GPIO resources.
+         * @param dcLineNumber The GPIO line number for the Data/Command pin.
+         * @param resetLineNumber The GPIO line number for the Reset pin.
+         * @param spiChipSelect The SPI chip select (default is 0).
+         * @param spiSpeed The speed of the SPI communication in Hz (default is 10 MHz).
+         * @throws std::runtime_error if any hardware resource cannot be initialized.
          * @note The GPIO pins are configured as output by this constructor.
          * @note After creating the SSD1322 object, the `initialize()` method should be called to set up the display.
          */
-        SSD1322(SPI& spi, GPIO& dcPin, GPIO& resetPin);
+        SSD1322(unsigned int dcLineNumber,
+                unsigned int resetLineNumber,
+                uint32_t spiChipSelect = 0,
+                uint32_t spiSpeed = 10'000'000);
 
         /**
          * Initializes the SSD1322 display.
