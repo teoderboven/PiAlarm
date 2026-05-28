@@ -9,10 +9,13 @@
 #include "model/manager/AlarmManager.h"
 #include "controller/AlarmController.h"
 #include "view/manager/ViewManager.h"
-#include "service/TimeUpdateService.h"
-#include "service/WeatherApiService.h"
+#include "provider/WeatherApiClient.h"
+#include "service/IService.h"
 #include "media/MusicService.h"
 #include "trigger/AlarmSoundTrigger.h"
+
+#include <vector>
+#include <memory>
 
 
 #ifdef INPUT_GPIO
@@ -103,18 +106,17 @@ namespace PiAlarm {
     private:
 
         /**
+         * @brief Initializes the services for the application.
+         */
+        void initServices();
+
+        /**
          * @brief Starts all services required by the application.
-         *
-         * This method initializes and starts the time update service and weather API service,
-         * which are essential for the application's functionality.
          */
         void startServices();
 
         /**
          * @brief Stops all services gracefully.
-         *
-         * This method stops the time update service and weather API service,
-         * ensuring that all resources are released properly before the application exits.
          */
         void stopServices();
 
@@ -173,8 +175,7 @@ namespace PiAlarm {
 #endif // INPUT_GPIO
 
         // services
-        service::TimeUpdateService timeUpdateService;           ///< Service to update the time regularly
-        service::WeatherApiService weatherApiService;           ///< Service to fetch weather data from an API using the WeatherApiClient
+        std::vector<std::unique_ptr<service::IService>> services; ///< Vector to hold pointers to all services for easy management
 
         // media
         media::MusicService musicService;                       ///< Service to handle music playback, especially for alarm sounds

@@ -1,5 +1,7 @@
 #include <thread>
 #include "Application.h"
+#include "service/TimeUpdateService.h"
+#include "service/WeatherApiService.h"
 
 #ifdef DISPLAY_SSD1322
     #include "gfx/SDD1322Buffer.h"
@@ -70,16 +72,13 @@ namespace PiAlarm {
 
 #endif // INPUT_GPIO
 
-        // service
-        timeUpdateService{clock_data},
-        weatherApiService{currentWeather_data, apiClient},
-
         // media
         musicService{customMusicFolderPath, "assets/default_alarm"},
 
         // trigger
         alarmSoundTrigger{alarmManager.getAlarmState(), musicService}
     {
+        initServices();
         initViews();
     }
 
@@ -106,14 +105,21 @@ namespace PiAlarm {
         stopServices(); // will never be reached, but good practice to have it here
     }
 
+    void Application::initServices() {
+        services.emplace_back(std::make_unique<service::TimeUpdateService>(clock_data));
+        services.emplace_back(std::make_unique<service::WeatherApiService>(currentWeather_data, apiClient));
+    }
+
     void Application::startServices() {
-        timeUpdateService.start();
-        weatherApiService.start();
+        for (auto& service : services) {
+            service->start();
+        }
     }
 
     void Application::stopServices() {
-        timeUpdateService.stop();
-        weatherApiService.stop();
+        for (auto& service : services) {
+            service->stop();
+        }
     }
 
     void Application::initViews() {
