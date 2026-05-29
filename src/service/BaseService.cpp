@@ -11,16 +11,73 @@ namespace PiAlarm::service {
     }
 
     void BaseService::run() {
+        if (!executeStart()) {
+            running_ = false;
+            return;
+        }
+
         while (running_) {
+            if (!executeCycle()) {
+                break;
+            }
+        }
+
+        executeStop();
+    }
+
+    bool BaseService::executeStart() {
+        try {
+            if (!onStart()) {
+                logger().error("Service initialization failed. Stopping service.");
+                return false;
+            }
+            return true;
+        }
+        catch (const std::exception& e) {
+            logger().critical("Fatal exception during onStart: " + std::string(e.what()));
+            return false;
+        }
+        catch (...) {
+            logger().critical("Unknown fatal exception during onStart.");
+            return false;
+        }
+    }
+
+    bool BaseService::executeCycle() {
+        try {
             std::unique_lock lock{mutex_};
             cv_.wait(lock, [this]() { return !paused_ || !running_; });
 
-            if (!running_) break;
+            if (!running_) {
+                return false;
+            }
             lock.unlock();
 
             update();
 
             waitNextCycle();
+        }
+        catch (const std::exception& e) {
+            logger().error("Exception caught during service update: " + std::string(e.what()));
+            std::this_thread::sleep_for(std::chrono::milliseconds{500});
+        }
+        catch (...) {
+            logger().error("Unknown exception caught during service update.");
+            std::this_thread::sleep_for(std::chrono::milliseconds{500});
+        }
+
+        return true;
+    }
+
+    void BaseService::executeStop() {
+        try {
+            onStop();
+        }
+        catch (const std::exception& e) {
+            logger().error("Exception caught during onStop: " + std::string(e.what()));
+        }
+        catch (...) {
+            logger().error("Unknown exception caught during onStop.");
         }
     }
 
