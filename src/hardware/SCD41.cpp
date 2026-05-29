@@ -65,16 +65,15 @@ namespace PiAlarm::hardware {
             checkCRC(&buffer[i * 3], 2, buffer[i * 3 + 2]);
         }
 
-        uint16_t co2_raw = (buffer[0] << 8) | buffer[1];
-        uint16_t temperature_raw = (buffer[3] << 8) | buffer[4];
-        uint16_t humidity_raw = (buffer[6] << 8) | buffer[7];
+        const uint16_t co2_raw = (buffer[0] << 8) | buffer[1];
+        const uint16_t temperature_raw = (buffer[3] << 8) | buffer[4];
+        const uint16_t humidity_raw = (buffer[6] << 8) | buffer[7];
 
-        Measurement measurement;
-        measurement.co2 = co2_raw;
-        measurement.temperature = convertTemperature(temperature_raw);
-        measurement.humidity = convertHumidity(humidity_raw);
-
-        return measurement;
+        return Measurement {
+            .co2 = co2_raw,
+            .temperature = convertTemperature(temperature_raw),
+            .humidity = convertHumidity(humidity_raw)
+        };
     }
 
     uint8_t SCD41::computeCRC(const uint8_t* data, size_t length) {

@@ -22,7 +22,7 @@ namespace PiAlarm::hardware {
      * Made with the help of ChatGPT.
      */
     class SPI {
-        int fd_; ///< File descriptor for the SPI device
+        int fd_ {-1}; ///< File descriptor for the SPI device
 
     public:
 
