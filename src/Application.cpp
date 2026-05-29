@@ -3,6 +3,10 @@
 #include "service/TimeUpdateService.h"
 #include "service/WeatherApiService.h"
 
+#ifdef SENSOR_SCD41
+    #include "service/CurrentIndoorService.h"
+#endif
+
 #ifdef DISPLAY_SSD1322
     #include "gfx/SDD1322Buffer.h"
     #include "view/ssd1322/MainClockView.h"
@@ -108,15 +112,19 @@ namespace PiAlarm {
     void Application::initServices() {
         services.emplace_back(std::make_unique<service::TimeUpdateService>(clock_data));
         services.emplace_back(std::make_unique<service::WeatherApiService>(currentWeather_data, apiClient));
+
+        #ifdef SENSOR_SCD41
+            services.emplace_back(std::make_unique<service::CurrentIndoorService>(currentIndoor_data));
+        #endif
     }
 
-    void Application::startServices() {
+    void Application::startServices() const {
         for (auto& service : services) {
             service->start();
         }
     }
 
-    void Application::stopServices() {
+    void Application::stopServices() const {
         for (auto& service : services) {
             service->stop();
         }

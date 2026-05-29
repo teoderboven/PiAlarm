@@ -17,7 +17,6 @@
 #include <vector>
 #include <memory>
 
-
 #ifdef INPUT_GPIO
     #include "hardware/GPIO.h"
     #include "input/InputManager.h"
@@ -113,12 +112,12 @@ namespace PiAlarm {
         /**
          * @brief Starts all services required by the application.
          */
-        void startServices();
+        void startServices() const;
 
         /**
          * @brief Stops all services gracefully.
          */
-        void stopServices();
+        void stopServices() const;
 
         /**
          * @brief Initializes the views for the application.

@@ -10,6 +10,7 @@
 // SCD41 Command Definitions
 // from https://download.mikroe.com/documents/datasheets/SCD41%20Datasheet.pdf section 3.4
 #define SCD41_START_PERIODIC_MEASUREMENT 0x21B1
+#define SCD41_START_LOW_POWER_PERIODIC_MEASUREMENT 0x21ac
 #define SCD41_STOP_PERIODIC_MEASUREMENT 0x3F86
 #define SCD41_GET_DATA_READY_STATUS 0xE4B8
 #define SCD41_READ_MEASUREMENT 0xEC05
@@ -45,8 +46,15 @@ namespace PiAlarm::hardware {
 
         /**
          * @brief Starts periodic measurement mode on the SCD41 sensor.
+         * The update interval of measurements is determined by the sensor and is typically around **5 seconds**.
          */
         void startPeriodicMeasurement() const;
+
+        /**
+         * @brief Starts low power periodic measurement mode on the SCD41 sensor.
+         * The update interval of measurements is determined by the sensor and is typically around **30 seconds**.
+         */
+        void startLowPowerPeriodicMeasurement() const;
 
         /**
          * @brief Stops periodic measurement mode on the SCD41 sensor.
@@ -57,13 +65,15 @@ namespace PiAlarm::hardware {
          * @brief Checks if new measurement data is available.
          * @return true if data is ready, false otherwise.
          */
+        [[nodiscard]]
         bool dataReady() const;
 
         /**
          * @brief Reads the latest measurement data from the SCD41 sensor.
          * @return Measurement structure containing CO2, temperature, and humidity data.
          */
-        Measurement readMeasurement();
+        [[nodiscard]]
+        Measurement readMeasurement() const;
 
     private:
 

@@ -9,6 +9,7 @@ set(SOURCES
         BaseService.cpp
         TimeUpdateService.cpp
         WeatherApiService.cpp
+        CurrentIndoorService.cpp
 )
 
 add_library(${PROJECT_NAME} STATIC

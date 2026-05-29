@@ -36,6 +36,11 @@ namespace PiAlarm::hardware {
         std::this_thread::sleep_for(std::chrono::milliseconds(5));
     }
 
+    void SCD41::startLowPowerPeriodicMeasurement() const {
+        sendCommand(SCD41_START_LOW_POWER_PERIODIC_MEASUREMENT);
+        std::this_thread::sleep_for(std::chrono::milliseconds(5));
+    }
+
     void SCD41::stopPeriodicMeasurement() const {
         sendCommand(SCD41_STOP_PERIODIC_MEASUREMENT);
         std::this_thread::sleep_for(std::chrono::milliseconds(500));
@@ -54,7 +59,7 @@ namespace PiAlarm::hardware {
         return (status & 0x07FF) != 0;
     }
 
-    SCD41::Measurement SCD41::readMeasurement() {
+    SCD41::Measurement SCD41::readMeasurement() const {
         sendCommand(SCD41_READ_MEASUREMENT);
         std::this_thread::sleep_for(std::chrono::milliseconds(1));
 
