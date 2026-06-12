@@ -23,7 +23,7 @@ namespace PiAlarm::service {
      */
     class WeatherApiService final : public BaseService {
         model::CurrentWeatherData &currentWeatherData_;         ///< Reference to the CurrentWeatherData model to update
-        const provider::WeatherApiClient& weatherApiClient_;    ///< Client for fetching weather data
+        const provider::WeatherApiClient weatherApiClient_;     ///< Client for fetching weather data
 
         int failureCount_ = 0;      ///< Counter for consecutive failures in fetching weather data
 
@@ -32,11 +32,11 @@ namespace PiAlarm::service {
         /**
          * @brief Constructs a WeatherApiService that updates the CurrentWeatherData model with weather data.
          * @param currentWeatherData Reference to the CurrentWeatherData model to be updated.
-         * @param weatherApiClient Client for fetching weather data from an external API.
+         * @param cityName The name of the city for which to fetch weather data.
          */
         explicit WeatherApiService(
             model::CurrentWeatherData &currentWeatherData,
-            const provider::WeatherApiClient& weatherApiClient
+            const std::string& cityName
         );
 
     protected:

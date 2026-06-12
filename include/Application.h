@@ -9,7 +9,6 @@
 #include "model/manager/AlarmManager.h"
 #include "controller/AlarmController.h"
 #include "view/manager/ViewManager.h"
-#include "provider/WeatherApiClient.h"
 #include "service/IService.h"
 #include "media/MusicService.h"
 #include "trigger/AlarmSoundTrigger.h"
@@ -143,8 +142,9 @@ namespace PiAlarm {
         // controller
         controller::AlarmController alarmController;            ///< Controller to manage alarm operations and interactions
 
-        // providers
-        provider::WeatherApiClient apiClient;                   ///< API client for weather data retrieval
+        // for service
+        // TODO: replace with more elegant data retrieval
+        const std::string& weatherCityName;                     ///< City name for weather data retrieval, used by the WeatherApiService
 
         // display
         RenderType renderer;                                    ///< Renderer type for the display output

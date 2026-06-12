@@ -4,11 +4,11 @@ namespace PiAlarm::service {
 
     WeatherApiService::WeatherApiService(
         model::CurrentWeatherData& currentWeatherData,
-        const provider::WeatherApiClient& weatherApiClient
+        const std::string& cityName
     )
         : BaseService{"WeatherApiService"},
           currentWeatherData_{currentWeatherData},
-          weatherApiClient_{weatherApiClient}
+          weatherApiClient_{cityName}
     {}
 
     void WeatherApiService::update() {

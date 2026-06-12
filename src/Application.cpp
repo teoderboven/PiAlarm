@@ -21,7 +21,7 @@ namespace PiAlarm {
         size_t alarmCount,
         std::chrono::minutes snoozeDuration,
         std::chrono::minutes ringDuration,
-        const std::string &weatherCityName,
+        const std::string& weatherCityName,
         const std::filesystem::path &customMusicFolderPath
     )
         // model
@@ -37,8 +37,8 @@ namespace PiAlarm {
         // controller
         alarmController{alarms_data, alarmManager},
 
-        // provider
-        apiClient{weatherCityName},
+        // for service
+        weatherCityName{weatherCityName},
 
 #ifdef DISPLAY_SSD1322
 
@@ -111,7 +111,7 @@ namespace PiAlarm {
 
     void Application::initServices() {
         services.emplace_back(std::make_unique<service::TimeUpdateService>(clock_data));
-        services.emplace_back(std::make_unique<service::WeatherApiService>(currentWeather_data, apiClient));
+        services.emplace_back(std::make_unique<service::WeatherApiService>(currentWeather_data, weatherCityName));
 
         #ifdef SENSOR_SCD41
             services.emplace_back(std::make_unique<service::CurrentIndoorService>(currentIndoor_data));
