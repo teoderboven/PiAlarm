@@ -12,8 +12,8 @@ namespace PiAlarm::service {
      * @brief Service for fetching and updating indoor environmental data from the SCD41 sensor.
      */
     class CurrentIndoorService : public BaseService {
-        const hardware::SCD41 sensor; ///< SCD41 sensor for indoor measurements.
-        model::CurrentIndoorData& currentIndoorData; ///< Reference to the CurrentIndoorData model to be updated with sensor readings.
+        const hardware::SCD41 scd41_; ///< SCD41 sensor for indoor measurements.
+        model::CurrentIndoorData& currentIndoorData_; ///< Reference to the CurrentIndoorData model to be updated with sensor readings.
 
     public:
         /**

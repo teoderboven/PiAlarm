@@ -8,15 +8,15 @@ namespace PiAlarm::service {
         model::CurrentIndoorData& currentIndoorData
     )
         : BaseService("CurrentIndoorService"),
-          currentIndoorData{currentIndoorData}
+          currentIndoorData_{currentIndoorData}
     {}
 
     bool CurrentIndoorService::onStart() {
         try {
-            sensor.stopPeriodicMeasurement(); // Ensure the sensor is stopped before starting a new measurement mode
+            scd41_.stopPeriodicMeasurement(); // Ensure the sensor is stopped before starting a new measurement mode
 
-            sensor.setTemperatureOffset(0.8);
-            sensor.startLowPowerPeriodicMeasurement(); // 30s response time
+            scd41_.setTemperatureOffset(0.8);
+            scd41_.startLowPowerPeriodicMeasurement(); // 30s response time
 
             return true;
         } catch (const std::exception& e) {
@@ -27,7 +27,7 @@ namespace PiAlarm::service {
 
     void CurrentIndoorService::onStop() {
         try {
-            sensor.stopPeriodicMeasurement();
+            scd41_.stopPeriodicMeasurement();
         } catch (const std::exception& e) {
             logger().error("Failed to stop SCD41 sensor: {}", e.what());
         }
@@ -35,9 +35,9 @@ namespace PiAlarm::service {
 
     void CurrentIndoorService::update() {
         try {
-            if (sensor.dataReady()) {
-                const auto measurement = sensor.readMeasurement();
-                currentIndoorData.setValues(measurement.temperature, measurement.humidity);
+            if (scd41_.dataReady()) {
+                const auto measurement = scd41_.readMeasurement();
+                currentIndoorData_.setValues(measurement.temperature, measurement.humidity);
 
                 logger().debug("SCD41 data: {}°C, {}%, {}ppm", measurement.temperature, measurement.humidity, measurement.co2);
             }
