@@ -15,17 +15,34 @@ namespace PiAlarm::hardware {
     }
 
     void SCD41::sendCommand(uint16_t command) const {
-        uint8_t cmd[2] = {
-            static_cast<uint8_t>(command >> 8),
-            static_cast<uint8_t>(command & 0xFF)
-        };
+        uint8_t buffer[3];
 
-        uint8_t crc = computeCRC(cmd, 2);
-        uint8_t buffer[3] = { cmd[0], cmd[1], crc };
+        // command byte
+        buffer[0] = static_cast<uint8_t>(command >> 8);
+        buffer[1] = static_cast<uint8_t>(command & 0xFF);
+
+        // crc
+        buffer[2] = computeCRC(buffer, 2);
 
         i2c_.writeData(buffer, 3);
     }
 
+    void SCD41::sendCommand(uint16_t command, uint16_t data) const {
+        uint8_t buffer[5];
+
+        // command bytes
+        buffer[0] = static_cast<uint8_t>(command >> 8);
+        buffer[1] = static_cast<uint8_t>(command & 0xFF);
+
+        // data bytes
+        buffer[2] = static_cast<uint8_t>(data >> 8);
+        buffer[3] = static_cast<uint8_t>(data & 0xFF);
+
+        // crc computed only over the data bytes
+        buffer[4] = computeCRC(&buffer[2], 2);
+
+        i2c_.writeData(buffer, 5);
+    }
 
     void SCD41::readResponse(uint8_t* buffer, size_t length) const {
         i2c_.readData(buffer, length);
@@ -79,6 +96,30 @@ namespace PiAlarm::hardware {
             .temperature = convertTemperature(temperature_raw),
             .humidity = convertHumidity(humidity_raw)
         };
+    }
+
+    void SCD41::setTemperatureOffset(float offset_celsius) const {
+        const uint16_t data = convertTemperatureOffset(offset_celsius);
+        sendCommand(SCD41_SET_TEMPERATURE_OFFSET, data);
+        std::this_thread::sleep_for(std::chrono::milliseconds(1));
+    }
+
+    float SCD41::getTemperatureOffset() const {
+        sendCommand(SCD41_GET_TEMPERATURE_OFFSET);
+        std::this_thread::sleep_for(std::chrono::milliseconds(1));
+
+        uint8_t buffer[3];
+        readResponse(buffer, sizeof(buffer));
+
+        checkCRC(buffer, 2, buffer[2]);
+
+        const uint16_t offset_raw = (buffer[0] << 8) | buffer[1];
+        return convertRawToTemperatureOffset(offset_raw);
+    }
+
+    void SCD41::setAmbientPressure(uint16_t pressure_hpa) const {
+        sendCommand(SCD41_SET_AMBIENT_PRESSURE, pressure_hpa);
+        std::this_thread::sleep_for(std::chrono::milliseconds(1));
     }
 
     uint8_t SCD41::computeCRC(const uint8_t* data, size_t length) {

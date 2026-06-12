@@ -6,12 +6,16 @@
 #include "hardware/I2C.h"
 
 #include <cstdint>
+#include <cmath>
 
 // SCD41 Command Definitions
 // from https://download.mikroe.com/documents/datasheets/SCD41%20Datasheet.pdf section 3.4
 #define SCD41_START_PERIODIC_MEASUREMENT 0x21B1
-#define SCD41_START_LOW_POWER_PERIODIC_MEASUREMENT 0x21ac
+#define SCD41_START_LOW_POWER_PERIODIC_MEASUREMENT 0x21AC
 #define SCD41_STOP_PERIODIC_MEASUREMENT 0x3F86
+#define SCD41_GET_TEMPERATURE_OFFSET 0x2318
+#define SCD41_SET_TEMPERATURE_OFFSET 0x241D
+#define SCD41_SET_AMBIENT_PRESSURE 0xE000
 #define SCD41_GET_DATA_READY_STATUS 0xE4B8
 #define SCD41_READ_MEASUREMENT 0xEC05
 
@@ -75,6 +79,25 @@ namespace PiAlarm::hardware {
         [[nodiscard]]
         Measurement readMeasurement() const;
 
+        /**
+         * @brief Sets the temperature offset on the SCD41 sensor.
+         * @param offset_celsius Temperature offset in degrees Celsius.
+         */
+        void setTemperatureOffset(float offset_celsius) const;
+
+        /**
+         * @brief Reads the sensor memory to get the temperature offset value.
+         * @return The temperature offset value.
+         */
+        [[nodiscard]]
+        float getTemperatureOffset() const;
+
+        /**
+         * @brief Sets the ambient pressure for onboard correction.
+         * @param pressure_hpa Ambient pressure in hPa.
+         */
+        void setAmbientPressure(uint16_t pressure_hpa) const;
+
     private:
 
         /**
@@ -82,6 +105,13 @@ namespace PiAlarm::hardware {
          * @param command 16-bit command to send.
          */
         void sendCommand(uint16_t command) const;
+
+        /**
+         * @brief Sends a command followed by a 16-bit data word and its CRC.
+         * @param command 16-bit command to send.
+         * @param data 16-bit data word.
+         */
+        void sendCommand(uint16_t command, uint16_t data) const;
 
         /**
          * @brief Reads a response from the SCD41 sensor.
@@ -106,6 +136,25 @@ namespace PiAlarm::hardware {
          */
         static inline float convertHumidity(uint16_t raw) {
             return 100.0f * (static_cast<float>(raw) / 65535.0f); // from datasheet section 3.5.2
+        }
+
+        /**
+         * @brief Converts temperature offset in degrees Celsius to raw sensor value.
+         * @param offset_celsius Temperature offset in degrees Celsius.
+         * @return Raw 16-bit value for the sensor.
+         */
+        static inline uint16_t convertTemperatureOffset(float offset_celsius) {
+            const float raw_val = (offset_celsius * 65536.0f) / 175.0f; // from datasheet section 3.6.1
+            return static_cast<uint16_t>(std::lround(raw_val));
+        }
+
+        /**
+         * @brief Converts raw sensor value to temperature offset in degrees Celsius.
+         * @param raw Raw 16-bit value from the sensor.
+         * @return Temperature offset in degrees Celsius.
+         */
+        static inline float convertRawToTemperatureOffset(uint16_t raw) {
+            return 175.0f * (static_cast<float>(raw) / 65536.0f); // from datasheet section 3.6.2
         }
 
         /**
