@@ -5,6 +5,7 @@
 #include <chrono>
 
 #include <spdlog/sinks/rotating_file_sink.h>
+#include <spdlog/sinks/stdout_color_sinks.h>
 #include <spdlog/pattern_formatter.h>
 
 #include "logging/HasLogger.h"
@@ -92,12 +93,22 @@ namespace PiAlarm::logging {
                 const std::filesystem::path logDir = tryCreateLogPath();
                 const std::filesystem::path logFilePath = logDir / "PiAlarm.log";
 
-                auto sink = std::make_shared<spdlog::sinks::rotating_file_sink_mt>(
+                std::vector<spdlog::sink_ptr> sinks;
+
+                auto file_sink = std::make_shared<spdlog::sinks::rotating_file_sink_mt>(
                     logFilePath.string(), 1024 * 1024 * 5, 2 // 5 MB max, 2 files
                 );
-                sink->set_pattern("[%Y-%m-%d %H:%M:%S.%e] [%n] [%l] %v");
+                file_sink->set_pattern("[%Y-%m-%d %H:%M:%S.%e] [%n] [%l] %v");
+                sinks.push_back(file_sink);
 
-                global_logger = std::make_shared<spdlog::logger>("global", sink);
+                #ifndef DISPLAY_CONSOLE
+                    // only if display != console to not pollute view
+                    auto console_sink = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
+                    console_sink->set_pattern("[%H:%M:%S.%e] [%n] [%^%l%$] %v");
+                    sinks.push_back(console_sink);
+                #endif
+
+                global_logger = std::make_shared<spdlog::logger>("global", sinks.begin(), sinks.end());
                 spdlog::register_logger(global_logger);
                 spdlog::set_default_logger(global_logger);
                 spdlog::set_level(parseLogLevel(LOG_LEVEL)); // use macro

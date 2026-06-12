@@ -33,7 +33,12 @@ option(DISPLAY_CONSOLE "Use console display" OFF)
 option(SENSOR_BME280 "Use BME280 sensor to display interior temperature & humidity (Raspberry Pi only)" OFF)
 option(SENSOR_SCD41 "Use SCD41 sensor to display interior temperature, humidity & CO2 (Raspberry Pi only)" OFF)
 option(INPUT_GPIO "Use GPIO pin for user inputs (Raspberry Pi only)" OFF)
-set(LOG_LEVEL "info" CACHE STRING "Log level (trace, debug, info, warn, error, critical)")
+
+if(CMAKE_BUILD_TYPE STREQUAL "Debug" OR CMAKE_BUILD_TYPE STREQUAL "")
+    set(LOG_LEVEL "trace" CACHE STRING "Log level (trace, debug, info, warn, error, critical)")
+else()
+    set(LOG_LEVEL "info" CACHE STRING "Log level (trace, debug, info, warn, error, critical)")
+endif()
 
 if(DISPLAY_SSD1322 AND DISPLAY_CONSOLE)
     message(FATAL_ERROR "You cannot enable both DISPLAY_SSD1322 and DISPLAY_CONSOLE.")
@@ -140,6 +145,7 @@ add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
         $<TARGET_FILE_DIR:${PROJECT_NAME}>/assets
 )
 
+message(STATUS "Log level set to: ${LOG_LEVEL}")
 target_compile_definitions(PiAlarm_logging PRIVATE LOG_LEVEL="${LOG_LEVEL}")
 
 if(CMAKE_BUILD_TYPE STREQUAL "Release")
