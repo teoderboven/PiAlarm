@@ -2,8 +2,8 @@
 
 namespace PiAlarm::model {
 
-    CurrentIndoorData::CurrentIndoorData(float temperature, float humidity, bool valid)
-        : temperature_{temperature}, humidity_{humidity}, valid_{valid}
+    CurrentIndoorData::CurrentIndoorData(float temperature, float humidity, float pressure, bool valid)
+        : temperature_{temperature}, humidity_{humidity}, pressure_{pressure}, valid_{valid}
     {}
 
     void CurrentIndoorData::setTemperature(float temperature) {
@@ -18,13 +18,19 @@ namespace PiAlarm::model {
         if (valueChanged) notifyObservers();
     }
 
+    void CurrentIndoorData::setPressure(float pressure) {
+        bool valueChanged = setIfDifferent(pressure_, pressure);
+
+        if (valueChanged) notifyObservers();
+    }
+
     void CurrentIndoorData::setValid(bool valid) {
         bool valueChanged = setIfDifferent(valid_, valid);
 
         if (valueChanged) notifyObservers();
     }
 
-    void CurrentIndoorData::setValues(float temperature, float humidity, bool valid) {
+    void CurrentIndoorData::setValues(float temperature, float humidity, float pressure, bool valid) {
         bool valueChanged = false;
 
         {
@@ -32,9 +38,10 @@ namespace PiAlarm::model {
 
             const bool tempChanged = (temperature_ != temperature);
             const bool humChanged = (humidity_ != humidity);
+            const bool pressChanged = (pressure_ != pressure);
             const bool validChanged = (valid_ != valid);
 
-            const bool anyChange = tempChanged || humChanged || validChanged;
+            const bool anyChange = tempChanged || humChanged || pressChanged || validChanged;
 
             // Only update if at least one state is valid
             // Prevents updating when both old and new states are invalid
@@ -43,6 +50,7 @@ namespace PiAlarm::model {
             if (anyChange && anyValid) {
                 temperature_ = temperature;
                 humidity_ = humidity;
+                pressure_ = pressure;
                 valid_ = valid;
                 valueChanged = true;
             }

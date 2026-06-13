@@ -10,58 +10,67 @@ namespace PiAlarm::model {
 
     /**
      * @class CurrentIndoorData
-     * @brief Represents the data from a temperature sensor, including temperature, humidity, and validity status.
+     * @brief Represents the data from a temperature sensor, including temperature, humidity, pressure, and validity status.
      *
      * This class extends the Observable class to notify observers of changes in the temperature sensor data.
      */
     class CurrentIndoorData final : public BaseModelData, public common::Observable {
         float temperature_;
         float humidity_;
+        float pressure_;
         bool valid_ = false;
 
     public:
         /**
-         * Default constructor for TemperatureSensorData.
+         * @brief Default constructor for CurrentIndoorData.
          */
         CurrentIndoorData() = default;
 
         /**
-         * Constructs a TemperatureSensorData object with specified temperature, humidity, and validity status.
+         * @brief Constructs a CurrentIndoorData object with specified temperature, humidity, pressure, and validity status.
          * @param temperature The temperature to set.
          * @param humidity The humidity to set.
+         * @param pressure The pressure to set in hPa.
          * @param valid True if the weather data is valid, false otherwise.
          */
-        CurrentIndoorData(float temperature, float humidity, bool valid);
+        CurrentIndoorData(float temperature, float humidity, float pressure, bool valid);
 
         /**
-         * Sets the temperature and notifies observers of the change.
+         * @brief Sets the temperature and notifies observers of the change.
          * @param temperature The new temperature to set.
          */
         void setTemperature(float temperature);
 
         /**
-         * Sets the humidity and notifies observers of the change.
+         * @brief Sets the humidity and notifies observers of the change.
          * @param humidity The new humidity to set.
          */
         void setHumidity(float humidity);
 
         /**
-         * Sets the validity status of the weather data and notifies observers of the change.
+         * @brief Sets the pressure and notifies observers of the change.
+         * @param pressure The new pressure to set in hPa.
+         */
+        void setPressure(float pressure);
+
+        /**
+         * @brief Sets the validity status of the weather data and notifies observers of the change.
          * @param valid True if the weather data is valid, false otherwise.
          */
         void setValid(bool valid);
 
         /**
-         * Updates the weather data with new temperature, humidity, and validity status,
+         * @brief Updates the weather data with new temperature, humidity, pressure, and validity status,
          * and notifies observers of the change.
          * @param temperature The new temperature to set.
          * @param humidity The new humidity to set.
+         * @param pressure The new pressure to set in hPa.
          * @param valid True if the weather data is valid, false otherwise. Defaults to true.
          */
-        void setValues(float temperature, float humidity, bool valid = true);
+        void setValues(float temperature, float humidity, float pressure, bool valid = true);
 
         /**
-         * Gets the current temperature.
+         * @brief Gets the current temperature.
          * @return The current temperature.
          * @note Always checks if the weather data is valid before using this value.
          */
@@ -69,7 +78,7 @@ namespace PiAlarm::model {
         inline float getTemperature() const;
 
         /**
-         * Gets the current humidity.
+         * @brief Gets the current humidity.
          * @return The current humidity.
          * @note Always checks if the weather data is valid before using this value.
          */
@@ -77,7 +86,15 @@ namespace PiAlarm::model {
         inline float getHumidity() const;
 
         /**
-         * Checks if the weather data is valid.
+         * @brief Gets the current pressure.
+         * @return The current pressure in hPa.
+         * @note Always checks if the weather data is valid before using this value.
+         */
+        [[nodiscard]]
+        inline float getPressure() const;
+
+        /**
+         * @brief Checks if the weather data is valid.
          * Invalid data may indicate that the weather service is unavailable or that the data could not be fetched.
          * @return True if the weather data is valid, false otherwise.
          */
@@ -98,6 +115,12 @@ namespace PiAlarm::model {
         std::lock_guard lock{mutex_};
 
         return humidity_;
+    }
+
+    inline float CurrentIndoorData::getPressure() const {
+        std::lock_guard lock{mutex_};
+
+        return pressure_;
     }
 
     inline bool CurrentIndoorData::isValid() const {
