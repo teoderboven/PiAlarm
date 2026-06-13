@@ -3,7 +3,8 @@
 
 #ifdef RASPBERRY_PI
 
-#include <cstdint>
+#include <chrono>
+#include <atomic>
 
 #include "hardware/I2C.h"
 
@@ -69,20 +70,21 @@ namespace PiAlarm::hardware {
         /**
          * @brief Constructs a BME280 object with the specified I2C address.
          * @param address The address of the I2C device, default is the BME280 I2C address (0x76).
+         * @note A call to initialize() must be done before using the sensor features.
          */
         explicit BME280(uint8_t address = I2C_ADDRESS);
+
+        /**
+         * @brief Initializes the BME280 sensor with default settings.
+         * The sensor is reset and calibration data is read.
+         * A default oversampling is set, x2 for temperature, x16 for pressure, x1 for humidity.
+         */
+        void initialize();
 
         /**
          * @brief Resets the BME280 sensor.
          */
         void reset() const;
-
-        /**
-         * @brief Initializes the BME280 sensor with default settings.
-         * The sensor is reset, calibration data is read, oversampling is set to x1,
-         * and the sensor is set to Normal mode.
-         */
-        void initialize();
 
         /**
          * @brief Sets the operating mode of the BME280 sensor.
@@ -98,15 +100,27 @@ namespace PiAlarm::hardware {
          * @param hum Oversampling setting for humidity.
          * @note The sensor must be in Sleep mode when changing oversampling settings.
          */
-        void setOversampling(Oversampling temp, Oversampling press, Oversampling hum) const;
+        void setOversampling(Oversampling temp, Oversampling press, Oversampling hum);
 
         /**
          * @brief Reads the latest measurement data from the BME280 sensor.
          * @return Measurement structure containing temperature, humidity, and pressure data.
          */
-        Measurement readMeasurement();
+        [[nodiscard]]
+        Measurement readMeasurement() const;
+
+        /**
+         * @brief Calculates the recommended delay time after changing oversampling settings before reading measurements.
+         * See datasheet section 9.1 for the formula used in this calculation.
+         * @return The recommended delay time.
+         */
+        [[nodiscard]]
+        std::chrono::milliseconds getMeasurementDelay() const;
 
     private:
+        Oversampling currentTempOversampling_ = Oversampling::Skipped;  ///< Current oversampling setting for temperature
+        Oversampling currentPressOversampling_ = Oversampling::Skipped; ///< Current oversampling setting for pressure
+        Oversampling currentHumOversampling_ = Oversampling::Skipped;   ///< Current oversampling setting for humidity
 
         /**
          * @brief Calibration data structure for the BME280 sensor.
@@ -126,7 +140,7 @@ namespace PiAlarm::hardware {
         };
 
         Calibration calibration_; ///< Calibration data of the sensor
-        int32_t t_fine_ = 0; ///< Fine temperature value for compensation calculations
+        mutable std::atomic<int32_t> t_fine_ = 0; ///< Fine temperature value for compensation calculations
 
         /**
          * @brief Reads the calibration data from the BME280 sensor.
@@ -137,24 +151,30 @@ namespace PiAlarm::hardware {
 
         // Compensation functions based on BME280 datasheet algorithms
         /**
-         * @brief Compensates the raw pressure reading.
-         * @param adc_P Raw pressure reading from the sensor.
-         * @return Compensated pressure in Pa.
-         */
-        uint32_t compensatePressure(int32_t adc_P) const;
-
-        /**
          * @brief Compensates the raw temperature reading.
          * @param adc_T Raw temperature reading from the sensor.
          * @return Compensated temperature in °C as an integer (scaled by 100).
+         * @note The method sets the fine temperature value attribute that is used in pressure and humidity compensation calculations.
          */
-        int32_t compensateTemperature(int32_t adc_T);
+        [[nodiscard]]
+        int32_t compensateTemperature(int32_t adc_T) const;
+
+        /**
+         * @brief Compensates the raw pressure reading.
+         * @param adc_P Raw pressure reading from the sensor.
+         * @return Compensated pressure in Pa.
+         * @note If the temperature is read by the sensor, the compensateTemperature method must be called before this method to set the fine temperature value used in the compensation calculations.
+         */
+        [[nodiscard]]
+        uint32_t compensatePressure(int32_t adc_P) const;
 
         /**
          * @brief Compensates the raw humidity reading.
          * @param adc_H Raw humidity reading from the sensor.
          * @return Compensated relative humidity in % (scaled by 1024).
+         * @note If the temperature is read by the sensor, the compensateTemperature method must be called before this method to set the fine temperature value used in the compensation calculations.
          */
+        [[nodiscard]]
         uint32_t compensateHumidity(int32_t adc_H) const;
 
     };

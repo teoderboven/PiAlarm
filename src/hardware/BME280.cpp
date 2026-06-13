@@ -2,14 +2,14 @@
 
 #include "hardware/BME280.h"
 
-#include <bits/this_thread_sleep.h>
+#include <thread>
+#include <cmath>
 
 namespace PiAlarm ::hardware {
 
     BME280::BME280(uint8_t address)
-        : i2c_{address} {
-        initialize();
-    }
+        : i2c_{address}
+    {}
 
     void BME280::reset() const {
         i2c_.writeRegister(BME280_REG_RESET, BME280_RESET_COMMAND);
@@ -26,22 +26,29 @@ namespace PiAlarm ::hardware {
     void BME280::initialize() {
         reset();
         readCalibrationData();
-        setOversampling(Oversampling::x1, Oversampling::x1, Oversampling::x1);
-        setMode(Mode::Normal);
+        setOversampling(Oversampling::x2, Oversampling::x16, Oversampling::x1);
     }
 
-    void BME280::setOversampling(Oversampling temp, Oversampling press, Oversampling hum) const {
+    void BME280::setOversampling(Oversampling temp, Oversampling press, Oversampling hum) {
         i2c_.writeRegister(BME280_REG_CTRL_HUM, static_cast<uint8_t>(hum));
+
+        uint8_t current_ctrl;
+        i2c_.readRegister(BME280_REG_CTRL_MEAS, &current_ctrl, 1);
+        uint8_t current_mode = current_ctrl & 0b00000011;
 
         uint8_t ctrl_meas =
             (static_cast<uint8_t>(temp)  << 5) |
             (static_cast<uint8_t>(press) << 2) |
-            static_cast<uint8_t>(Mode::Sleep);
+            current_mode;
 
         i2c_.writeRegister(BME280_REG_CTRL_MEAS, ctrl_meas);
+
+        currentTempOversampling_ = temp;
+        currentPressOversampling_ = press;
+        currentHumOversampling_ = hum;
     }
 
-    BME280::Measurement BME280::readMeasurement() {
+    BME280::Measurement BME280::readMeasurement() const {
         uint8_t data[BME280_DATA_LENGTH];
         i2c_.readRegister(BME280_DATA_START, data, BME280_DATA_LENGTH);
 
@@ -49,11 +56,36 @@ namespace PiAlarm ::hardware {
         int32_t adc_T = (data[3] << 12) | (data[4] << 4) | (data[5] >> 4);
         int32_t adc_H = (data[6] << 8)  | data[7];
 
-        float temperature = compensateTemperature(adc_T) / 100.0f;
-        float pressure = compensatePressure(adc_P) / 100.0f;
-        float humidity  = compensateHumidity(adc_H) / 1024.0f;
+        const float temperature = compensateTemperature(adc_T) / 100.0f;
+        const float pressure = compensatePressure(adc_P) / 100.0f;
+        const float humidity  = compensateHumidity(adc_H) / 1024.0f;
 
         return { temperature, humidity, pressure };
+    }
+
+    std::chrono::milliseconds BME280::getMeasurementDelay() const {
+        /// Converts the oversampling enum value to the actual oversampling factor used in the delay calculation.
+        auto toRealValue = [](Oversampling os) -> int {
+            auto const val = static_cast<uint8_t>(os);
+            if (val == 0) return 0;
+            return 1 << (val - 1); // 1 => 1, 2 => 2, 3 => 4, 4 => 8, 5 => 16
+        };
+
+        const int t_os = toRealValue(currentTempOversampling_);
+        const int p_os = toRealValue(currentPressOversampling_);
+        const int h_os = toRealValue(currentHumOversampling_);
+
+        // formula from datasheet (section 9.1)
+        double delay_ms = 1.25 + (2.3 * t_os);
+
+        if (p_os > 0) {
+            delay_ms += (2.3 * p_os) + 0.575;
+        }
+        if (h_os > 0) {
+            delay_ms += (2.3 * h_os) + 0.575;
+        }
+
+        return std::chrono::milliseconds(static_cast<long long>(std::ceil(delay_ms)) + 3);
     }
 
     void BME280::readCalibrationData() {
@@ -94,6 +126,21 @@ namespace PiAlarm ::hardware {
     // See the datasheet for detailed explanation of the algorithms.
     // Made with the help of ChatGPT
 
+    int32_t BME280::compensateTemperature(int32_t adc_T) const {
+        int32_t var1, var2;
+
+        var1 = (((adc_T >> 3) - (static_cast<int32_t>(calibration_.dig_T1) << 1)) *
+                static_cast<int32_t>(calibration_.dig_T2)) >> 11;
+
+        var2 = (((((adc_T >> 4) - static_cast<int32_t>(calibration_.dig_T1)) *
+                  ((adc_T >> 4) - static_cast<int32_t>(calibration_.dig_T1))) >> 12) *
+                static_cast<int32_t>(calibration_.dig_T3)) >> 14;
+
+        t_fine_ = var1 + var2;
+
+        return (t_fine_ * 5 + 128) >> 8;
+    }
+
     uint32_t BME280::compensatePressure(int32_t adc_P) const {
         int64_t var1, var2;
 
@@ -119,21 +166,6 @@ namespace PiAlarm ::hardware {
             (static_cast<int64_t>(calibration_.dig_P7) << 4);
 
         return static_cast<uint32_t>(p);
-    }
-
-    int32_t BME280::compensateTemperature(int32_t adc_T) {
-        int32_t var1, var2;
-
-        var1 = (((adc_T >> 3) - (static_cast<int32_t>(calibration_.dig_T1) << 1)) *
-                static_cast<int32_t>(calibration_.dig_T2)) >> 11;
-
-        var2 = (((((adc_T >> 4) - static_cast<int32_t>(calibration_.dig_T1)) *
-                  ((adc_T >> 4) - static_cast<int32_t>(calibration_.dig_T1))) >> 12) *
-                static_cast<int32_t>(calibration_.dig_T3)) >> 14;
-
-        t_fine_ = var1 + var2;
-
-        return (t_fine_ * 5 + 128) >> 8;
     }
 
     uint32_t BME280::compensateHumidity(int32_t adc_H) const {
