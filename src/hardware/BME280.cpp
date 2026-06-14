@@ -57,7 +57,7 @@ namespace PiAlarm ::hardware {
         int32_t adc_H = (data[6] << 8)  | data[7];
 
         const float temperature = compensateTemperature(adc_T) / 100.0f;
-        const float pressure = compensatePressure(adc_P) / 100.0f;
+        const float pressure = (compensatePressure(adc_P) >> 8) / 100.0f;
         const float humidity  = compensateHumidity(adc_H) / 1024.0f;
 
         return { temperature, humidity, pressure };

@@ -152,6 +152,7 @@ namespace PiAlarm::hardware {
         // Compensation functions based on BME280 datasheet algorithms
         /**
          * @brief Compensates the raw temperature reading.
+         * Exact algorithm as described in datasheet section 4.2.3
          * @param adc_T Raw temperature reading from the sensor.
          * @return Compensated temperature in °C as an integer (scaled by 100).
          * @note The method sets the fine temperature value attribute that is used in pressure and humidity compensation calculations.
@@ -161,15 +162,18 @@ namespace PiAlarm::hardware {
 
         /**
          * @brief Compensates the raw pressure reading.
+         * Exact algorithm as described in datasheet section 4.2.3
          * @param adc_P Raw pressure reading from the sensor.
-         * @return Compensated pressure in Pa.
+         * @return Compensated pressure in Pa * 256.
          * @note If the temperature is read by the sensor, the compensateTemperature method must be called before this method to set the fine temperature value used in the compensation calculations.
+         * @warning Returns pressure in Pa as unsigned 32-bit integer in Q24.8 format (24 integer bits and 8 fractional bits). Output value of “24674867” represents 24674867/256 = 96386.2 Pa = 963.862 hPa
          */
         [[nodiscard]]
         uint32_t compensatePressure(int32_t adc_P) const;
 
         /**
          * @brief Compensates the raw humidity reading.
+         * Exact algorithm as described in datasheet section 4.2.3
          * @param adc_H Raw humidity reading from the sensor.
          * @return Compensated relative humidity in % (scaled by 1024).
          * @note If the temperature is read by the sensor, the compensateTemperature method must be called before this method to set the fine temperature value used in the compensation calculations.
