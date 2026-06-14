@@ -3,6 +3,9 @@
 #include "service/TimeUpdateService.h"
 #include "service/WeatherApiService.h"
 
+#ifdef SENSOR_BME280
+    #include "service/BME280Service.h"
+#endif
 #ifdef SENSOR_SCD41
     #include "service/CurrentIndoorService.h"
 #endif
@@ -113,6 +116,9 @@ namespace PiAlarm {
         services.emplace_back(std::make_unique<service::TimeUpdateService>(clock_data));
         services.emplace_back(std::make_unique<service::WeatherApiService>(currentWeather_data, weatherCityName));
 
+        #ifdef SENSOR_BME280
+            services.emplace_back(std::make_unique<service::BME280Service>(currentIndoor_data));
+        #endif
         #ifdef SENSOR_SCD41
             services.emplace_back(std::make_unique<service::CurrentIndoorService>(currentIndoor_data));
         #endif
