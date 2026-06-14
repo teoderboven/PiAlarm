@@ -102,28 +102,28 @@ namespace PiAlarm::hardware {
          * This method sends the necessary commands to configure the display.
          * It should be called after creating the SSD1322 object.
          */
-        void initialize() const;
+        void initialize();
 
         /**
          * Resets the SSD1322 display.
          * This method sets the reset pin low for a short duration and then sets it high again.
          * It is typically called at the start of the initialization process.
          */
-        void reset() const;
+        void reset();
 
         /**
          * Sends a command to the SSD1322 display.
          * @param cmd The command byte to send.
          * @note The command is sent in command mode, which is set by the `setDCPinCommand()` method.
          */
-        void sendCommand(CommandByte cmd) const;
+        void sendCommand(CommandByte cmd);
 
         /**
          * Sends data to the SSD1322 display.
          * @param data The data byte to send.
          * @note The data is sent in data mode, which is set by the `setDCPinData()` method.
          */
-        void sendData(DataByte data) const;
+        void sendData(DataByte data);
 
         /**
          * Sends an array of data bytes to the SSD1322 display.
@@ -131,7 +131,7 @@ namespace PiAlarm::hardware {
          * @param length The number of bytes to send.
          * @note The data is sent in data mode, which is set by the `setDCPinData()` method.
          */
-        void sendData(const DataByte* data, size_t length) const;
+        void sendData(const DataByte* data, size_t length);
 
         /**
          * @brief Transfers a 4-bit grayscale framebuffer to the SSD1322 display.
@@ -143,7 +143,7 @@ namespace PiAlarm::hardware {
          * @param size
          * @note The size of the framebuffer must match the defined BUFFER_WIDTH * BUFFER_HEIGHT (8192 for 64*128 bytes).
          */
-        void flush(const uint8_t* buffer, size_t size) const;
+        void flush(const uint8_t* buffer, size_t size);
 
         /**
          * Sets the contrast of the SSD1322 display.
@@ -152,27 +152,27 @@ namespace PiAlarm::hardware {
          * @note Try to use values between 0x00 and Ox80 to avoid long-term damages to the display.
          * @note The recommended default value is 0x50.
          */
-        void setContrast(uint8_t contrast) const;
+        void setContrast(uint8_t contrast);
 
         /**
          * Turns on all pixels on the SSD1322 display.
          * This method sends a command to turn on all pixels, making the display fully lit.
          * @note Call `setNormalDisplay()` to return to normal mode after this.
          */
-        void allPixelsOn() const;
+        void allPixelsOn();
 
         /**
          * Turns off all pixels on the SSD1322 display.
          * This method sends a command to turn off all pixels, making the display fully dark.
          * @note Call `setNormalDisplay()` to return to normal mode after this.
          */
-        void allPixelsOff() const;
+        void allPixelsOff();
 
         /**
          * Sets the display to normal mode (non-inverted).
          * This method sends a command to set the display to normal mode, where pixels are displayed as they are in the buffer.
          */
-        void setNormalDisplay() const;
+        void setNormalDisplay();
 
     private:
 
@@ -180,13 +180,13 @@ namespace PiAlarm::hardware {
          * Sets the DC pin to command mode.
          * This method is used to indicate that the next byte sent is a command.
          */
-        void setDCPinCommand() const;
+        void setDCPinCommand();
 
         /**
          * Sets the DC pin to data mode.
          * This method is used to indicate that the next byte sent is data.
          */
-        void setDCPinData() const;
+        void setDCPinData();
     };
 
 } // namespace PiAlarm::hardware

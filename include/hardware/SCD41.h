@@ -28,7 +28,7 @@ namespace PiAlarm::hardware {
      * It allows for reading CO2 levels, temperature, and humidity data.
      */
     class SCD41 {
-        const I2C i2c_; ///< The I2C interface used for communication
+        mutable I2C i2c_; ///< The I2C interface used for communication
 
     public:
         static constexpr uint8_t I2C_ADDRESS = 0x62; ///< I2C address of the SCD41 sensor
@@ -52,18 +52,18 @@ namespace PiAlarm::hardware {
          * @brief Starts periodic measurement mode on the SCD41 sensor.
          * The update interval of measurements is determined by the sensor and is typically around **5 seconds**.
          */
-        void startPeriodicMeasurement() const;
+        void startPeriodicMeasurement();
 
         /**
          * @brief Starts low power periodic measurement mode on the SCD41 sensor.
          * The update interval of measurements is determined by the sensor and is typically around **30 seconds**.
          */
-        void startLowPowerPeriodicMeasurement() const;
+        void startLowPowerPeriodicMeasurement();
 
         /**
          * @brief Stops periodic measurement mode on the SCD41 sensor.
          */
-        void stopPeriodicMeasurement() const;
+        void stopPeriodicMeasurement();
 
         /**
          * @brief Checks if new measurement data is available.
@@ -83,7 +83,7 @@ namespace PiAlarm::hardware {
          * @brief Sets the temperature offset on the SCD41 sensor.
          * @param offset_celsius Temperature offset in degrees Celsius.
          */
-        void setTemperatureOffset(float offset_celsius) const;
+        void setTemperatureOffset(float offset_celsius);
 
         /**
          * @brief Reads the sensor memory to get the temperature offset value.
@@ -96,7 +96,7 @@ namespace PiAlarm::hardware {
          * @brief Sets the ambient pressure for onboard correction.
          * @param pressure_hpa Ambient pressure in hPa.
          */
-        void setAmbientPressure(uint16_t pressure_hpa) const;
+        void setAmbientPressure(uint16_t pressure_hpa);
 
     private:
 
@@ -111,7 +111,7 @@ namespace PiAlarm::hardware {
          * @param command 16-bit command to send.
          * @param data 16-bit data word.
          */
-        void sendCommand(uint16_t command, uint16_t data) const;
+        void sendCommand(uint16_t command, uint16_t data);
 
         /**
          * @brief Reads a response from the SCD41 sensor.

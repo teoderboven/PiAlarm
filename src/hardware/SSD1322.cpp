@@ -22,37 +22,37 @@ namespace PiAlarm::hardware {
         resetPin_.setOutput(GPIO::HIGH);
     }
 
-    void SSD1322::reset() const {
+    void SSD1322::reset() {
         resetPin_.set(GPIO::LOW);
         std::this_thread::sleep_for(std::chrono::milliseconds(20));
         resetPin_.set(GPIO::HIGH);
         std::this_thread::sleep_for(std::chrono::milliseconds(20));
     }
 
-    void SSD1322::setDCPinCommand() const {
+    void SSD1322::setDCPinCommand() {
         dcPin_.set(GPIO::LOW);
     }
 
-    void SSD1322::setDCPinData() const {
+    void SSD1322::setDCPinData() {
         dcPin_.set(GPIO::HIGH);
     }
 
-    void SSD1322::sendCommand(CommandByte cmd) const {
+    void SSD1322::sendCommand(CommandByte cmd) {
         setDCPinCommand();
         spi_.writeByte(cmd);
     }
 
-    void SSD1322::sendData(DataByte data) const {
+    void SSD1322::sendData(DataByte data) {
         setDCPinData();
         spi_.writeByte(data);
     }
 
-    void SSD1322::sendData(const DataByte* data, size_t length) const {
+    void SSD1322::sendData(const DataByte* data, size_t length) {
         setDCPinData();
         spi_.writeData(data, length);
     }
 
-    void SSD1322::flush(const uint8_t* buffer, size_t size) const {
+    void SSD1322::flush(const uint8_t* buffer, size_t size) {
         assert(size == DISPLAY_HEIGHT * (DISPLAY_WIDTH/2)); // Ensure the buffer size matches the expected dimensions
 
         // Set the drawing area to the full display size
@@ -71,7 +71,7 @@ namespace PiAlarm::hardware {
         sendData(buffer, size);
     }
 
-    void SSD1322::initialize() const {
+    void SSD1322::initialize() {
         reset();
 
         // commands documentation: https://www.crystalfontz.com/controllers/datasheet-viewer.php?id=427 (chapter 9 & 10)
@@ -134,20 +134,20 @@ namespace PiAlarm::hardware {
         sendCommand(SSD1322_DISPLAYON);        // 0xAF - Display ON
     }
 
-    void SSD1322::setContrast(uint8_t contrast) const {
+    void SSD1322::setContrast(uint8_t contrast) {
         sendCommand(SSD1322_SETCONTRAST);
         sendData(contrast);
     }
 
-    void SSD1322::allPixelsOn() const {
+    void SSD1322::allPixelsOn() {
         sendCommand(SSD1322_DISPLAYALLON);  // 0xA5
     }
 
-    void SSD1322::allPixelsOff() const {
+    void SSD1322::allPixelsOff() {
         sendCommand(SSD1322_DISPLAYALLOFF); // 0xA4
     }
 
-    void SSD1322::setNormalDisplay() const {
+    void SSD1322::setNormalDisplay() {
         sendCommand(SSD1322_NORMALDISPLAY); // 0xA6
     }
 

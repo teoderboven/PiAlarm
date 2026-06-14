@@ -57,11 +57,11 @@ namespace PiAlarm::hardware {
         }
     }
 
-    void SPI::writeByte(uint8_t byte) const {
+    void SPI::writeByte(uint8_t byte) {
         writeData(&byte, sizeof(byte));
     }
 
-    void SPI::writeData(const uint8_t* data, size_t length) const {
+    void SPI::writeData(const uint8_t* data, size_t length) {
         size_t totalWritten = 0;
 
         while (totalWritten < length) {

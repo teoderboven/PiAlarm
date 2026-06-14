@@ -75,7 +75,7 @@ namespace PiAlarm::hardware {
         mode_ = GPIOMode::INPUT;
     }
 
-    void GPIO::set(int value) const {
+    void GPIO::set(int value) {
         if (mode_ != GPIOMode::OUTPUT) {
             throw std::runtime_error("GPIO line is not set as output, cannot set value.");
         }

@@ -50,7 +50,7 @@ namespace PiAlarm::hardware {
          * @param byte The byte to write.
          * @throws std::runtime_error if the write operation fails.
          */
-        void writeByte(uint8_t byte) const;
+        void writeByte(uint8_t byte);
 
         /**
          * Writes multiple bytes to the SPI device.
@@ -58,7 +58,7 @@ namespace PiAlarm::hardware {
          * @param length The number of bytes to write.
          * @throws std::runtime_error if the write operation fails.
          */
-        void writeData(const uint8_t* data, size_t length) const;
+        void writeData(const uint8_t* data, size_t length);
 
     };
 

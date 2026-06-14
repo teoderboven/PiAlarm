@@ -11,12 +11,12 @@ namespace PiAlarm ::hardware {
         : i2c_{address}
     {}
 
-    void BME280::reset() const {
+    void BME280::reset() {
         i2c_.writeRegister(BME280_REG_RESET, BME280_RESET_COMMAND);
         std::this_thread::sleep_for(std::chrono::milliseconds(100));
     }
 
-    void BME280::setMode(Mode mode) const {
+    void BME280::setMode(Mode mode) {
         uint8_t ctrl_meas;
         i2c_.readRegister(BME280_REG_CTRL_MEAS, &ctrl_meas, 1); // read current reg value
         ctrl_meas = (ctrl_meas & 0b11111100) | static_cast<uint8_t>(mode);

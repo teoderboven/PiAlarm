@@ -32,7 +32,7 @@ namespace PiAlarm::hardware {
         }
     }
 
-    void I2C::writeData(const uint8_t* data, size_t length) const {
+    void I2C::writeData(const uint8_t* data, size_t length) {
         const ssize_t written = write(fd_, data, length);
         if (written != static_cast<ssize_t>(length)) {
             throw std::runtime_error("I2C write failed: " + std::string(std::strerror(errno)));
@@ -46,7 +46,7 @@ namespace PiAlarm::hardware {
         }
     }
 
-    void I2C::writeRegister(uint8_t reg, uint8_t value) const {
+    void I2C::writeRegister(uint8_t reg, uint8_t value) {
         uint8_t buffer[2] = { reg, value };
         writeData(buffer, sizeof(buffer));
     }

@@ -157,7 +157,7 @@ namespace PiAlarm::hardware {
          * @param value The value to set (0 or 1).
          * @throws std::runtime_error if the line value cannot be set.
          */
-        void set(int value) const;
+        void set(int value);
 
         /**
          * Gets the current value of the GPIO line.

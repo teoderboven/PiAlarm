@@ -27,7 +27,7 @@ namespace PiAlarm::hardware {
         i2c_.writeData(buffer, 3);
     }
 
-    void SCD41::sendCommand(uint16_t command, uint16_t data) const {
+    void SCD41::sendCommand(uint16_t command, uint16_t data) {
         uint8_t buffer[5];
 
         // command bytes
@@ -48,17 +48,17 @@ namespace PiAlarm::hardware {
         i2c_.readData(buffer, length);
     }
 
-    void SCD41::startPeriodicMeasurement() const {
+    void SCD41::startPeriodicMeasurement() {
         sendCommand(SCD41_START_PERIODIC_MEASUREMENT);
         std::this_thread::sleep_for(std::chrono::milliseconds(5));
     }
 
-    void SCD41::startLowPowerPeriodicMeasurement() const {
+    void SCD41::startLowPowerPeriodicMeasurement() {
         sendCommand(SCD41_START_LOW_POWER_PERIODIC_MEASUREMENT);
         std::this_thread::sleep_for(std::chrono::milliseconds(5));
     }
 
-    void SCD41::stopPeriodicMeasurement() const {
+    void SCD41::stopPeriodicMeasurement() {
         sendCommand(SCD41_STOP_PERIODIC_MEASUREMENT);
         std::this_thread::sleep_for(std::chrono::milliseconds(500));
     }
@@ -98,7 +98,7 @@ namespace PiAlarm::hardware {
         };
     }
 
-    void SCD41::setTemperatureOffset(float offset_celsius) const {
+    void SCD41::setTemperatureOffset(float offset_celsius) {
         const uint16_t data = convertTemperatureOffset(offset_celsius);
         sendCommand(SCD41_SET_TEMPERATURE_OFFSET, data);
         std::this_thread::sleep_for(std::chrono::milliseconds(1));
@@ -117,7 +117,7 @@ namespace PiAlarm::hardware {
         return convertRawToTemperatureOffset(offset_raw);
     }
 
-    void SCD41::setAmbientPressure(uint16_t pressure_hpa) const {
+    void SCD41::setAmbientPressure(uint16_t pressure_hpa) {
         sendCommand(SCD41_SET_AMBIENT_PRESSURE, pressure_hpa);
         std::this_thread::sleep_for(std::chrono::milliseconds(1));
     }

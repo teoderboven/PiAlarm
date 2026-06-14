@@ -55,7 +55,7 @@ namespace PiAlarm::hardware {
          * @param data Pointer to the data to write.
          * @param length Number of bytes to write.
          */
-        void writeData(const uint8_t* data, size_t length) const;
+        void writeData(const uint8_t* data, size_t length);
 
         /**
          * Reads raw data from the I2C slave.
@@ -77,7 +77,7 @@ namespace PiAlarm::hardware {
          * @param reg Register address.
          * @param value Value to write.
          */
-        void writeRegister(uint8_t reg, uint8_t value) const;
+        void writeRegister(uint8_t reg, uint8_t value);
 
     };
 
