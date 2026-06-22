@@ -18,6 +18,9 @@ namespace PiAlarm::service {
         model::CurrentIndoorData& currentIndoorData_; ///< Reference to the CurrentIndoorData model to be updated with sensor readings.
         std::chrono::milliseconds measurementDelay_ {50}; ///< Delay required by the BME280 sensor between measurements. Set to 50 by default, but updated after the initialization of the sensor.
 
+        // TODO: set offset once on the final case
+        static constexpr float BME280_TEMPERATURE_OFFSET = 0.65f; ///< Offset to apply to the temperature reading from the BME280 sensor to correct for sensor placement and heat from the Raspberry Pi.
+
     public:
         /**
          * @brief Constructs a CurrentIndoorService that updates the CurrentIndoorData model with indoor sensor data.
