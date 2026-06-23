@@ -1,21 +1,20 @@
 #ifdef SENSOR_SCD41
 
-#include "service/CurrentIndoorService.h"
+#include "service/SCD41Service.h"
 
 namespace PiAlarm::service {
-
-    CurrentIndoorService::CurrentIndoorService(
-        model::CurrentIndoorData& currentIndoorData
+    SCD41Service::SCD41Service(
+        model::CO2Data& CO2Data,
+        const model::CurrentIndoorData& currentIndoorData
     )
-        : BaseService("CurrentIndoorService"),
+        : BaseService("SCD41Service"),
+          co2Data_{CO2Data},
           currentIndoorData_{currentIndoorData}
     {}
 
-    bool CurrentIndoorService::onStart() {
+    bool SCD41Service::onStart() {
         try {
             scd41_.stopPeriodicMeasurement(); // Ensure the sensor is stopped before starting a new measurement mode
-
-            scd41_.setTemperatureOffset(0.8);
             scd41_.startLowPowerPeriodicMeasurement(); // 30s response time
 
             return true;
@@ -25,7 +24,7 @@ namespace PiAlarm::service {
         }
     }
 
-    void CurrentIndoorService::onStop() {
+    void SCD41Service::onStop() {
         try {
             scd41_.stopPeriodicMeasurement();
         } catch (const std::exception& e) {
@@ -33,11 +32,16 @@ namespace PiAlarm::service {
         }
     }
 
-    void CurrentIndoorService::update() {
+    void SCD41Service::update() {
         try {
+            if (currentIndoorData_.isValid()) {
+                scd41_.setAmbientPressure(static_cast<uint16_t>(currentIndoorData_.getPressure()));
+            }
+
             if (scd41_.dataReady()) {
                 const auto measurement = scd41_.readMeasurement();
-                currentIndoorData_.setValues(measurement.temperature, measurement.humidity);
+
+                co2Data_.setValues(measurement.co2);
 
                 logger().debug("SCD41 data: {}°C, {}%, {}ppm", measurement.temperature, measurement.humidity, measurement.co2);
             }
@@ -46,7 +50,7 @@ namespace PiAlarm::service {
         }
     }
 
-    std::chrono::milliseconds CurrentIndoorService::updateInterval() const {
+    std::chrono::milliseconds SCD41Service::updateInterval() const {
         return std::chrono::seconds(30);
     }
 

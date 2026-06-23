@@ -6,6 +6,7 @@
 #include "model/ClockData.hpp"
 #include "model/CurrentWeatherData.h"
 #include "model/CurrentIndoorData.hpp"
+#include "model/CO2Data.hpp"
 #include "model/manager/AlarmManager.h"
 #include "controller/AlarmController.h"
 #include "view/manager/ViewManager.h"
@@ -134,6 +135,7 @@ namespace PiAlarm {
         model::AlarmsData alarms_data;                          ///< Alarms data model
         model::CurrentWeatherData currentWeather_data;          ///< Current weather data model
         model::CurrentIndoorData currentIndoor_data;            ///< Current indoor data model
+        model::CO2Data co2_data;                                ///< Current CO2 measurement data model
 
         // model manager
         model::manager::AlarmManager alarmManager;              ///< Alarm manager to handle alarm states and operations

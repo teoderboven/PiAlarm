@@ -7,7 +7,7 @@
     #include "service/BME280Service.h"
 #endif
 #ifdef SENSOR_SCD41
-    #include "service/CurrentIndoorService.h"
+    #include "service/SCD41Service.h"
 #endif
 
 #ifdef DISPLAY_SSD1322
@@ -32,6 +32,7 @@ namespace PiAlarm {
         alarms_data{alarmCount},
         currentWeather_data{},
         currentIndoor_data{},
+        co2_data{},
 
         // manager
         alarmManager{clock_data, alarms_data, snoozeDuration, ringDuration},
@@ -120,7 +121,7 @@ namespace PiAlarm {
             services.emplace_back(std::make_unique<service::BME280Service>(currentIndoor_data));
         #endif
         #ifdef SENSOR_SCD41
-            services.emplace_back(std::make_unique<service::CurrentIndoorService>(currentIndoor_data));
+            services.emplace_back(std::make_unique<service::SCD41Service>(co2_data, currentIndoor_data));
         #endif
     }
 
