@@ -35,6 +35,7 @@ namespace PiAlarm::service {
     void SCD41Service::update() {
         try {
             if (currentIndoorData_.isValid()) {
+                // use indoor pressure to improve co2 measurement value
                 scd41_.setAmbientPressure(static_cast<uint16_t>(currentIndoorData_.getPressure()));
             }
 
@@ -46,6 +47,7 @@ namespace PiAlarm::service {
                 logger().debug("SCD41 data: {}°C, {}%, {}ppm", measurement.temperature, measurement.humidity, measurement.co2);
             }
         } catch (const std::exception& e) {
+            co2Data_.setValid(false);
             logger().error("Failed to read from SCD41 sensor: {}", e.what());
         }
     }

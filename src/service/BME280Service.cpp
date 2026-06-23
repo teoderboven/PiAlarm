@@ -28,15 +28,17 @@ namespace PiAlarm::service {
         try {
             BME280_.setMode(BME280::Mode::Forced);
             std::this_thread::sleep_for(measurementDelay_);
+
             const auto measurement = BME280_.readMeasurement();
 
-            const auto coorectedTemperature = measurement.temperature + BME280_TEMPERATURE_OFFSET;
+            const auto correctedTemperature = measurement.temperature + BME280_TEMPERATURE_OFFSET;
 
-            currentIndoorData_.setValues(coorectedTemperature, measurement.humidity, measurement.pressure);
+            currentIndoorData_.setValues(correctedTemperature, measurement.humidity, measurement.pressure);
 
-            logger().debug("BME280 data: {}°C (+{}), {}%, {}hPa", coorectedTemperature, BME280_TEMPERATURE_OFFSET, measurement.humidity, measurement.pressure);
+            logger().debug("BME280 data: {}°C (+{}), {}%, {}hPa", correctedTemperature, BME280_TEMPERATURE_OFFSET, measurement.humidity, measurement.pressure);
 
         } catch (const std::exception& e) {
+            currentIndoorData_.setValid(false);
             logger().error("Failed to read from BME280 sensor: {}", e.what());
         }
     }

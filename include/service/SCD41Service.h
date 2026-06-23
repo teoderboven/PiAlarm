@@ -49,7 +49,6 @@ namespace PiAlarm::service {
          * @return The duration until the next reading.
          */
         std::chrono::milliseconds updateInterval() const override;
-
     };
 
 } // namespace PiAlarm::service
