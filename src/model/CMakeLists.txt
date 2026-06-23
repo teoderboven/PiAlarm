@@ -15,6 +15,7 @@ set(SOURCES
         ClockData.cpp
         CurrentIndoorData.cpp
         CurrentWeatherData.cpp
+        CO2Data.cpp
 )
 
 add_library(${PROJECT_NAME} STATIC
