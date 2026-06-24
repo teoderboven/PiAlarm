@@ -10,7 +10,8 @@ namespace PiAlarm::gfx {
         : buffer_{std::move(buffer)}, drawMode_{drawMode}
     {}
 
-    void Canvas::setPixel(size_t x, size_t y, Pixel value) const {
+    // NOLINTNEXTLINE(readability-make-member-function-const)
+    void Canvas::setPixel(size_t x, size_t y, Pixel value) {
         uint8_t finalValue {value};
 
         switch (drawMode_) {
@@ -29,7 +30,7 @@ namespace PiAlarm::gfx {
         buffer_->setPixel(x, y, finalValue);
     }
 
-    void Canvas::drawRectangle(size_t x, size_t y, size_t w, size_t h, size_t thickness, Pixel color) const {
+    void Canvas::drawRectangle(size_t x, size_t y, size_t w, size_t h, size_t thickness, Pixel color) {
         if (w <= 0 || h <= 0 || thickness <= 0) return;
 
         // Top
@@ -59,7 +60,7 @@ namespace PiAlarm::gfx {
     }
 
 
-    void Canvas::drawBitmap(size_t x, size_t y, const Bitmap &bitmap) const {
+    void Canvas::drawBitmap(size_t x, size_t y, const Bitmap &bitmap) {
         for (size_t row = 0; row < bitmap.height; row++) {
             for (size_t col = 0; col < bitmap.width; col++) {
                 setPixel(x + col, y + row, bitmap.getPixel(col, row));
@@ -67,7 +68,7 @@ namespace PiAlarm::gfx {
         }
     }
 
-    void Canvas::drawChar(size_t x, size_t y, const UTF8Char& utf8Char, IFont& font) const {
+    void Canvas::drawChar(size_t x, size_t y, const UTF8Char& utf8Char, IFont& font) {
         const auto glyph = font.renderChar(utf8Char);
 
         const size_t baselineY = y + font.getAscender();
@@ -75,14 +76,14 @@ namespace PiAlarm::gfx {
         drawGlyph(x, baselineY, glyph);
     }
 
-    void Canvas::drawGlyph(size_t x, size_t baselineY, const RenderedGlyph &glyph) const {
+    void Canvas::drawGlyph(size_t x, size_t baselineY, const RenderedGlyph &glyph) {
         const size_t drawX = x + glyph.bearingX;
         const size_t drawY = baselineY - glyph.bearingY;
 
         drawBitmap(drawX, drawY, glyph.bitmap);
     }
 
-    Canvas::DrawMetrics Canvas::drawText(size_t x, size_t y, const std::string& text, const std::shared_ptr<IFont>& font, Anchor anchor) const {
+    Canvas::DrawMetrics Canvas::drawText(size_t x, size_t y, const std::string& text, const std::shared_ptr<IFont>& font, Anchor anchor) {
         const auto glyphs = layoutText(text, font);
 
         // get measures of the text
@@ -100,7 +101,7 @@ namespace PiAlarm::gfx {
         return {textWidth, textHeight};
     }
 
-    std::vector<PositionedGlyph> Canvas::layoutText(const std::string& text, const std::shared_ptr<IFont>& font) const {
+    std::vector<PositionedGlyph> Canvas::layoutText(const std::string& text, const std::shared_ptr<IFont>& font) {
         std::vector<PositionedGlyph> glyphs;
         size_t cursorX = 0;
 
@@ -117,7 +118,7 @@ namespace PiAlarm::gfx {
         return glyphs;
     }
 
-    std::pair<size_t, size_t> Canvas::measureText(const std::vector<PositionedGlyph>& glyphs, const std::shared_ptr<IFont>& font) const {
+    std::pair<size_t, size_t> Canvas::measureText(const std::vector<PositionedGlyph>& glyphs, const std::shared_ptr<IFont>& font) {
         if (glyphs.empty()) return {0, 0};
 
         size_t width = glyphs.back().xOffset + glyphs.back().glyph.advance; // offset of the last glyph + its advance
@@ -125,7 +126,7 @@ namespace PiAlarm::gfx {
         return {width, height};
     }
 
-    int Canvas::getMaxAscender(const std::vector<PositionedGlyph>& glyphs) const {
+    int Canvas::getMaxAscender(const std::vector<PositionedGlyph>& glyphs) {
         if (glyphs.empty()) return 0;
 
         return std::ranges::max_element(
@@ -135,7 +136,7 @@ namespace PiAlarm::gfx {
             })->glyph.bearingY;
     }
 
-    int Canvas::getMaxDescender(const std::vector<PositionedGlyph>& glyphs) const {
+    int Canvas::getMaxDescender(const std::vector<PositionedGlyph>& glyphs) {
         if (glyphs.empty()) return 0;
 
         auto glyphWithMax = std::ranges::min_element(
@@ -152,7 +153,7 @@ namespace PiAlarm::gfx {
         size_t textWidth,
         int maxBearingY,
         const std::shared_ptr<IFont>& font,
-        Anchor anchor) const
+        Anchor anchor)
     {
         size_t drawX = x;
         size_t baselineY = y;

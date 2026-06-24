@@ -143,7 +143,7 @@ namespace PiAlarm::view::ssd1322 {
          * This method renders the index of the alarm being edited on the display.
          * @param renderer The renderer to use for drawing.
          */
-        void drawAlarmIndex(const RenderType &renderer) const;
+        void drawAlarmIndex(RenderType &renderer) const;
 
         /**
          * @brief Draws the current alarm settings on the display.
@@ -152,7 +152,7 @@ namespace PiAlarm::view::ssd1322 {
          * @param x The X coordinate for rendering the alarm settings.
          * @param baseline The baseline Y coordinate for rendering the alarm settings.
          */
-        void drawHour(const RenderType &renderer, size_t x, size_t baseline) const;
+        void drawHour(RenderType &renderer, size_t x, size_t baseline) const;
 
         /**
          * @brief Draws the current minute settings on the display.
@@ -161,14 +161,14 @@ namespace PiAlarm::view::ssd1322 {
          * @param x The X coordinate for rendering the minute settings.
          * @param baseline The baseline Y coordinate for rendering the minute settings.
          */
-        void drawMinute(const RenderType &renderer, size_t x, size_t baseline) const;
+        void drawMinute(RenderType &renderer, size_t x, size_t baseline) const;
 
         /**
          * @brief Draws the activation status of the current alarm.
          * This method renders whether the alarm is active or inactive.
          * @param renderer The renderer to use for drawing.
          */
-        void drawActivation(const RenderType &renderer) const;
+        void drawActivation(RenderType &renderer) const;
 
         /**
           * @brief Highlights the content of the current alarm part being edited.
@@ -180,7 +180,7 @@ namespace PiAlarm::view::ssd1322 {
           * @param contentHeight The height of the content to highlight.
           * @note This method is used to visually indicate which part of the alarm settings is currently being edited.
           */
-        void highlightContent(const RenderType &renderer, size_t topLeftX, size_t topLeftY, size_t contentWidth, size_t contentHeight) const;
+        void highlightContent(RenderType &renderer, size_t topLeftX, size_t topLeftY, size_t contentWidth, size_t contentHeight) const;
 
         /**
          * @brief Determines the next edit state based on the current state.

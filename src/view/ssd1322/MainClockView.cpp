@@ -38,7 +38,7 @@ namespace PiAlarm::view::ssd1322 {
         drawConditions(renderer);
     }
 
-    void MainClockView::drawClock(const RenderType &renderer) const {
+    void MainClockView::drawClock(RenderType &renderer) const {
         auto middleY = renderer.getHeight() / 2;
 
         auto HMDimensions = renderer.drawText(
@@ -130,7 +130,7 @@ namespace PiAlarm::view::ssd1322 {
         return pictoBell_;
     }
 
-    void MainClockView::drawConditions(const RenderType &renderer) const {
+    void MainClockView::drawConditions(RenderType &renderer) const {
         auto bottomY = renderer.getHeight() - listElementBorderScreenVerticalSpacing_;
 
         // draw outdoor condition
@@ -153,7 +153,7 @@ namespace PiAlarm::view::ssd1322 {
     }
 
     ssize_t MainClockView::drawSingleCondition(
-        const RenderType &renderer,
+        RenderType &renderer,
         size_t baseline,
         const std::string &temperatureText,
         const std::string &humidityText,

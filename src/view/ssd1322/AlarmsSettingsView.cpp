@@ -48,7 +48,7 @@ namespace PiAlarm::view::ssd1322 {
         drawActivation(renderer);
     }
 
-    void AlarmsSettingsView::drawAlarmIndex(const RenderType &renderer) const {
+    void AlarmsSettingsView::drawAlarmIndex(RenderType &renderer) const {
         auto leftX = borderScreenVerticalSpacing_;
         auto topY = borderScreenVerticalSpacing_;
         renderer.drawText(
@@ -59,7 +59,7 @@ namespace PiAlarm::view::ssd1322 {
         );
     }
 
-    void AlarmsSettingsView::drawHour(const RenderType &renderer, size_t x, size_t baseline) const {
+    void AlarmsSettingsView::drawHour(RenderType &renderer, size_t x, size_t baseline) const {
         auto dimensions = renderer.drawText(
             x, baseline,
             utils::formatInt(currentHour_, 2),
@@ -76,7 +76,7 @@ namespace PiAlarm::view::ssd1322 {
         }
     }
 
-    void AlarmsSettingsView::drawMinute(const RenderType &renderer, size_t x, size_t baseline) const {
+    void AlarmsSettingsView::drawMinute(RenderType &renderer, size_t x, size_t baseline) const {
         auto dimensions = renderer.drawText(
             x, baseline,
             utils::formatInt(currentMinute_, 2),
@@ -91,7 +91,7 @@ namespace PiAlarm::view::ssd1322 {
         }
     }
 
-    void AlarmsSettingsView::drawActivation(const RenderType &renderer) const {
+    void AlarmsSettingsView::drawActivation(RenderType &renderer) const {
         auto centerX = renderer.getWidth() / 2;
         auto bottomY = renderer.getHeight() - borderScreenVerticalSpacing_;
         auto dimensions = renderer.drawText(
@@ -109,7 +109,7 @@ namespace PiAlarm::view::ssd1322 {
         }
     }
 
-    void AlarmsSettingsView::highlightContent(const RenderType &renderer, size_t topLeftX, size_t topLeftY, size_t contentWidth, size_t contentHeight) const {
+    void AlarmsSettingsView::highlightContent(RenderType &renderer, size_t topLeftX, size_t topLeftY, size_t contentWidth, size_t contentHeight) const {
         auto borderAreaWidth = highlightBorderWidth_ + highlightedContentPadding_;
 
         renderer.drawRectangle(

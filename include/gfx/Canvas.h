@@ -96,7 +96,7 @@ namespace PiAlarm::gfx {
          * @brief Clears the canvas by resetting the buffer.
          * This method should be called before drawing new content.
          */
-        inline void clear() const;
+        inline void clear();
 
         /**
          * @brief Sets a pixel in the canvas at the specified coordinates.
@@ -104,7 +104,7 @@ namespace PiAlarm::gfx {
          * @param y The y-coordinate of the pixel (vertical position).
          * @param grayscale The grayscale value to set for the pixel (0-255).
          */
-        inline void drawPixel(size_t x, size_t y, Pixel grayscale) const;
+        inline void drawPixel(size_t x, size_t y, Pixel grayscale);
 
         /**
          * @brief Draws a rectangle on the canvas at the specified coordinates.
@@ -115,7 +115,7 @@ namespace PiAlarm::gfx {
          * @param thickness The thickness of the rectangle's border (default is 1 pixel).
          * @param color The color of the rectangle's border (default is white, represented by 255).
          */
-        void drawRectangle(size_t x, size_t y, size_t w, size_t h, size_t thickness = 1, Pixel color = 255) const;
+        void drawRectangle(size_t x, size_t y, size_t w, size_t h, size_t thickness = 1, Pixel color = 255);
 
         /**
          * @brief Draws a bitmap at the specified coordinates on the canvas.
@@ -123,7 +123,7 @@ namespace PiAlarm::gfx {
          * @param y The y-coordinate where the bitmap will be drawn.
          * @param bitmap The Bitmap object to draw on the canvas.
          */
-        void drawBitmap(size_t x, size_t y, const Bitmap& bitmap) const;
+        void drawBitmap(size_t x, size_t y, const Bitmap& bitmap);
 
         /**
          * @brief Draws a pictogram at the specified coordinates on the canvas.
@@ -131,7 +131,7 @@ namespace PiAlarm::gfx {
          * @param y The y-coordinate where the pictogram will be drawn.
          * @param pictogram The Pictogram object to draw on the canvas.
          */
-        void drawPictogram(size_t x, size_t y, const Pictogram& pictogram) const;
+        void drawPictogram(size_t x, size_t y, const Pictogram& pictogram);
 
         /**
          * @brief Draws a character at the specified coordinates using the provided font.
@@ -140,7 +140,7 @@ namespace PiAlarm::gfx {
          * @param utf8Char The character to draw, represented as a UTF-8 encoded string.
          * @param font The Font used to render the character.
          */
-        void drawChar(size_t x, size_t y, const UTF8Char& utf8Char, IFont& font) const;
+        void drawChar(size_t x, size_t y, const UTF8Char& utf8Char, IFont& font);
 
         /**
          * @brief Draws UTF-8 text on the canvas with the specified anchor alignment.
@@ -161,7 +161,7 @@ namespace PiAlarm::gfx {
          *
          * @see Anchor for available alignment options.
          */
-        DrawMetrics drawText(size_t x, size_t y, const std::string& text, const std::shared_ptr<IFont>& font, Anchor anchor = Anchor::TopLeft) const;
+        DrawMetrics drawText(size_t x, size_t y, const std::string& text, const std::shared_ptr<IFont>& font, Anchor anchor = Anchor::TopLeft);
 
     private:
 
@@ -172,7 +172,7 @@ namespace PiAlarm::gfx {
          * @param baselineY The y-coordinate of the baseline for the glyph.
          * @param glyph The RenderedGlyph object containing the glyph data to draw.
          */
-        void drawGlyph(size_t x, size_t baselineY, const RenderedGlyph& glyph) const;
+        void drawGlyph(size_t x, size_t baselineY, const RenderedGlyph& glyph);
 
         /**
          * @brief Lays out the text by rendering each character and positioning them.
@@ -182,7 +182,7 @@ namespace PiAlarm::gfx {
          * @param font The Font used to render the text.
          * @return A vector of PositionedGlyphs representing the laid-out text.
          */
-        std::vector<PositionedGlyph> layoutText(const std::string& text, const std::shared_ptr<IFont>& font) const;
+        static std::vector<PositionedGlyph> layoutText(const std::string& text, const std::shared_ptr<IFont>& font);
 
         /**
          * @brief Measures the width and height of the laid-out text.
@@ -191,7 +191,7 @@ namespace PiAlarm::gfx {
          * @param font The Font used to render the text.
          * @return A pair containing the width and height of the text in pixels.
          */
-        std::pair<size_t, size_t> measureText(const std::vector<PositionedGlyph>& glyphs, const std::shared_ptr<IFont>& font) const;
+        static std::pair<size_t, size_t> measureText(const std::vector<PositionedGlyph>& glyphs, const std::shared_ptr<IFont>& font);
 
         /**
          * @brief Gets the maximum ascender value from the laid-out glyphs.
@@ -200,7 +200,7 @@ namespace PiAlarm::gfx {
          * @param glyphs The vector of PositionedGlyphs representing the laid-out text.
          * @return The maximum ascender value among the glyphs, as a positive integer.
          */
-        int getMaxAscender(const std::vector<PositionedGlyph>& glyphs) const;
+        static int getMaxAscender(const std::vector<PositionedGlyph>& glyphs);
 
         /**
          * @brief Gets the maximum descender value from the laid-out glyphs.
@@ -214,7 +214,7 @@ namespace PiAlarm::gfx {
          *          so it is the smallest (most negative) value.
          *          For example, between -1 and -2, the maximum descender is -2.
          */
-        int getMaxDescender(const std::vector<PositionedGlyph>& glyphs) const;
+        static int getMaxDescender(const std::vector<PositionedGlyph>& glyphs);
 
         /**
          * @brief Calculates the anchor position for text based on the specified anchor type.
@@ -228,13 +228,13 @@ namespace PiAlarm::gfx {
          * @param anchor The Anchor type that specifies how to align the text.
          * @return A pair containing the adjusted x and y coordinates for drawing the text.
          */
-        std::pair<size_t, size_t> getTextAnchorPosition(
+        static std::pair<size_t, size_t> getTextAnchorPosition(
             size_t x, size_t y,
             size_t textWidth,
             int maxBearingY,
             const std::shared_ptr<IFont>& font,
             Anchor anchor
-        ) const;
+        );
 
     public:
 
@@ -268,7 +268,7 @@ namespace PiAlarm::gfx {
          * @param y The y-coordinate of the pixel (vertical position).
          * @param value The pixel value to set (0-255).
          */
-        void setPixel(size_t x, size_t y, Pixel value) const;
+        void setPixel(size_t x, size_t y, Pixel value);
 
     };
 
@@ -282,15 +282,15 @@ namespace PiAlarm::gfx {
         return drawMode_;
     }
 
-    inline void Canvas::clear() const {
+    inline void Canvas::clear() {
         buffer_->clear();
     }
 
-    inline void Canvas::drawPixel(size_t x, size_t y, Pixel grayscale) const {
+    inline void Canvas::drawPixel(size_t x, size_t y, Pixel grayscale) {
         setPixel(x, y, grayscale);
     }
 
-    inline void Canvas::drawPictogram(size_t x, size_t y, const Pictogram& pictogram) const {
+    inline void Canvas::drawPictogram(size_t x, size_t y, const Pictogram& pictogram) {
         drawBitmap(x, y, pictogram.getBitmap());
     }
 

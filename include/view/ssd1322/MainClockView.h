@@ -80,7 +80,7 @@ namespace PiAlarm::view::ssd1322 {
          * This method is responsible for rendering the current time in a specific format.
          * @param renderer The renderer used to draw the clock.
          */
-        void drawClock(const RenderType& renderer) const;
+        void drawClock(RenderType& renderer) const;
 
         /**
          * @brief Draws the alarm status on the screen.
@@ -96,6 +96,7 @@ namespace PiAlarm::view::ssd1322 {
          * alarm status, such as "No Alarm", "Alarm Active", or "Alarm Snoozed".
          * @return A string representing the current alarm status.
          */
+        [[nodiscard]]
         std::string getAlarmStatus() const;
 
         /**
@@ -104,6 +105,7 @@ namespace PiAlarm::view::ssd1322 {
          * for an active alarm, a filled bell for a ringing alarm, or a bell slash for a disabled alarm.
          * @return A reference to the pictogram representing the current alarm status.const
          */
+        [[nodiscard]]
         const gfx::Pictogram& getAlarmStatusPictogram() const;
 
         /**
@@ -112,7 +114,7 @@ namespace PiAlarm::view::ssd1322 {
          * conditions at the bottom right of the screen.
          * @param renderer The renderer used to draw the conditions.
          */
-        void drawConditions(const RenderType &renderer) const;
+        void drawConditions(RenderType &renderer) const;
 
         /**
          * @brief Draws the condition (temperature, humidity, and indicator) on the screen.
@@ -127,7 +129,7 @@ namespace PiAlarm::view::ssd1322 {
          * @return The height of the drawn condition, which can be used for further layout adjustments.
          */
         ssize_t drawSingleCondition(
-            const RenderType &renderer,
+            RenderType &renderer,
             size_t baseline,
             const std::string &temperatureText,
             const std::string &humidityText,
