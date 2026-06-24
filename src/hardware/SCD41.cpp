@@ -10,8 +10,6 @@ namespace PiAlarm::hardware {
 
     SCD41::SCD41(uint8_t address)
         : i2c_{address} {
-        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
-        stopPeriodicMeasurement();
     }
 
     void SCD41::sendCommand(uint16_t command) const {
