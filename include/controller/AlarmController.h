@@ -58,10 +58,9 @@ namespace PiAlarm::controller {
          * @param hour The hour for the alarm (0-23).
          * @param minute The minute for the alarm (0-59).
          * @param enabled Whether the alarm should be enabled or not.
-         * @return An optional string containing an error message if the operation fails,
-         *         or an empty optional if successful.
+         * @return true if the alarm is set successfully, false otherwise.
          */
-        std::optional<std::string> setAlarm(size_t index, int hour, int minute, bool enabled) const;
+        bool setAlarm(size_t index, int hour, int minute, bool enabled) const;
 
     };
 

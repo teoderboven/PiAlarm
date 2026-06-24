@@ -6,12 +6,12 @@ namespace PiAlarm::controller {
         : alarmsData_{alarmsData}, alarmManager_{alarmManager}
     {}
 
-    std::optional<std::string> AlarmController::setAlarm(size_t index, int hour, int minute, bool enabled) const {
+    bool AlarmController::setAlarm(size_t index, int hour, int minute, bool enabled) const {
         try {
             alarmsData_.setAlarm(index, model::Time{hour, minute}, enabled);
-            return {};
+            return true;
         } catch (...) {
-            return std::make_optional<std::string>("Failed to set alarm");
+            return false;
         }
     }
 
