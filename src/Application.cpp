@@ -148,7 +148,8 @@ namespace PiAlarm {
                     alarmState,
                     clock_data,
                     currentWeather_data,
-                    currentIndoor_data
+                    currentIndoor_data,
+                    co2_data
                 )
             );
             viewManager.addView(

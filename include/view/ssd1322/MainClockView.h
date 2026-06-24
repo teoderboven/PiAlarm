@@ -1,6 +1,7 @@
 #ifndef PIALARM_MAINCLOCKVIEW_H
 #define PIALARM_MAINCLOCKVIEW_H
 
+#include "model/CO2Data.hpp"
 #include "view/AbstractMainClockView.h"
 #include "gfx/TrueTypeFont.h"
 #include "gfx/TrueTypeFontCache.h"
@@ -22,11 +23,15 @@ namespace PiAlarm::view::ssd1322 {
      * including displaying the current time, alarm information, and weather data.
      */
     class MainClockView final : public AbstractMainClockView {
+        const model::CO2Data& co2Data_; ///< Reference to the CO2 data model, used for displaying air quality alert.
+
         const std::shared_ptr<gfx::IFont> mainClockDigitFont_;       ///< Font for the main clock digits.
         const std::shared_ptr<gfx::IFont> secondClockDigitFont_;     ///< Font for the seconds in the clock.
         const std::shared_ptr<gfx::IFont> rightListFont_;            ///< Font for the right list elements (alarm & conditions).
         const std::shared_ptr<gfx::IFont> noAlarmFont_;              ///< Font for displaying "No Alarm" text.
         const std::shared_ptr<gfx::IFont> snoozeUntilFont_;          ///< Font for displaying the snooze until time.
+        const std::shared_ptr<gfx::IFont> mainCO2AlertFont_;         ///< Font for displaying the CO2 alert text.
+        const std::shared_ptr<gfx::IFont> subCO2AlertFont_;          ///< Font for displaying the sub CO2 alert text.
         const std::shared_ptr<gfx::IFont> temperatureIndicatorFont_; ///< Font for the temperature indicator.
 
         const gfx::Pictogram pictoBell_;                              ///< Pictogram for the bell icon, used when indicating the next alarm.
@@ -40,6 +45,7 @@ namespace PiAlarm::view::ssd1322 {
         const ssize_t listElementBorderHorizontalSpacing_ {2};        ///< Horizontal spacing for list elements from the screen border.
         const ssize_t snoozeStatusSnoozeUntilSpacing_ {3};            ///< Spacing between snooze status and snooze until text.
         const ssize_t pictogramStatusSpacing_ {2};                    ///< Spacing between the alarm status pictogram and the status text.
+        const ssize_t co2AlertStatusSpacing_ {4};                     ///< Spacing between the CO2 alert and the alarm status.
         const ssize_t conditionVerticalSpacing_ {4};                  ///< Vertical spacing between different conditions (indoor/outdoor).
 
     public:
@@ -51,13 +57,15 @@ namespace PiAlarm::view::ssd1322 {
          * @param clockData Reference to the clock data model.
          * @param currentWeatherData Reference to the current weather data model.
          * @param temperatureSensorData Reference to the temperature sensor data model.
+         * @param co2Data Reference to the CO2 data model.
          */
         MainClockView(
             const model::AlarmsData& alarmsData,
             const model::AlarmState& alarmStateData,
             const model::ClockData& clockData,
             const model::CurrentWeatherData& currentWeatherData,
-            const model::CurrentIndoorData& temperatureSensorData
+            const model::CurrentIndoorData& temperatureSensorData,
+            const model::CO2Data& co2Data
         );
 
         /**
@@ -87,8 +95,9 @@ namespace PiAlarm::view::ssd1322 {
          * This method displays the current alarm status, including whether the alarm is active,
          * snoozed, or disabled. It also handles the display of snooze until time if applicable.
          * @param renderer The renderer used to draw the alarm status.
+         * @return The most left X coordinate of the status.
          */
-        void drawAlarmStatus(RenderType &renderer) const;
+        size_t drawAlarmStatus(RenderType &renderer) const;
 
         /**
          * @brief Gets the current alarm status as a string.
@@ -107,6 +116,22 @@ namespace PiAlarm::view::ssd1322 {
          */
         [[nodiscard]]
         const gfx::Pictogram& getAlarmStatusPictogram() const;
+
+        /**
+         * @brief Draws the CO2 alert on the screen if the CO2 level exceeds a certain threshold.
+         * This method checks the air quality level and renders an alert on the screen if the CO2 level is above the defined threshold, indicating poor air quality.
+         * @param renderer The renderer used to draw the alert.
+         * @param rightX The right X-coordinate for drawing the alert, allowing for positioning adjustments.
+         */
+        void drawCo2Alert(RenderType &renderer, size_t rightX) const;
+
+        /**
+         * @brief Checks if the given air quality level is considered an alert level.
+         * This method determines whether the provided air quality level indicates a poor or very poor condition, which would require user attention.
+         * @param level The air quality level to check.
+         * @return True if the level is Poor or VeryPoor, false otherwise.
+         */
+        static bool isAlertLevel(model::AirQualityLevel level);
 
         /**
          * @brief Draws the conditions (temperature and humidity) on the screen.

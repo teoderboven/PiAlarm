@@ -10,7 +10,8 @@ namespace PiAlarm::view::ssd1322 {
         const model::AlarmState& alarmStateData,
         const model::ClockData &clockData,
         const model::CurrentWeatherData &currentWeatherData,
-        const model::CurrentIndoorData& temperatureSensorData
+        const model::CurrentIndoorData& temperatureSensorData,
+        const model::CO2Data& co2Data
         )
         : AbstractMainClockView(
             alarmsData,
@@ -19,11 +20,15 @@ namespace PiAlarm::view::ssd1322 {
             currentWeatherData,
             temperatureSensorData
         ),
+        co2Data_{co2Data},
+
         mainClockDigitFont_{gfx::TrueTypeFontCache::getFont(FONT_MozillaText_Light, 48)},
         secondClockDigitFont_{gfx::TrueTypeFontCache::getFont(FONT_MozillaText_Light, 18)},
         rightListFont_{gfx::TrueTypeFontCache::getFont(FONT_MozillaText_Light, 13)},
         noAlarmFont_{gfx::TrueTypeFontCache::getFont(FONT_MozillaText_Light, 11)},
         snoozeUntilFont_{gfx::TrueTypeFontCache::getFont(FONT_MozillaText_Light, 10)},
+        mainCO2AlertFont_{gfx::TrueTypeFontCache::getFont(FONT_MozillaText_SemiBold, 13)},
+        subCO2AlertFont_{gfx::TrueTypeFontCache::getFont(FONT_MozillaText_SemiBold, 7)},
         temperatureIndicatorFont_{gfx::TrueTypeFontCache::getFont(FONT_MozillaText_Light, 7)},
 
         pictoBell_{"assets/pictograms/bell.png"},
@@ -34,7 +39,8 @@ namespace PiAlarm::view::ssd1322 {
 
     void MainClockView::render(RenderType &renderer) const {
         drawClock(renderer);
-        drawAlarmStatus(renderer);
+        auto rightX = drawAlarmStatus(renderer);
+        drawCo2Alert(renderer, rightX);
         drawConditions(renderer);
     }
 
@@ -57,7 +63,7 @@ namespace PiAlarm::view::ssd1322 {
         );
     }
 
-    void MainClockView::drawAlarmStatus(RenderType &renderer) const {
+    size_t MainClockView::drawAlarmStatus(RenderType &renderer) const {
         auto rightBorder = renderer.getWidth() - listElementBorderHorizontalSpacing_;
         auto topY = listElementBorderScreenVerticalSpacing_;
         size_t snoozeOffset {0}; // width of the potential snooze until text
@@ -99,11 +105,13 @@ namespace PiAlarm::view::ssd1322 {
         renderer.drawPictogram(pictogramX, pictogramY, pictogram);
 
         renderer.setDrawMode(savedDrawMode);
+
+        return pictogramX; // The most left X coordinate of the status
     }
 
     std::string MainClockView::getAlarmStatus() const {
         if (!hasAlarmEnabled_)
-            return "Pas d'alarme active";
+            return "Pas d'alarme";
 
         if (!alarmStateData_.hasTriggeredAlarm())
             return  nextAlarmTime_.toString(false);
@@ -128,6 +136,36 @@ namespace PiAlarm::view::ssd1322 {
             return pictoBellSnooze_;
 
         return pictoBell_;
+    }
+
+    void MainClockView::drawCo2Alert(RenderType &renderer, size_t rightX) const {
+        if (!isAlertLevel(co2Data_.getAirQualityLevel()) || !co2Data_.isValid()) return;
+
+        if (co2Data_.getAirQualityLevel() == model::AirQualityLevel::VeryPoor
+            && currentTime_.second() % 3 == 2)
+                return; // blink the alert every 3 seconds (2 on, 1 off)
+
+        auto rightBorder = rightX - co2AlertStatusSpacing_;
+        auto topY = listElementBorderScreenVerticalSpacing_;
+
+        auto subTextDimensions = renderer.drawText(
+            rightBorder, topY + mainCO2AlertFont_->getAscender(),
+            "2",
+            subCO2AlertFont_,
+            gfx::Canvas::Anchor::BottomRight
+        );
+
+        renderer.drawText(
+            rightBorder - subTextDimensions.width, topY,
+            "CO",
+            mainCO2AlertFont_,
+            gfx::Canvas::Anchor::TopRight
+        );
+    }
+
+    bool MainClockView::isAlertLevel(model::AirQualityLevel level) {
+        using model::AirQualityLevel;
+        return level == AirQualityLevel::Poor || level == AirQualityLevel::VeryPoor;
     }
 
     void MainClockView::drawConditions(RenderType &renderer) const {
