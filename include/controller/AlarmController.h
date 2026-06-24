@@ -1,9 +1,6 @@
 #ifndef ALARMCONTROLLER_H
 #define ALARMCONTROLLER_H
 
-#include <optional>
-#include <string>
-
 #include "model/AlarmsData.hpp"
 #include "model/manager/AlarmManager.h"
 
