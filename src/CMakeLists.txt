@@ -103,10 +103,14 @@ add_executable(${PROJECT_NAME}
         Application.cpp
 )
 
+set_target_properties(${PROJECT_NAME} PROPERTIES
+        BUILD_RPATH "$ORIGIN"
+        INSTALL_RPATH "$ORIGIN"
+)
+
 # link project libraries
 target_link_libraries(${PROJECT_NAME} PRIVATE
         PiAlarm_view_manager
-        PiAlarm_view         # Contains the abstract view class and common functionality
         PiAlarm_controller
         PiAlarm_service
         PiAlarm_provider
@@ -126,6 +130,12 @@ else()
             PiAlarm_view_console
     )
 endif()
+
+# Link abstract view
+target_link_libraries(${PROJECT_NAME} PRIVATE
+        PiAlarm_view         # Contains the abstract view class and common functionality
+)
+
 if(INPUT_GPIO)
     target_link_libraries(${PROJECT_NAME} PRIVATE
             PiAlarm_input

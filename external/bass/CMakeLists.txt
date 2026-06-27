@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.10)
 
-add_library(bass STATIC IMPORTED GLOBAL)
+add_library(bass SHARED IMPORTED GLOBAL)
 
 # Headers
 set_target_properties(bass PROPERTIES
@@ -23,23 +23,22 @@ if(WIN32)
 
 elseif(UNIX AND NOT APPLE) # Linux
     if(CMAKE_SYSTEM_PROCESSOR MATCHES "x86_64")
-        set(BASS_SO_PATH ${CMAKE_CURRENT_SOURCE_DIR}/lib/linux/x86_64/libbass.so)
-
+        set(BASS_ARCH_DIR lib/linux/x86_64)
     elseif(CMAKE_SYSTEM_PROCESSOR MATCHES "i686" OR CMAKE_SYSTEM_PROCESSOR MATCHES "x86")
-        set(BASS_SO_PATH ${CMAKE_CURRENT_SOURCE_DIR}/lib/linux/x86/libbass.so)
-
+        set(BASS_ARCH_DIR lib/linux/x86)
     elseif(CMAKE_SYSTEM_PROCESSOR MATCHES "aarch64")
-        set(BASS_SO_PATH ${CMAKE_CURRENT_SOURCE_DIR}/lib/linux/aarch64/libbass.so)
-
+        set(BASS_ARCH_DIR lib/linux/aarch64)
     elseif(CMAKE_SYSTEM_PROCESSOR MATCHES "arm")
-        set(BASS_SO_PATH ${CMAKE_CURRENT_SOURCE_DIR}/lib/linux/armhf/libbass.so)
-
+        set(BASS_ARCH_DIR lib/linux/armhf)
     else()
         message(FATAL_ERROR "Unsupported architecture: ${CMAKE_SYSTEM_PROCESSOR}")
     endif()
 
+    set(BASS_SO_PATH ${CMAKE_CURRENT_SOURCE_DIR}/${BASS_ARCH_DIR}/libbass.so)
+
     set_target_properties(bass PROPERTIES
             IMPORTED_LOCATION "${BASS_SO_PATH}"
+            IMPORTED_NO_SONAME TRUE
     )
 else()
     message(FATAL_ERROR "Unsupported platform: ${CMAKE_SYSTEM_NAME}")
@@ -61,4 +60,3 @@ function(copy_bass_dll_to_target target)
         message(WARNING "IMPORTED_LOCATION for `bass` is not set or does not exist: ${BASS_RUNTIME_PATH}")
     endif()
 endfunction()
-
