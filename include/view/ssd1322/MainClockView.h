@@ -48,6 +48,15 @@ namespace PiAlarm::view::ssd1322 {
         const ssize_t co2AlertStatusSpacing_ {4};                     ///< Spacing between the CO2 alert and the alarm status.
         const ssize_t conditionVerticalSpacing_ {4};                  ///< Vertical spacing between different conditions (indoor/outdoor).
 
+        /**
+        * @struct AlarmStatusBounds
+        * @brief Bounding box for the alarm status area.
+        */
+        struct AlarmStatusBounds {
+            size_t leftX;    ///< The most left X coordinate of the alarm status area.
+            size_t bottomY;  ///< The bottom Y coordinate of the alarm status area.
+        };
+
     public:
 
         /**
@@ -95,9 +104,9 @@ namespace PiAlarm::view::ssd1322 {
          * This method displays the current alarm status, including whether the alarm is active,
          * snoozed, or disabled. It also handles the display of snooze until time if applicable.
          * @param renderer The renderer used to draw the alarm status.
-         * @return The most left X coordinate of the status.
+         * @return The bounding box of the alarm status area.
          */
-        size_t drawAlarmStatus(RenderType &renderer) const;
+        AlarmStatusBounds drawAlarmStatus(RenderType& renderer) const;
 
         /**
          * @brief Gets the current alarm status as a string.
@@ -121,9 +130,10 @@ namespace PiAlarm::view::ssd1322 {
          * @brief Draws the CO2 alert on the screen if the CO2 level exceeds a certain threshold.
          * This method checks the air quality level and renders an alert on the screen if the CO2 level is above the defined threshold, indicating poor air quality.
          * @param renderer The renderer used to draw the alert.
-         * @param rightX The right X-coordinate for drawing the alert, allowing for positioning adjustments.
+         * @param bounds The bounding box of the alarm status, used for positioning the CO2 alert.
+         * @see model::CO2Data::getAirQualityLevel() for determining the air quality level.
          */
-        void drawCo2Alert(RenderType &renderer, size_t rightX) const;
+        void drawCo2Alert(RenderType& renderer, const AlarmStatusBounds& bounds) const;
 
         /**
          * @brief Checks if the given air quality level is considered an alert level.
@@ -139,7 +149,7 @@ namespace PiAlarm::view::ssd1322 {
          * conditions at the bottom right of the screen.
          * @param renderer The renderer used to draw the conditions.
          */
-        void drawConditions(RenderType &renderer) const;
+        void drawConditions(RenderType& renderer) const;
 
         /**
          * @brief Draws the condition (temperature, humidity, and indicator) on the screen.
@@ -154,7 +164,7 @@ namespace PiAlarm::view::ssd1322 {
          * @return The height of the drawn condition, which can be used for further layout adjustments.
          */
         ssize_t drawSingleCondition(
-            RenderType &renderer,
+            RenderType& renderer,
             size_t baseline,
             const std::string &temperatureText,
             const std::string &humidityText,

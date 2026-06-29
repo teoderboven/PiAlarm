@@ -72,6 +72,10 @@ namespace PiAlarm::model {
 
         /**
          * @brief Gets the air quality level based on the current CO2 concentration.
+         * The air quality level is determined as follows:
+         * - Good: CO2 < 800 ppm
+         * - Poor: 800 ppm <= CO2 < 1500 ppm
+         * - Very Poor: CO2 >= 1500 ppm
          * @return The air quality level as an AirQualityLevel enum value.
          * @note Always check if the CO2 data is valid before using this value.
          */

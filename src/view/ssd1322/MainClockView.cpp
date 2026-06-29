@@ -8,8 +8,8 @@ namespace PiAlarm::view::ssd1322 {
     MainClockView::MainClockView(
         const model::AlarmsData& alarmsData,
         const model::AlarmState& alarmStateData,
-        const model::ClockData &clockData,
-        const model::CurrentWeatherData &currentWeatherData,
+        const model::ClockData& clockData,
+        const model::CurrentWeatherData& currentWeatherData,
         const model::CurrentIndoorData& temperatureSensorData,
         const model::CO2Data& co2Data
         )
@@ -37,14 +37,14 @@ namespace PiAlarm::view::ssd1322 {
         pictoBellSlash_{"assets/pictograms/bell-slash.png"}
     {}
 
-    void MainClockView::render(RenderType &renderer) const {
+    void MainClockView::render(RenderType& renderer) const {
         drawClock(renderer);
-        auto rightX = drawAlarmStatus(renderer);
-        drawCo2Alert(renderer, rightX);
+        auto alarmStatusBounds = drawAlarmStatus(renderer);
+        drawCo2Alert(renderer, alarmStatusBounds);
         drawConditions(renderer);
     }
 
-    void MainClockView::drawClock(RenderType &renderer) const {
+    void MainClockView::drawClock(RenderType& renderer) const {
         auto middleY = renderer.getHeight() / 2;
 
         auto HMDimensions = renderer.drawText(
@@ -63,7 +63,7 @@ namespace PiAlarm::view::ssd1322 {
         );
     }
 
-    size_t MainClockView::drawAlarmStatus(RenderType &renderer) const {
+    MainClockView::AlarmStatusBounds MainClockView::drawAlarmStatus(RenderType& renderer) const {
         auto rightBorder = renderer.getWidth() - listElementBorderHorizontalSpacing_;
         auto topY = listElementBorderScreenVerticalSpacing_;
         size_t snoozeOffset {0}; // width of the potential snooze until text
@@ -106,7 +106,7 @@ namespace PiAlarm::view::ssd1322 {
 
         renderer.setDrawMode(savedDrawMode);
 
-        return pictogramX; // The most left X coordinate of the status
+        return {pictogramX, pictogramY + pictogram.getHeight()}; // return the bounding box of the alarm status area
     }
 
     std::string MainClockView::getAlarmStatus() const {
@@ -138,14 +138,14 @@ namespace PiAlarm::view::ssd1322 {
         return pictoBell_;
     }
 
-    void MainClockView::drawCo2Alert(RenderType &renderer, size_t rightX) const {
+    void MainClockView::drawCo2Alert(RenderType& renderer, const AlarmStatusBounds& bounds) const {
         if (!isAlertLevel(co2Data_.getAirQualityLevel()) || !co2Data_.isValid()) return;
 
         if (co2Data_.getAirQualityLevel() == model::AirQualityLevel::VeryPoor
             && currentTime_.second() % 3 == 2)
                 return; // blink the alert every 3 seconds (2 on, 1 off)
 
-        auto rightBorder = rightX - co2AlertStatusSpacing_;
+        auto rightBorder = bounds.leftX - co2AlertStatusSpacing_;
         auto topY = listElementBorderScreenVerticalSpacing_;
 
         auto subTextDimensions = renderer.drawText(
@@ -168,7 +168,7 @@ namespace PiAlarm::view::ssd1322 {
         return level == AirQualityLevel::Poor || level == AirQualityLevel::VeryPoor;
     }
 
-    void MainClockView::drawConditions(RenderType &renderer) const {
+    void MainClockView::drawConditions(RenderType& renderer) const {
         auto bottomY = renderer.getHeight() - listElementBorderScreenVerticalSpacing_;
 
         // draw outdoor condition
@@ -191,7 +191,7 @@ namespace PiAlarm::view::ssd1322 {
     }
 
     ssize_t MainClockView::drawSingleCondition(
-        RenderType &renderer,
+        RenderType& renderer,
         size_t baseline,
         const std::string &temperatureText,
         const std::string &humidityText,
