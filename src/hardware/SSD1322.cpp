@@ -14,13 +14,7 @@ namespace PiAlarm::hardware {
         : spi_{spiChipSelect, spiSpeed},
           dcPin_{dcLineNumber},
           resetPin_{resetLineNumber}
-    {
-        // Configure GPIO pins as output
-        // DC pin is used to switch between command and data mode
-        // Reset pin is used to reset the display
-        dcPin_.setOutput(GPIO::LOW);
-        resetPin_.setOutput(GPIO::HIGH);
-    }
+    {}
 
     void SSD1322::reset() {
         resetPin_.set(GPIO::LOW);
@@ -72,6 +66,12 @@ namespace PiAlarm::hardware {
     }
 
     void SSD1322::initialize() {
+        // Configure GPIO pins as output
+        // DC pin is used to switch between command and data mode
+        // Reset pin is used to reset the display
+        dcPin_.setOutput(GPIO::LOW);
+        resetPin_.setOutput(GPIO::HIGH);
+
         reset();
 
         // commands documentation: https://www.crystalfontz.com/controllers/datasheet-viewer.php?id=427 (chapter 9 & 10)

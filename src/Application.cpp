@@ -143,7 +143,12 @@ namespace PiAlarm {
     void Application::initViews() {
         #ifdef DISPLAY_SSD1322
 
-            screen.initialize();
+            try {
+                screen.initialize();
+            } catch (const std::exception& e) {
+                logger().error("Failed to initialize SSD1322 display: {}", e.what());
+                throw;
+            }
 
             viewManager.addView(
                 std::make_unique<view::ssd1322::MainClockView>(

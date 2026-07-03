@@ -83,7 +83,8 @@ namespace PiAlarm::hardware {
         using DataByte = uint8_t; ///< Type alias for data byte
 
         /**
-         * Constructs an SSD1322 object, creating and taking ownership of SPI and GPIO resources.
+         * @brief Constructs an SSD1322 object, creating and taking ownership of SPI and GPIO resources.
+         *
          * @param dcLineNumber The GPIO line number for the Data/Command pin.
          * @param resetLineNumber The GPIO line number for the Reset pin.
          * @param spiChipSelect The SPI chip select (default is 0).
@@ -98,35 +99,42 @@ namespace PiAlarm::hardware {
                 uint32_t spiSpeed = 10'000'000);
 
         /**
-         * Initializes the SSD1322 display.
+         * @brief Initializes the SSD1322 display.
+         *
          * This method sends the necessary commands to configure the display.
          * It should be called after creating the SSD1322 object.
+         *
+         * @throw std::runtime_error if any hardware resource cannot be initialized.
          */
         void initialize();
 
         /**
-         * Resets the SSD1322 display.
+         * @brief Resets the SSD1322 display.
+         *
          * This method sets the reset pin low for a short duration and then sets it high again.
          * It is typically called at the start of the initialization process.
          */
         void reset();
 
         /**
-         * Sends a command to the SSD1322 display.
+         * @brief Sends a command to the SSD1322 display.
+         *
          * @param cmd The command byte to send.
          * @note The command is sent in command mode, which is set by the `setDCPinCommand()` method.
          */
         void sendCommand(CommandByte cmd);
 
         /**
-         * Sends data to the SSD1322 display.
+         * @brief Sends data to the SSD1322 display.
+         *
          * @param data The data byte to send.
          * @note The data is sent in data mode, which is set by the `setDCPinData()` method.
          */
         void sendData(DataByte data);
 
         /**
-         * Sends an array of data bytes to the SSD1322 display.
+         * @brief Sends an array of data bytes to the SSD1322 display.
+         *
          * @param data Pointer to the array of data bytes.
          * @param length The number of bytes to send.
          * @note The data is sent in data mode, which is set by the `setDCPinData()` method.
@@ -146,7 +154,7 @@ namespace PiAlarm::hardware {
         void flush(const uint8_t* buffer, size_t size);
 
         /**
-         * Sets the contrast of the SSD1322 display.
+         * @brief Sets the contrast of the SSD1322 display.
          * @param contrast The contrast value to set (0-255).
          * @note This method sends a command to set the contrast level of the display.
          * @note Try to use values between 0x00 and Ox80 to avoid long-term damages to the display.
@@ -155,21 +163,24 @@ namespace PiAlarm::hardware {
         void setContrast(uint8_t contrast);
 
         /**
-         * Turns on all pixels on the SSD1322 display.
+         * @brief Turns on all pixels on the SSD1322 display.
+         *
          * This method sends a command to turn on all pixels, making the display fully lit.
          * @note Call `setNormalDisplay()` to return to normal mode after this.
          */
         void allPixelsOn();
 
         /**
-         * Turns off all pixels on the SSD1322 display.
+         * @brief Turns off all pixels on the SSD1322 display.
+         *
          * This method sends a command to turn off all pixels, making the display fully dark.
          * @note Call `setNormalDisplay()` to return to normal mode after this.
          */
         void allPixelsOff();
 
         /**
-         * Sets the display to normal mode (non-inverted).
+         * @brief Sets the display to normal mode (non-inverted).
+         *
          * This method sends a command to set the display to normal mode, where pixels are displayed as they are in the buffer.
          */
         void setNormalDisplay();
@@ -177,13 +188,15 @@ namespace PiAlarm::hardware {
     private:
 
         /**
-         * Sets the DC pin to command mode.
+         * @brief Sets the DC pin to command mode.
+         *
          * This method is used to indicate that the next byte sent is a command.
          */
         void setDCPinCommand();
 
         /**
-         * Sets the DC pin to data mode.
+         * @brief Sets the DC pin to data mode.
+         *
          * This method is used to indicate that the next byte sent is data.
          */
         void setDCPinData();
