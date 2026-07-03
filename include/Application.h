@@ -1,18 +1,19 @@
 #ifndef PIALARM_APPLICATION_H
 #define PIALARM_APPLICATION_H
 
+#include "controller/AlarmController.h"
 #include "display/ViewOutputConfig.h"
+#include "logging/HasLogger.h"
+#include "media/MusicService.h"
 #include "model/AlarmsData.hpp"
 #include "model/ClockData.hpp"
-#include "model/CurrentWeatherData.h"
-#include "model/CurrentIndoorData.hpp"
 #include "model/CO2Data.hpp"
+#include "model/CurrentIndoorData.hpp"
+#include "model/CurrentWeatherData.h"
 #include "model/manager/AlarmManager.h"
-#include "controller/AlarmController.h"
-#include "view/manager/ViewManager.h"
 #include "service/IService.h"
-#include "media/MusicService.h"
 #include "trigger/AlarmSoundTrigger.h"
+#include "view/manager/ViewManager.h"
 
 #include <vector>
 #include <memory>
@@ -39,8 +40,9 @@ namespace PiAlarm {
      * and starts the main application loop.
      */
     class Application
+        : public logging::HasLogger
 #ifdef INPUT_GPIO
-        : public input::HasInputEventHandler // Inherit from HasInputEventHandler to handle input events
+        , public input::HasInputEventHandler // Inherit from HasInputEventHandler to handle input events
 #endif
     {
         static constexpr int BACK_BUTTON_LONG_PRESS_COUNT {4}; ///< Number of back button repeat event to trigger a long press action
@@ -66,6 +68,11 @@ namespace PiAlarm {
             const std::string &weatherCityName = "Brussel-1",
             const std::filesystem::path &customMusicFolderPath = ""
         );
+
+        /**
+         * @brief Initializes the application.
+         */
+        void init();
 
         /**
          * @brief Starts the main application loop.

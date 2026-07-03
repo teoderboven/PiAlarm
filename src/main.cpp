@@ -36,5 +36,6 @@ int main(int argc, char *argv[]) {
         weatherCityName, // Weather location from command line arguments
         customMusicFolderPath // Custom music folder path from command line arguments
     };
+    app.init();
     app.run();
 }

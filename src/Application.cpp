@@ -27,8 +27,9 @@ namespace PiAlarm {
         const std::string& weatherCityName,
         const std::filesystem::path &customMusicFolderPath
     )
+        : HasLogger("Application"),
         // model
-      : clock_data{},
+        clock_data{},
         alarms_data{alarmCount},
         currentWeather_data{},
         currentIndoor_data{},
@@ -85,13 +86,15 @@ namespace PiAlarm {
 
         // trigger
         alarmSoundTrigger{alarmManager.getAlarmState(), musicService}
-    {
-        initServices();
-        initViews();
-    }
+    {} // empty body of constructor
 
 
     //////////// Application methods ////////////
+
+    void Application::init() {
+        initServices();
+        initViews();
+    }
 
     void Application::run() {
         startServices();
