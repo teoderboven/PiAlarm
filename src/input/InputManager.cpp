@@ -6,9 +6,13 @@ namespace PiAlarm::input {
         buttons_.reserve(buttonsConfig.size());
 
         for (const auto& buttonConfig : buttonsConfig) {
-            buttonConfig.gpio.setInputWithEdgeDetection(hardware::GPIO::EdgeType::BOTH);
+            buttons_.emplace_back(std::make_unique<ManagedButton>(buttonConfig));
+        }
+    }
 
-            buttons_.emplace_back(buttonConfig);
+    void InputManager::init() {
+        for (const auto& btnPtr : buttons_) {
+            btnPtr->gpio.setInputWithEdgeDetection(hardware::GPIO::EdgeType::BOTH);
         }
     }
 
@@ -18,7 +22,8 @@ namespace PiAlarm::input {
         EventList events;
 
         // Read the state of each button and generate events
-        for (auto& button : buttons_) {
+        for (const auto& btnPtr : buttons_) {
+            auto& button = *btnPtr;
             readButton(button, events, now); // Read the button state and generate press/release events
 
             if (button.generateRepeats)

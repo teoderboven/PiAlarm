@@ -19,7 +19,6 @@
 #include <memory>
 
 #ifdef INPUT_GPIO
-    #include "hardware/GPIO.h"
     #include "input/InputManager.h"
     #include "input/HasInputEventHandler.h"
 #endif
@@ -112,6 +111,11 @@ namespace PiAlarm {
     private:
 
         /**
+         * @brief Initializes the input manager and sets up input event handling.
+         */
+        void initInputs();
+
+        /**
          * @brief Initializes the services for the application.
          */
         void initServices();
@@ -169,12 +173,7 @@ namespace PiAlarm {
 
 #ifdef INPUT_GPIO
 
-        // input manager and hardware
-        hardware::GPIO mainButtonPin;                           ///< GPIO pin for the main button input
-        hardware::GPIO backButtonPin;                           ///< GPIO pin for the back button input
-        hardware::GPIO nextButtonPin;                           ///< GPIO pin for the next button input
-        hardware::GPIO previousButtonPin;                       ///< GPIO pin for the previous button input
-
+        // input manager
         input::InputManager inputManager;                       ///< Manages user input events
 
         // input event state

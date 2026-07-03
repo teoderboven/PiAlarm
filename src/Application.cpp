@@ -65,17 +65,12 @@ namespace PiAlarm {
 #ifdef INPUT_GPIO
 
         // input manager
-        mainButtonPin{13},
-        backButtonPin{12},
-        nextButtonPin{6},
-        previousButtonPin{5},
-
         inputManager{
             {
-                {mainButtonPin, input::ButtonId::Main, false},
-                {backButtonPin, input::ButtonId::Back, true},
-                {nextButtonPin, input::ButtonId::Next, true},
-                {previousButtonPin, input::ButtonId::Previous, true}
+                {13, input::ButtonId::Main, false},
+                {12, input::ButtonId::Back, true},
+                {6, input::ButtonId::Next, true},
+                {5, input::ButtonId::Previous, true}
             }
         },
 
@@ -92,6 +87,7 @@ namespace PiAlarm {
     //////////// Application methods ////////////
 
     void Application::init() {
+        initInputs();
         initServices();
         initViews();
     }
@@ -114,6 +110,19 @@ namespace PiAlarm {
         }
 
         stopServices(); // will never be reached, but good practice to have it here
+    }
+
+    void Application::initInputs() {
+        #ifdef INPUT_GPIO
+
+        try {
+            inputManager.init();
+        } catch (const std::exception& e) {
+            logger().error("Failed to initialize input manager: {}", e.what());
+            throw;
+        }
+
+        #endif // INPUT_GPIO
     }
 
     void Application::initServices() {

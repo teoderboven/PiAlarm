@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <chrono>
+#include <memory>
 #include "hardware/GPIO.h"
 #include "input/InputEvent.h"
 
@@ -32,12 +33,12 @@ namespace PiAlarm::input {
          * It is used to initialize buttons in the InputManager.
          */
         struct ButtonConfig {
-            hardware::GPIO& gpio; ///< The GPIO object for the button
+            unsigned int gpioLineNumber; ///< The GPIO line number for the button.
             ButtonId type; ///< The type of button (Main, Back, Left, Right). Used to identify the button in events.
             bool generateRepeats; ///< Whether to generate auto-repeat events for this button
 
-            ButtonConfig(hardware::GPIO& gpio, ButtonId type, bool generateRepeats = false)
-                : gpio{gpio}, type{type}, generateRepeats{generateRepeats} {}
+            ButtonConfig(unsigned int gpioLineNumber, ButtonId type, bool generateRepeats = false)
+                : gpioLineNumber{gpioLineNumber}, type{type}, generateRepeats{generateRepeats} {}
         };
 
     private:
@@ -50,7 +51,7 @@ namespace PiAlarm::input {
          * auto-repeat settings, and timestamps for press and repeat events.
          */
         struct ManagedButton {
-            hardware::GPIO& gpio; ///< The GPIO object for the button
+            hardware::GPIO gpio; ///< The GPIO object for the button
             ButtonId type; ///< The type of button (Main, Back, Left, Right).
             bool pressed = false; ///< True if the button is currently pressed, false otherwise
             bool generateRepeats; ///< Whether to generate auto-repeat events for this button
@@ -66,7 +67,7 @@ namespace PiAlarm::input {
              * @param mapping The ButtonMapping containing the GPIO and type for the button
              */
             explicit ManagedButton(const ButtonConfig& mapping)
-                : gpio{mapping.gpio}, type{mapping.type}, generateRepeats{mapping.generateRepeats} {}
+                : gpio{mapping.gpioLineNumber}, type{mapping.type}, generateRepeats{mapping.generateRepeats} {}
         };
 
         static constexpr auto REPEAT_DELAY = std::chrono::milliseconds(500);    ///< Delay before auto-repeat starts
@@ -75,7 +76,7 @@ namespace PiAlarm::input {
 
         using now_type = std::chrono::steady_clock::time_point; ///< Alias for the current time point type
 
-        std::vector<ManagedButton> buttons_; ///< List of buttons managed by the InputManager
+        std::vector<std::unique_ptr<ManagedButton>> buttons_; ///< List of buttons managed by the InputManager
 
     public:
         using EventList = std::vector<InputEvent>; ///< Alias for a list of input events
@@ -89,6 +90,12 @@ namespace PiAlarm::input {
          * @param buttonsConfig A vector of ButtonConfig objects representing the buttons to manage
          */
         explicit InputManager(const std::vector<ButtonConfig>& buttonsConfig);
+
+        /**
+         * @brief Initializes the InputManager.
+         * @throw std::runtime_error if any GPIO line cannot be initialized.
+         */
+        void init();
 
         /**
          * @brief Polls for input events from the GPIO buttons.
