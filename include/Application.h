@@ -15,6 +15,7 @@
 #include "trigger/AlarmSoundTrigger.h"
 #include "view/manager/ViewManager.h"
 
+#include <atomic>
 #include <vector>
 #include <memory>
 
@@ -45,6 +46,8 @@ namespace PiAlarm {
 #endif
     {
         static constexpr int BACK_BUTTON_LONG_PRESS_COUNT {4}; ///< Number of back button repeat event to trigger a long press action
+
+        std::atomic<bool> running_ {true}; ///< Atomic flag to control the main application loop
 
     public:
 
@@ -79,7 +82,6 @@ namespace PiAlarm {
          * This method runs the application, handling input events, updating the display,
          * and managing the state of alarms and weather data.
          */
-        [[noreturn]]
         void run();
 
 #ifdef INPUT_GPIO

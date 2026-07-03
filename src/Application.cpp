@@ -95,7 +95,7 @@ namespace PiAlarm {
     void Application::run() {
         startServices();
 
-        while (true) {
+        while (running_.load()) {
             #ifdef INPUT_GPIO
 
                 auto events {inputManager.pollEvents()};
@@ -109,7 +109,7 @@ namespace PiAlarm {
             std::this_thread::sleep_for(std::chrono::milliseconds(170));
         }
 
-        stopServices(); // will never be reached, but good practice to have it here
+        stopServices();
     }
 
     void Application::initInputs() {
