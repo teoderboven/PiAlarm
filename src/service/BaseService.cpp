@@ -86,9 +86,20 @@ namespace PiAlarm::service {
         }
     }
 
-    void BaseService::waitNextCycle() {
+    bool BaseService::interruptibleSleepFor(std::chrono::milliseconds duration) {
         std::unique_lock lock{mutex_};
-        cv_.wait_for(lock, updateInterval(), [this]() { return !running_; });
+        cv_.wait_for(lock, duration, [this]() { return !running_; });
+        return running_; // Return true if still running, false if stopped
+    }
+
+    bool BaseService::interruptibleSleepUntil(std::chrono::system_clock::time_point time_point) {
+        std::unique_lock lock{mutex_};
+        cv_.wait_until(lock, time_point, [this]() { return !running_; });
+        return running_; // Return true if still running, false if stopped
+    }
+
+    void BaseService::waitNextCycle() {
+        interruptibleSleepFor(updateInterval());
     }
 
     void BaseService::start() {

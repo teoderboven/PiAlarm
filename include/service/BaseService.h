@@ -69,12 +69,14 @@ namespace PiAlarm::service {
          * @brief Waits before the next update cycle.
          *
          * This method is called after each call to update() and is responsible for introducing a delay
-         * between cycles. The default implementation uses std::this_thread::sleep_for with the value
-         * returned by updateIntervalMs(). Derived classes may override this method to implement
-         * more precise or adaptive waiting strategies, such as using std::this_thread::sleep_until
+         * between cycles. The default implementation uses interruptibleSleepFor with the value
+         * returned by updateInterval(). Derived classes may override this method to implement
+         * more precise or adaptive waiting strategies, such as using interruptibleSleepUntil()
          * or event-based synchronization.
          *
          * @note Override this method if you require custom control over the timing between update cycles.
+         * @warning Please use the given methods interruptibleSleepFor() or interruptibleSleepUntil()
+         * to ensure that the service can be stopped gracefully during the wait.
          */
         virtual void waitNextCycle();
 
@@ -94,6 +96,26 @@ namespace PiAlarm::service {
         virtual inline std::chrono::milliseconds updateInterval() const {
             return std::chrono::milliseconds{1000};
         }
+
+        /**
+         * @brief Performs an interruptible sleep for a specified duration.
+         *
+         * This method uses the internal condition variable to wait, allowing the wait
+         * to be interrupted if the service is stopped.
+         * @param duration The duration to wait for.
+         * @return true if the wait completed (duration elapsed or notified), false if the service was stopped.
+         */
+        bool interruptibleSleepFor(std::chrono::milliseconds duration);
+
+        /**
+         * @brief Performs an interruptible sleep until a specified time point.
+         *
+         * This method uses the internal condition variable to wait, allowing the wait
+         * to be interrupted if the service is stopped.
+         * @param time_point The time point to wait until.
+         * @return true if the wait completed (time point reached or notified), false if the service was stopped.
+         */
+        bool interruptibleSleepUntil(std::chrono::system_clock::time_point time_point);
 
     public:
 

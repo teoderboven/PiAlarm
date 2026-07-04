@@ -28,7 +28,7 @@ namespace PiAlarm::service {
             next_tick += seconds{1};
         }
 
-        std::this_thread::sleep_until(next_tick);
+        interruptibleSleepUntil(next_tick);
     }
 
 } // namespace PiAlarm::service
