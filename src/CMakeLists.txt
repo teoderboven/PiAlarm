@@ -95,6 +95,7 @@ add_subdirectory(media)
 add_subdirectory(model)
 add_subdirectory(provider)
 add_subdirectory(service)
+add_subdirectory(system)
 add_subdirectory(trigger)
 add_subdirectory(view)
 
@@ -118,6 +119,7 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
         PiAlarm_model_manager
         PiAlarm_model
         PiAlarm_media
+        PiAlarm_system
 )
 
 if(DISPLAY_SSD1322)

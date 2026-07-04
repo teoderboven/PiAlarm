@@ -113,6 +113,11 @@ namespace PiAlarm {
     private:
 
         /**
+         * @brief Initializes TerminationService and registers a shutdown hook to handle application cleanup.
+         */
+        void initSignalHandler();
+
+        /**
          * @brief Initializes the input manager and sets up input event handling.
          */
         void initInputs();

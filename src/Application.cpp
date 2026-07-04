@@ -2,6 +2,7 @@
 #include "Application.h"
 #include "service/TimeUpdateService.h"
 #include "service/WeatherApiService.h"
+#include "system/TerminationService.h"
 
 #ifdef SENSOR_BME280
     #include "service/BME280Service.h"
@@ -87,6 +88,7 @@ namespace PiAlarm {
     //////////// Application methods ////////////
 
     void Application::init() {
+        initSignalHandler();
         initInputs();
         initServices();
         initViews();
@@ -110,6 +112,13 @@ namespace PiAlarm {
         }
 
         stopServices();
+    }
+
+    void Application::initSignalHandler() {
+        system::TerminationService::initialize();
+        system::TerminationService::register_hook([this] {
+            running_.store(false);
+        });
     }
 
     void Application::initInputs() {
