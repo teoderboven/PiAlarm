@@ -29,7 +29,7 @@ namespace PiAlarm::view {
         forceRefresh_ = true;
     }
 
-    void ViewManager::loop() {
+    void ViewManager::refresh() {
         if (!hasValidActiveView()) {
             return;
         }

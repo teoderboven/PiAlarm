@@ -107,7 +107,7 @@ namespace PiAlarm {
 
             #endif // INPUT_GPIO
 
-            viewManager.loop();
+            viewManager.refresh();
             std::this_thread::sleep_for(std::chrono::milliseconds(170));
         }
 

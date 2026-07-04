@@ -68,11 +68,11 @@ namespace PiAlarm::view {
         void previousView();
 
         /**
-         * Performs the loop operation for the current view.
+         * Performs the refresh operation for the current view.
          * Calls update and render if the view is dirty.
          * If no active view is set, this method does nothing.
          */
-        void loop();
+        void refresh();
 
         /**
          * Handles input events for the view manager.
