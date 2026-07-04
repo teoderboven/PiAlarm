@@ -32,7 +32,7 @@ namespace PiAlarm::service {
         }
     }
 
-    void SCD41Service::update() {
+    void SCD41Service::process() {
         try {
             if (currentIndoorData_.isValid()) {
                 // use indoor pressure to improve co2 measurement value

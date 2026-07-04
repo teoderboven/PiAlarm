@@ -42,7 +42,7 @@ namespace PiAlarm::service {
         /**
          * @brief Updates the data in the CO2Data model.
          */
-        void update() override;
+        void process() override;
 
         /**
          * @brief Returns the update interval for the service.

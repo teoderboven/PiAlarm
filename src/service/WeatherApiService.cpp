@@ -11,7 +11,7 @@ namespace PiAlarm::service {
           weatherApiClient_{cityName}
     {}
 
-    void WeatherApiService::update() {
+    void WeatherApiService::process() {
         const auto result {weatherApiClient_.fetchCurrentWeather()};
 
         if (std::holds_alternative<provider::WeatherError>(result)) {

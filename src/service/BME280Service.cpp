@@ -23,7 +23,7 @@ namespace PiAlarm::service {
         }
     }
 
-    void BME280Service::update() {
+    void BME280Service::process() {
         using hardware::BME280;
         try {
             BME280_.setMode(BME280::Mode::Forced);

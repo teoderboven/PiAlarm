@@ -28,7 +28,7 @@ namespace PiAlarm::service {
         /**
          * @brief Updates the current time in the ClockData model.
          */
-        void update() override;
+        void process() override;
 
         /**
          * @brief Waits until the next second to ensure precise time updates.

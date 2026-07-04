@@ -63,12 +63,12 @@ namespace PiAlarm::service {
          * This method is called in the worker thread and should contain the main logic of the service.
          * It is called repeatedly until the service is stopped.
          */
-        virtual void update() = 0;
+        virtual void process() = 0;
 
         /**
          * @brief Waits before the next update cycle.
          *
-         * This method is called after each call to update() and is responsible for introducing a delay
+         * This method is called after each call to process() and is responsible for introducing a delay
          * between cycles. The default implementation uses interruptibleSleepFor with the value
          * returned by updateInterval(). Derived classes may override this method to implement
          * more precise or adaptive waiting strategies, such as using interruptibleSleepUntil()
@@ -84,7 +84,7 @@ namespace PiAlarm::service {
          * @brief Returns the update interval for the service.
          *
          * This method provides a fixed time interval used by the default implementation of waitNextCycle().
-         * Derived classes may override this method to specify a different update frequency.
+         * Derived classes may override this method to specify a different process frequency.
          *
          * @note Override this method only if you are using the default sleep_for-based waitNextCycle().
          *
@@ -170,7 +170,7 @@ namespace PiAlarm::service {
          * @brief The main execution loop of the service.
          *
          * This method runs in a dedicated thread and orchestrates the service life cycle
-         * by chaining the initialization, the update loop, and the cleanup.
+         * by chaining the initialization, the process loop, and the cleanup.
          */
         void run();
 
@@ -187,7 +187,7 @@ namespace PiAlarm::service {
          * @brief Executes a single cycle of the update loop.
          *
          * This method handles passive waiting related to pause or stop states,
-         * calls the update() method, and applies the delay between cycles.
+         * calls the process() method, and applies the delay between cycles.
          * @return true if the service should continue running, false if it should stop.
          */
         bool executeCycle();

@@ -47,7 +47,7 @@ namespace PiAlarm::service {
          * This method is called periodically to fetch the latest weather data from the API
          * and update the CurrentWeatherData model with the fetched information.
          */
-        void update() override;
+        void process() override;
 
         /**
          * @brief Returns the update interval for the service.

@@ -53,9 +53,9 @@ namespace PiAlarm::service {
             }
             lock.unlock();
 
-            update();
+            process();
 
-            // Check running_ again in case stop() was called during update()
+            // Check running_ again in case stop() was called during process()
             if (!running_) {
                 return false;
             }
@@ -63,11 +63,11 @@ namespace PiAlarm::service {
             waitNextCycle();
         }
         catch (const std::exception& e) {
-            logger().error("Exception caught during service update: " + std::string(e.what()));
+            logger().error("Exception caught during service process: " + std::string(e.what()));
             std::this_thread::sleep_for(std::chrono::milliseconds{500});
         }
         catch (...) {
-            logger().error("Unknown exception caught during service update.");
+            logger().error("Unknown exception caught during service process.");
             std::this_thread::sleep_for(std::chrono::milliseconds{500});
         }
 

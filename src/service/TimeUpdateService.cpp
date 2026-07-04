@@ -9,7 +9,7 @@ namespace PiAlarm::service {
         : BaseService("TimeUpdateService"), clockData_{clockData}
     {}
 
-    void TimeUpdateService::update() {
+    void TimeUpdateService::process() {
         clockData_.setCurrentTime(model::Time::now());
     }
 

@@ -38,7 +38,7 @@ namespace PiAlarm::service {
         /**
          * @brief Updates the data in the CurrentIndoorData model.
          */
-        void update() override;
+        void process() override;
 
         /**
          * @brief Returns the update interval for the service.
