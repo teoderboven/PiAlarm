@@ -55,6 +55,11 @@ namespace PiAlarm::service {
 
             update();
 
+            // Check running_ again in case stop() was called during update()
+            if (!running_) {
+                return false;
+            }
+
             waitNextCycle();
         }
         catch (const std::exception& e) {
@@ -82,7 +87,8 @@ namespace PiAlarm::service {
     }
 
     void BaseService::waitNextCycle() {
-        std::this_thread::sleep_for(updateInterval());
+        std::unique_lock lock{mutex_};
+        cv_.wait_for(lock, updateInterval(), [this]() { return !running_; });
     }
 
     void BaseService::start() {
@@ -95,8 +101,10 @@ namespace PiAlarm::service {
     }
 
     void BaseService::stop() {
+        bool previouslyRunning;
         {
             std::lock_guard lock{mutex_};
+            previouslyRunning = running_;
             running_ = false;
             paused_ = false;
         }
@@ -106,7 +114,11 @@ namespace PiAlarm::service {
             workerThread_.join();
         }
 
-        logger().info("Service stopped");
+        if (previouslyRunning) {
+            logger().info("Service stopped");
+        } else {
+            logger().info("Service was already stopped");
+        }
     }
 
     void BaseService::pause() {
