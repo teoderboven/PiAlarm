@@ -1,5 +1,4 @@
-#ifndef CONSOLEDISPLAYUTILS_HPP
-#define CONSOLEDISPLAYUTILS_HPP
+#pragma once
 
 #include <string>
 
@@ -46,5 +45,3 @@ namespace PiAlarm::utils {
     }
 
 } // namespace PiAlarm::utils
-
-#endif //CONSOLEDISPLAYUTILS_HPP

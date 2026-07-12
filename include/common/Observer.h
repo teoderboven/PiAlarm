@@ -1,5 +1,4 @@
-#ifndef OBSERVER_H
-#define OBSERVER_H
+#pragma once
 
 /**
  * @namespace PiAlarm::common
@@ -35,5 +34,3 @@ namespace PiAlarm::common {
     };
 
 } // namespace PiAlarm::common
-
-#endif //OBSERVER_H

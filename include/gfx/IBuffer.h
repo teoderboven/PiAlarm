@@ -1,5 +1,4 @@
-#ifndef IBUFFER_H
-#define IBUFFER_H
+#pragma once
 
 #include <cstddef> // For size_t
 #include "gfx/Types.h"
@@ -66,9 +65,6 @@ namespace PiAlarm::gfx {
          */
         [[nodiscard]]
         virtual size_t getHeight() const = 0;
-
     };
 
 } // namespace PiAlarm::gfx
-
-#endif //IBUFFER_H

@@ -1,5 +1,4 @@
-#ifndef ALARMCONTROLLER_H
-#define ALARMCONTROLLER_H
+#pragma once
 
 #include "model/AlarmsData.hpp"
 #include "model/manager/AlarmManager.h"
@@ -58,7 +57,6 @@ namespace PiAlarm::controller {
          * @return true if the alarm is set successfully, false otherwise.
          */
         bool setAlarm(size_t index, int hour, int minute, bool enabled) const;
-
     };
 
     // Inline methods implementations
@@ -72,5 +70,3 @@ namespace PiAlarm::controller {
     }
 
 } // namespace PiAlarm::controller
-
-#endif //ALARMCONTROLLER_H

@@ -1,5 +1,4 @@
-#ifndef ALARMDATA_HPP
-#define ALARMDATA_HPP
+#pragma once
 
 #include <mutex>
 
@@ -71,7 +70,6 @@ namespace PiAlarm::model {
          */
         [[nodiscard]]
         inline bool isEnabled() const;
-
     };
 
     // inline methods implementations
@@ -93,5 +91,3 @@ namespace PiAlarm::model {
     }
 
 } // namespace PiAlarm::model
-
-#endif //ALARMDATA_HPP

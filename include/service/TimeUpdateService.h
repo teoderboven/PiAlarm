@@ -1,5 +1,4 @@
-#ifndef TIMEUPDATESERVICE_H
-#define TIMEUPDATESERVICE_H
+#pragma once
 
 #include "service/BaseService.h"
 #include "model/ClockData.hpp"
@@ -37,9 +36,6 @@ namespace PiAlarm::service {
          * ensuring that the time is updated exactly once per second without drift.
          */
         void waitNextCycle() override;
-
     };
 
 } // namespace PiAlarm::service
-
-#endif //TIMEUPDATESERVICE_H

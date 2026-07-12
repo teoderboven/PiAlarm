@@ -1,5 +1,4 @@
-#ifndef I2C_H
-#define I2C_H
+#pragma once
 
 #ifdef RASPBERRY_PI
 
@@ -78,10 +77,8 @@ namespace PiAlarm::hardware {
          * @param value Value to write.
          */
         void writeRegister(uint8_t reg, uint8_t value);
-
     };
 
 } // namespace PiAlarm::hardware
 
 #endif // RASPBERRY_PI
-#endif // I2C_H

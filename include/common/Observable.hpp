@@ -1,5 +1,4 @@
-#ifndef OBSERVABLE_HPP
-#define OBSERVABLE_HPP
+#pragma once
 
 #include <vector>
 #include "Observer.h"
@@ -49,9 +48,6 @@ namespace PiAlarm::common {
                 observer->update();
             }
         }
-
     };
 
 } // namespace PiAlarm::common
-
-#endif //OBSERVABLE_HPP

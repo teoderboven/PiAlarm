@@ -1,5 +1,4 @@
-#ifndef AUDIOTYPES_H
-#define AUDIOTYPES_H
+#pragma once
 
 #include "bass.h"
 
@@ -28,5 +27,3 @@ namespace PiAlarm::media {
     using AudioPosition = QWORD; ///< Represents an audio position in bytes.
 
 } // namespace PiAlarm::media
-
-#endif //AUDIOTYPES_H

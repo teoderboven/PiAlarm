@@ -1,5 +1,4 @@
-#ifndef MUSICPLAYER_H
-#define MUSICPLAYER_H
+#pragma once
 
 #include <filesystem>
 #include <optional>
@@ -189,7 +188,6 @@ namespace PiAlarm::media {
          * @param stream The audio stream to clean up.
          */
         void cleanupStream(AudioStream stream);
-
     };
 
     // Inline method implementation
@@ -199,5 +197,3 @@ namespace PiAlarm::media {
     }
 
 } // namespace PiAlarm::media
-
-#endif // MUSICPLAYER_H

@@ -1,5 +1,4 @@
-#ifndef ALARMSOUNDTRIGGER_H
-#define ALARMSOUNDTRIGGER_H
+#pragma once
 
 #include "common/Observer.h"
 #include "model/AlarmState.hpp"
@@ -64,5 +63,3 @@ namespace PiAlarm::trigger {
     }
 
 } // namespace PiAlarm::trigger
-
-#endif //ALARMSOUNDTRIGGER_H

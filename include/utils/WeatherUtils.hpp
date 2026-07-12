@@ -1,5 +1,4 @@
-#ifndef WEATHERCONDITIONMAPPER_HPP
-#define WEATHERCONDITIONMAPPER_HPP
+#pragma once
 
 #include "common/WeatherCondition.h"
 #include <string>
@@ -175,5 +174,3 @@ namespace PiAlarm::utils {
     }
 
 } // namespace PiAlarm::utils
-
-#endif //WEATHERCONDITIONMAPPER_HPP

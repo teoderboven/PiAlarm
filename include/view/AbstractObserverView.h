@@ -1,5 +1,4 @@
-#ifndef ABSTRACTOBSERVERVIEW_H
-#define ABSTRACTOBSERVERVIEW_H
+#pragma once
 
 #include <atomic>
 
@@ -76,5 +75,3 @@ namespace PiAlarm::view {
     }
 
 } // namespace PiAlarm::view
-
-#endif //ABSTRACTOBSERVERVIEW_H

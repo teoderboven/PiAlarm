@@ -1,5 +1,4 @@
-#ifndef WEATHERAPISERVICE_H
-#define WEATHERAPISERVICE_H
+#pragma once
 
 #include "service/BaseService.h"
 #include "model/CurrentWeatherData.h"
@@ -92,9 +91,6 @@ namespace PiAlarm::service {
          * @return The duration until the next alignment in milliseconds.
          */
         static std::chrono::milliseconds getDurationUntilNextAlignment(const int& minuteAlignment);
-
     };
 
 } // namespace PiAlarm::service
-
-#endif //WEATHERAPISERVICE_H

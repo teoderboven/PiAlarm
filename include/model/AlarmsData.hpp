@@ -1,5 +1,4 @@
-#ifndef ALARMSDATA_H
-#define ALARMSDATA_H
+#pragma once
 
 #include <ostream>
 #include <stdexcept>
@@ -215,7 +214,6 @@ namespace PiAlarm::model {
          * @throws std::out_of_range if the index is invalid.
          */
         inline void checkIndex(std::size_t index) const;
-
     };
 
     // Inline methods implementations
@@ -314,5 +312,3 @@ namespace PiAlarm::model {
     }
 
 } // namespace PiAlarm::model
-
-#endif //ALARMSDATA_H

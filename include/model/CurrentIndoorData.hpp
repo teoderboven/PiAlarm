@@ -1,5 +1,4 @@
-#ifndef CURRENT_INDOOR_DATA_HPP
-#define CURRENT_INDOOR_DATA_HPP
+#pragma once
 
 #include <mutex>
 
@@ -100,7 +99,6 @@ namespace PiAlarm::model {
          */
         [[nodiscard]]
         inline bool isValid() const;
-
     };
 
     // inline methods implementations
@@ -130,5 +128,3 @@ namespace PiAlarm::model {
     }
 
 } // namespace PiAlarm::model
-
-#endif //CURRENT_INDOOR_DATA_HPP

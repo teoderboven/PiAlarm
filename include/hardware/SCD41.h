@@ -1,5 +1,4 @@
-#ifndef PIALARM_SCD41_H
-#define PIALARM_SCD41_H
+#pragma once
 
 #ifdef RASPBERRY_PI
 
@@ -173,10 +172,8 @@ namespace PiAlarm::hardware {
          * @throws std::runtime_error if the CRC does not match.
          */
         static void checkCRC(const uint8_t* data, size_t length, uint8_t crc);
-
     };
 
 } // namespace PiAlarm::hardware
 
 #endif // RASPBERRY_PI
-#endif //PIALARM_SCD41_H

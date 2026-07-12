@@ -1,5 +1,4 @@
-#ifndef PIALARM_ALARMSSETTINGSVIEW_H
-#define PIALARM_ALARMSSETTINGSVIEW_H
+#pragma once
 
 #include "view/IView.h"
 #include "model/AlarmsData.hpp"
@@ -204,5 +203,3 @@ namespace PiAlarm::view::ssd1322 {
     }
 
 } // namespace PiAlarm::view::ssd1322
-
-#endif //PIALARM_ALARMSSETTINGSVIEW_H

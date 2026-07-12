@@ -1,5 +1,4 @@
-#ifndef SDD1322BUFFER_H
-#define SDD1322BUFFER_H
+#pragma once
 
 #include <array>
 
@@ -86,7 +85,6 @@ namespace PiAlarm::gfx {
          * @return The corresponding 4-bit grayscale pixel value (0-15).
          */
         inline static PixelGrayscale get4BitGrayscale(Pixel _8BitGrayScale);
-
     };
 
     // Inline method implementations
@@ -116,5 +114,3 @@ namespace PiAlarm::gfx {
     }
 
 } // namespace PiAlarm::gfx
-
-#endif //SDD1322BUFFER_H

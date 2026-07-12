@@ -1,5 +1,4 @@
-#ifndef ALARMMANAGER_H
-#define ALARMMANAGER_H
+#pragma once
 
 #include <chrono>
 #include <optional>
@@ -176,7 +175,6 @@ namespace PiAlarm::model::manager {
          */
         [[nodiscard]]
         Time getAlarmRingWindowEnd(const Alarm& alarm) const;
-
     };
 
     // Inline method implementation
@@ -186,5 +184,3 @@ namespace PiAlarm::model::manager {
     }
 
 } // namespace PiAlarm::model::manager
-
-#endif //ALARMMANAGER_H

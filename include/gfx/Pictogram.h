@@ -1,5 +1,4 @@
-#ifndef PIALARM_PICTOGRAM_H
-#define PIALARM_PICTOGRAM_H
+#pragma once
 
 #include "gfx/Bitmap.h"
 
@@ -58,7 +57,6 @@ namespace PiAlarm::gfx {
          * @return The grayscale pixel value (0-255).
          */
         inline static Pixel rgbToGray(uint8_t r, uint8_t g, uint8_t b);
-
     };
 
     // Inline methods implementation
@@ -84,5 +82,3 @@ namespace PiAlarm::gfx {
     }
 
 } // namespace PiAlarm::gfx
-
-#endif //PIALARM_PICTOGRAM_H

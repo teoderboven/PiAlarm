@@ -1,5 +1,4 @@
-#ifndef MAINCLOCKVIEW_H
-#define MAINCLOCKVIEW_H
+#pragma once
 
 #include <string>
 #include <vector>
@@ -71,9 +70,6 @@ namespace PiAlarm::view::console {
          */
         [[nodiscard]]
         std::string getAlarmStatus() const;
-
     };
 
 } // namespace PiAlarm::view::console
-
-#endif //MAINCLOCKVIEW_H

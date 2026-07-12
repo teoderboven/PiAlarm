@@ -1,5 +1,4 @@
-#ifndef BITMAP_H
-#define BITMAP_H
+#pragma once
 
 #include <vector>
 #include <algorithm>
@@ -49,7 +48,6 @@ namespace PiAlarm::gfx {
          * @param value The pixel value to fill the bitmap with (0-255)
          */
         inline void fill(Pixel value);
-
     };
 
     inline Bitmap::Bitmap(size_t width, size_t height)
@@ -69,5 +67,3 @@ namespace PiAlarm::gfx {
     }
 
 } // namespace PiAlarm::gfx
-
-#endif //BITMAP_H

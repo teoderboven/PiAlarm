@@ -1,5 +1,4 @@
-#ifndef GPIO_H
-#define GPIO_H
+#pragma once
 
 #ifdef RASPBERRY_PI
 
@@ -196,7 +195,6 @@ namespace PiAlarm::hardware {
          * @throws std::runtime_error if no event has occurred or if the line is not set for edge detection.
          */
         GPIOEvent readEvent() const;
-
     };
 
     // Inline methods implementations
@@ -219,4 +217,3 @@ namespace PiAlarm::hardware {
 } // namespace PiAlarm::hardware
 
 #endif // RASPBERRY_PI
-#endif //GPIO_H

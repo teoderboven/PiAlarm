@@ -1,5 +1,4 @@
-#ifndef PIALARM_ARGSUTILS_HPP
-#define PIALARM_ARGSUTILS_HPP
+#pragma once
 
 #include <iostream>
 #include <string>
@@ -88,5 +87,3 @@ namespace PiAlarm::utils {
     }
 
 } // namespace PiAlarm::utils
-
-#endif //PIALARM_ARGSUTILS_HPP

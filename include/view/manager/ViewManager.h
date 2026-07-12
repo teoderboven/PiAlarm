@@ -1,5 +1,4 @@
-#ifndef VIEWMANAGER_H
-#define VIEWMANAGER_H
+#pragma once
 
 #include <memory>
 #include <vector>
@@ -134,5 +133,3 @@ namespace PiAlarm::view {
     }
 
 } // namespace PiAlarm::view
-
-#endif //VIEWMANAGER_H

@@ -1,5 +1,4 @@
-#ifndef PIALARM_VIEWFORMATUTILS_H
-#define PIALARM_VIEWFORMATUTILS_H
+#pragma once
 
 #include <string>
 #include <sstream>
@@ -139,5 +138,3 @@ namespace PiAlarm::utils {
     }
 
 } // namespace PiAlarm::utils
-
-#endif //PIALARM_VIEWFORMATUTILS_H

@@ -1,5 +1,4 @@
-#ifndef ALARMSTATE_HPP
-#define ALARMSTATE_HPP
+#pragma once
 
 #include <mutex>
 #include <optional>
@@ -110,7 +109,6 @@ namespace PiAlarm::model {
          * @return The number of snoozes.
          */
         inline int getSnoozeCount() const;
-
     };
 
     // Inline method implementations
@@ -152,5 +150,3 @@ namespace PiAlarm::model {
     }
 
 } // namespace PiAlarm::model
-
-#endif //ALARMSTATE_HPP

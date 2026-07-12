@@ -1,5 +1,4 @@
-#ifndef PIALARM_SCD41SERVICE_H
-#define PIALARM_SCD41SERVICE_H
+#pragma once
 
 #ifdef SENSOR_SCD41
 
@@ -54,4 +53,3 @@ namespace PiAlarm::service {
 } // namespace PiAlarm::service
 
 #endif // SENSOR_SCD41
-#endif // PIALARM_SCD41SERVICE_H

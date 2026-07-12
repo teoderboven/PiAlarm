@@ -1,5 +1,4 @@
-#ifndef CANVAS_H
-#define CANVAS_H
+#pragma once
 
 #include <memory>
 
@@ -269,7 +268,6 @@ namespace PiAlarm::gfx {
          * @param value The pixel value to set (0-255).
          */
         void setPixel(size_t x, size_t y, Pixel value);
-
     };
 
     // Inline methods implementation
@@ -307,5 +305,3 @@ namespace PiAlarm::gfx {
     }
 
 } // namespace PiAlarm::gfx
-
-#endif //CANVAS_H

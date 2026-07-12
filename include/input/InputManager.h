@@ -1,5 +1,4 @@
-#ifndef PIALARM_INPUTMANAGER_H
-#define PIALARM_INPUTMANAGER_H
+#pragma once
 
 #include <vector>
 #include <chrono>
@@ -133,9 +132,6 @@ namespace PiAlarm::input {
          * @param now The current time point for event timestamping
          */
         static void generateRepeats(ManagedButton& button, EventList &events, now_type now);
-
     };
 
 } // namespace PiAlarm::input
-
-#endif //PIALARM_INPUTMANAGER_H

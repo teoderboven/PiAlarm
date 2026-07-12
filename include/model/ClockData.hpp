@@ -1,5 +1,4 @@
-#ifndef CLOCKDATA_HPP
-#define CLOCKDATA_HPP
+#pragma once
 
 #include <mutex>
 
@@ -43,7 +42,6 @@ namespace PiAlarm::model {
          */
         [[nodiscard]]
         inline Time getCurrentTime() const;
-
     };
 
     // inline method implementation
@@ -55,5 +53,3 @@ namespace PiAlarm::model {
     }
 
 } // namespace PiAlarm::model
-
-#endif //CLOCKDATA_HPP

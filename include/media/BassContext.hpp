@@ -1,5 +1,4 @@
-#ifndef BASSCONTEXT_H
-#define BASSCONTEXT_H
+#pragma once
 
 #include "bass.h"
 #include <mutex>
@@ -39,7 +38,6 @@ namespace PiAlarm::media {
         BassContext& operator=(const BassContext&) = delete; ///< No copy assignment operator
         BassContext(BassContext&&) = delete; ///< No move constructor
         BassContext& operator=(BassContext&&) = delete; ///< No move assignment operator
-
     };
 
     // Methods implementations
@@ -68,5 +66,3 @@ namespace PiAlarm::media {
     }
 
 } // namespace PiAlarm::media
-
-#endif //BASSCONTEXT_H

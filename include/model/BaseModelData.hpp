@@ -1,5 +1,4 @@
-#ifndef MODELDATA_HPP
-#define MODELDATA_HPP
+#pragma once
 
 #include <mutex>
 
@@ -48,9 +47,6 @@ namespace PiAlarm::model {
             }
             return false;
         }
-
     };
 
 } // namespace PiAlarm::model
-
-#endif //MODELDATA_HPP

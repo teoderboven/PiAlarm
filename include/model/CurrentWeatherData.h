@@ -1,5 +1,4 @@
-#ifndef CURRENTWEATHERDATA_H
-#define CURRENTWEATHERDATA_H
+#pragma once
 
 #include "model/BaseModelData.hpp"
 #include "common/Observable.hpp"
@@ -116,7 +115,6 @@ namespace PiAlarm::model {
          */
         [[nodiscard]]
         inline bool isValid() const;
-
     };
 
     // Inline method implementations
@@ -152,5 +150,3 @@ namespace PiAlarm::model {
     }
 
 } // namespace PiAlarm::model
-
-#endif //CURRENTWEATHERDATA_H

@@ -1,5 +1,4 @@
-#ifndef ISERVICE_H
-#define ISERVICE_H
+#pragma once
 
 /**
  * @namespace PiAlarm::service
@@ -58,9 +57,6 @@ namespace PiAlarm::service {
          */
         [[nodiscard]]
         virtual bool isPaused() const = 0;
-
     };
 
 } // namespace PiAlarm::service
-
-#endif //ISERVICE_H

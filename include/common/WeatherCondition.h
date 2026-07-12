@@ -1,5 +1,4 @@
-#ifndef WEATHERCONDITION_H
-#define WEATHERCONDITION_H
+#pragma once
 
 namespace PiAlarm::common {
 
@@ -28,5 +27,3 @@ namespace PiAlarm::common {
     };
 
 } // namespace PiAlarm::common
-
-#endif //WEATHERCONDITION_H

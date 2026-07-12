@@ -1,5 +1,4 @@
-#ifndef PIALARM_HASINPUTEVENTHANDLER_H
-#define PIALARM_HASINPUTEVENTHANDLER_H
+#pragma once
 
 #include "input/InputEvent.h"
 
@@ -27,9 +26,6 @@ namespace PiAlarm::input {
          * @param event The input event to handle.
          */
         virtual void handleInputEvent(const InputEvent& event) = 0;
-
     };
 
 } // namespace PiAlarm::input
-
-#endif //PIALARM_HASINPUTEVENTHANDLER_H

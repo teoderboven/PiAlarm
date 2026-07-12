@@ -1,5 +1,4 @@
-#ifndef PIALARM_BME280SERVICE_H
-#define PIALARM_BME280SERVICE_H
+#pragma once
 
 #ifdef SENSOR_BME280
 
@@ -50,4 +49,3 @@ namespace PiAlarm::service {
 } // namespace PiAlarm::service
 
 #endif // SENSOR_BME280
-#endif //PIALARM_BME280SERVICE_H

@@ -1,5 +1,4 @@
-#ifndef SPI_H
-#define SPI_H
+#pragma once
 
 #ifdef RASPBERRY_PI
 
@@ -59,10 +58,8 @@ namespace PiAlarm::hardware {
          * @throws std::runtime_error if the write operation fails.
          */
         void writeData(const uint8_t* data, size_t length);
-
     };
 
 } // namespace PiAlarm::hardware
 
 #endif // RASPBERRY_PI
-#endif //SPI_H

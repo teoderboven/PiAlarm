@@ -1,6 +1,4 @@
-#ifndef VIEWOUTPUTCONFIG_H
-#define VIEWOUTPUTCONFIG_H
-
+#pragma once
 
 #if defined(DISPLAY_SSD1322)
     #include "hardware/SSD1322.h"
@@ -15,6 +13,3 @@
 #else
     #error "No display type defined"
 #endif
-
-
-#endif //VIEWOUTPUTCONFIG_H

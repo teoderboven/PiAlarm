@@ -1,5 +1,4 @@
-#ifndef BASESERVICE_H
-#define BASESERVICE_H
+#pragma once
 
 #include <atomic>
 #include <thread>
@@ -199,9 +198,6 @@ namespace PiAlarm::service {
          * to guarantee a clean termination of the worker thread.
          */
         void executeStop();
-
     };
 
 } // namespace PiAlarm::service
-
-#endif //BASESERVICE_H

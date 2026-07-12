@@ -1,5 +1,4 @@
-#ifndef IVIEW_H
-#define IVIEW_H
+#pragma once
 
 #include "display/ViewOutputConfig.h"
 #include "input/HasInputEventHandler.h"
@@ -59,10 +58,6 @@ namespace PiAlarm::view {
          * @param event The input event to handle.
          */
         virtual void handleInputEvent(const input::InputEvent& event) override = 0;
-
     };
 
 } // namespace PiAlarm::view
-
-
-#endif //IVIEW_H

@@ -1,5 +1,4 @@
-#ifndef WEATHERAPICLIENT_H
-#define WEATHERAPICLIENT_H
+#pragma once
 
 #include <string>
 #include <optional>
@@ -157,9 +156,6 @@ namespace PiAlarm::provider {
          */
         [[nodiscard]]
         static WeatherDTO extractDto(const nlohmann::json& json);
-
     };
 
 } // namespace PiAlarm::provider
-
-#endif //WEATHERAPICLIENT_H

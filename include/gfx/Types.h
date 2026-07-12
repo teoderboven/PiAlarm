@@ -1,5 +1,4 @@
-#ifndef TYPES_H
-#define TYPES_H
+#pragma once
 
 #include <cstdint> // For uint8_t & uint32_t
 #include <string>
@@ -20,5 +19,3 @@ namespace PiAlarm::gfx {
     using UTF8Char = std::string; ///< Type alias for a UTF-8 encoded character, represented as a string.
 
 } // namespace PiAlarm::gfx
-
-#endif //TYPES_H

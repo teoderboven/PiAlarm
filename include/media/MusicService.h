@@ -1,5 +1,4 @@
-#ifndef MUSICSERVICE_H
-#define MUSICSERVICE_H
+#pragma once
 
 #include <filesystem>
 
@@ -49,7 +48,6 @@ namespace PiAlarm::media {
          * @return True if the music player is running, false otherwise.
          */
         inline bool isRunning() const;
-
     };
 
     // Inline method implementation
@@ -62,5 +60,3 @@ namespace PiAlarm::media {
         return musicPlayer_.isRunning();
     }
 } // namespace PiAlarm::media
-
-#endif //MUSICSERVICE_H

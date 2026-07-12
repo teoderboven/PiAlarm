@@ -1,5 +1,4 @@
-#ifndef CO2_DATA_HPP
-#define CO2_DATA_HPP
+#pragma once
 
 #include <mutex>
 
@@ -89,7 +88,6 @@ namespace PiAlarm::model {
          */
         [[nodiscard]]
         inline bool isValid() const;
-
     };
 
     // inline methods implementations
@@ -115,5 +113,3 @@ namespace PiAlarm::model {
     }
 
 } // namespace PiAlarm::model
-
-#endif //CO2_DATA_HPP

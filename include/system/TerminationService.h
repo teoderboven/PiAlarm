@@ -1,5 +1,4 @@
-#ifndef PIALARM_TERMINATIONSERVICE_H
-#define PIALARM_TERMINATIONSERVICE_H
+#pragma once
 
 #include <functional>
 #include <vector>
@@ -79,5 +78,3 @@ private:
 };
 
 } // namespace PiAlarm::system
-
-#endif //PIALARM_TERMINATIONSERVICE_H

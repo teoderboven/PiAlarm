@@ -1,5 +1,4 @@
-#ifndef PIALARM_GLYPH_H
-#define PIALARM_GLYPH_H
+#pragma once
 
 #include <utility>
 #include "gfx/Bitmap.h"
@@ -51,5 +50,3 @@ namespace PiAlarm::gfx {
     };
 
 } // namespace PiAlarm::gfx
-
-#endif //PIALARM_GLYPH_H

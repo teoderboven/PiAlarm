@@ -1,5 +1,4 @@
-#ifndef PIALARM_TTFONTCACHE_H
-#define PIALARM_TTFONTCACHE_H
+#pragma once
 
 #include <memory>
 #include <string>
@@ -53,9 +52,6 @@ namespace PiAlarm::gfx {
          * @return A string representing the unique key for the font.
          */
         static std::string makeKey(const std::string& fontPath, int pixelHeight);
-
     };
 
 } // namespace PiAlarm::gfx
-
-#endif //PIALARM_TTFONTCACHE_H

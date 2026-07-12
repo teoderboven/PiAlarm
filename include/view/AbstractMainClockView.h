@@ -1,5 +1,4 @@
-#ifndef PIALARM_ABSTRACTMAINCLOCKVIEW_H
-#define PIALARM_ABSTRACTMAINCLOCKVIEW_H
+#pragma once
 
 #include "view/AbstractObserverView.h"
 #include "model/AlarmsData.hpp"
@@ -81,9 +80,6 @@ namespace PiAlarm::view {
          * @param renderer The renderer to use for displaying the view.
          */
         virtual void render(RenderType& renderer) const override = 0;
-
     };
 
 } // namespace PiAlarm::view
-
-#endif //PIALARM_ABSTRACTMAINCLOCKVIEW_H

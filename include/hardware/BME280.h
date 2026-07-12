@@ -1,5 +1,4 @@
-#ifndef PIALARM_BME280_H
-#define PIALARM_BME280_H
+#pragma once
 
 #ifdef RASPBERRY_PI
 
@@ -180,10 +179,8 @@ namespace PiAlarm::hardware {
          */
         [[nodiscard]]
         uint32_t compensateHumidity(int32_t adc_H) const;
-
     };
 
 } // namespace PiAlarm::hardware
 
 #endif // RASPBERRY_PI
-#endif //PIALARM_BME280_H

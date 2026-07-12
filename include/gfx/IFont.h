@@ -1,5 +1,4 @@
-#ifndef FONT_H
-#define FONT_H
+#pragma once
 
 #include "gfx/Types.h"
 #include "gfx/Glyph.h"
@@ -59,9 +58,6 @@ namespace PiAlarm::gfx {
          */
         [[nodiscard]]
         virtual int getLineHeight() const = 0;
-
     };
 
 } // namespace PiAlarm::gfx
-
-#endif //FONT_H

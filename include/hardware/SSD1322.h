@@ -1,5 +1,4 @@
-#ifndef SSD1322_H
-#define SSD1322_H
+#pragma once
 
 #ifdef RASPBERRY_PI
 
@@ -205,4 +204,3 @@ namespace PiAlarm::hardware {
 } // namespace PiAlarm::hardware
 
 #endif // RASPBERRY_PI
-#endif //SSD1322_H

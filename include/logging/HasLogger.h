@@ -1,5 +1,4 @@
-#ifndef HASLOGGER_H
-#define HASLOGGER_H
+#pragma once
 
 #include <memory>
 #include <string>
@@ -61,9 +60,6 @@ namespace PiAlarm::logging {
          * It creates a log directory if it does not exist and configures the logger with the specified log level.
          */
         static void init_global_logger();
-
     };
 
 } // namespace PiAlarm::logging
-
-#endif //HASLOGGER_H

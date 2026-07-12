@@ -1,5 +1,4 @@
-#ifndef TRUETYPEFONT_H
-#define TRUETYPEFONT_H
+#pragma once
 
 #include <ft2build.h>
 #include FT_FREETYPE_H
@@ -63,7 +62,6 @@ namespace PiAlarm::gfx {
         inline int getDescender() const override;
         [[nodiscard]]
         inline int getLineHeight() const override;
-
     };
 
     // inline methods implementation
@@ -91,5 +89,3 @@ namespace PiAlarm::gfx {
     }
 
 } // namespace PiAlarm::gfx
-
-#endif //TRUETYPEFONT_H

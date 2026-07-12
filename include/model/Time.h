@@ -1,5 +1,4 @@
-#ifndef TIME_H
-#define TIME_H
+#pragma once
 
 #include <string>
 #include <chrono>
@@ -139,7 +138,6 @@ namespace PiAlarm::model {
          */
         template<typename Rep, typename Period>
         Time operator-(const std::chrono::duration<Rep, Period>& duration) const;
-
     };
 
     std::ostream& operator<<(std::ostream& os, const Time& time);
@@ -206,5 +204,3 @@ namespace PiAlarm::model {
     }
 
 } // namespace PiAlarm::model
-
-#endif // TIME_H

@@ -1,5 +1,4 @@
-#ifndef PIALARM_MAINCLOCKVIEW_H
-#define PIALARM_MAINCLOCKVIEW_H
+#pragma once
 
 #include "model/CO2Data.hpp"
 #include "view/AbstractMainClockView.h"
@@ -170,9 +169,6 @@ namespace PiAlarm::view::ssd1322 {
             const std::string &humidityText,
             const std::string &indicator
         ) const;
-
     };
 
 } // namespace PiAlarm::view::ssd1322
-
-#endif //PIALARM_MAINCLOCKVIEW_H

@@ -1,5 +1,4 @@
-#ifndef PIALARM_INPUTEVENT_H
-#define PIALARM_INPUTEVENT_H
+#pragma once
 
 namespace PiAlarm::input {
 
@@ -30,5 +29,3 @@ namespace PiAlarm::input {
     };
 
 } // namespace PiAlarm::input
-
-#endif //PIALARM_INPUTEVENT_H

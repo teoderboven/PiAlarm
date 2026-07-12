@@ -1,5 +1,4 @@
-#ifndef PIALARM_APPLICATION_H
-#define PIALARM_APPLICATION_H
+#pragma once
 
 #include "controller/AlarmController.h"
 #include "display/ViewOutputConfig.h"
@@ -196,9 +195,6 @@ namespace PiAlarm {
 
         // trigger
         trigger::AlarmSoundTrigger alarmSoundTrigger;           ///< Trigger to manage alarm sounds based on the alarm state
-
     };
 
 } // namespace PiAlarm
-
-#endif //PIALARM_APPLICATION_H
