@@ -29,7 +29,7 @@ namespace PiAlarm::media {
         std::atomic<bool> running_; ///< Flag to indicate if the player is running.
         std::thread playerThread_; ///< Thread running the music playback loop.
 
-        static constexpr float FADE_DURATION = 3.0f; ///< Duration for volume fade in seconds.
+        static constexpr float FADE_DURATION {3.0f}; ///< Duration for volume fade in seconds.
 
     public:
         using Track = fs::path; ///< Type alias for a single audio track path.

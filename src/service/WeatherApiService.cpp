@@ -33,13 +33,13 @@ namespace PiAlarm::service {
 
         failureCount_++;
 
-        if (failureCount_ >= WEATHER_API_SERVICE_MAX_FAILURE_COUNT) {
-            logger().critical("Failed to fetch weather data {} times in a row. Invalidating model.", WEATHER_API_SERVICE_MAX_FAILURE_COUNT);
+        if (failureCount_ >= MAX_FAILURE_COUNT) {
+            logger().critical("Failed to fetch weather data {} times in a row. Invalidating model.", MAX_FAILURE_COUNT);
 
             currentWeatherData_.setValid(false);
         }
         else {
-            logger().warn("Failed to fetch weather data. Attempt {} of {}.", failureCount_, WEATHER_API_SERVICE_MAX_FAILURE_COUNT);
+            logger().warn("Failed to fetch weather data. Attempt {} of {}.", failureCount_, MAX_FAILURE_COUNT);
         }
     }
 
@@ -54,21 +54,21 @@ namespace PiAlarm::service {
         );
     }
 
-    std::chrono::milliseconds WeatherApiService::getDurationUntilNextAlignment(const int& minuteAlignment){
+    std::chrono::milliseconds WeatherApiService::getDurationUntilNextAlignment(std::chrono::minutes minuteAlignment) {
         using namespace std::chrono;
 
-        // Get current time as system_clock::time_point
-        const auto now {floor<seconds>(system_clock::now())};
+        const auto now{floor<seconds>(system_clock::now())};
 
-        // Compute time since beginning of the hour
-        const auto minutesSinceHour {duration_cast<minutes>(now.time_since_epoch()) % 60min};
-        const auto secondsSinceHour {duration_cast<seconds>(now.time_since_epoch()) % 1min};
+        const auto minutesSinceHour{duration_cast<minutes>(now.time_since_epoch()) % 1h};
+        const auto secondsSinceMinute{duration_cast<seconds>(now.time_since_epoch()) % 1min};
 
         // Compute time until next alignment
-        int minutes_to_next {minuteAlignment - (static_cast<int>(minutesSinceHour.count()) % minuteAlignment)};
-        if (minutes_to_next == 0) minutes_to_next = minuteAlignment;
+        auto minutesToNext{minuteAlignment - (minutesSinceHour % minuteAlignment)};
+        if (minutesToNext == 0min) {
+            minutesToNext = minuteAlignment;
+        }
 
-        const auto sleepDuration {minutes{minutes_to_next} - secondsSinceHour};
+        const auto sleepDuration{minutesToNext - secondsSinceMinute};
 
         return duration_cast<milliseconds>(sleepDuration);
     }

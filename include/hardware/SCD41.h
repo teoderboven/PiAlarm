@@ -7,16 +7,7 @@
 #include <cstdint>
 #include <cmath>
 
-// SCD41 Command Definitions
-// from https://download.mikroe.com/documents/datasheets/SCD41%20Datasheet.pdf section 3.4
-#define SCD41_START_PERIODIC_MEASUREMENT 0x21B1
-#define SCD41_START_LOW_POWER_PERIODIC_MEASUREMENT 0x21AC
-#define SCD41_STOP_PERIODIC_MEASUREMENT 0x3F86
-#define SCD41_GET_TEMPERATURE_OFFSET 0x2318
-#define SCD41_SET_TEMPERATURE_OFFSET 0x241D
-#define SCD41_SET_AMBIENT_PRESSURE 0xE000
-#define SCD41_GET_DATA_READY_STATUS 0xE4B8
-#define SCD41_READ_MEASUREMENT 0xEC05
+// SCD41 datasheet: https://download.mikroe.com/documents/datasheets/SCD41%20Datasheet.pdf
 
 namespace PiAlarm::hardware {
 
@@ -30,7 +21,7 @@ namespace PiAlarm::hardware {
         mutable I2C i2c_; ///< The I2C interface used for communication
 
     public:
-        static constexpr uint8_t I2C_ADDRESS = 0x62; ///< I2C address of the SCD41 sensor
+        static constexpr uint8_t I2C_ADDRESS {0x62}; ///< I2C address of the SCD41 sensor
 
         /**
          * @brief Structure to hold measurement data from the SCD41 sensor.
@@ -98,19 +89,31 @@ namespace PiAlarm::hardware {
         void setAmbientPressure(uint16_t pressure_hpa);
 
     private:
+        using Command = uint16_t; ///< Type alias for command word
+
+        // SCD41 Command Definitions
+        // datasheet section 3.4
+        static constexpr Command START_PERIODIC_MEASUREMENT {0x21B1};
+        static constexpr Command START_LOW_POWER_PERIODIC_MEASUREMENT {0x21AC};
+        static constexpr Command STOP_PERIODIC_MEASUREMENT {0x3F86};
+        static constexpr Command GET_TEMPERATURE_OFFSET {0x2318};
+        static constexpr Command SET_TEMPERATURE_OFFSET {0x241D};
+        static constexpr Command SET_AMBIENT_PRESSURE {0xE000};
+        static constexpr Command GET_DATA_READY_STATUS {0xE4B8};
+        static constexpr Command READ_MEASUREMENT {0xEC05};
 
         /**
          * @brief Sends a command to the SCD41 sensor.
          * @param command 16-bit command to send.
          */
-        void sendCommand(uint16_t command) const;
+        void sendCommand(Command command) const;
 
         /**
          * @brief Sends a command followed by a 16-bit data word and its CRC.
          * @param command 16-bit command to send.
          * @param data 16-bit data word.
          */
-        void sendCommand(uint16_t command, uint16_t data);
+        void sendCommand(Command command, uint16_t data);
 
         /**
          * @brief Reads a response from the SCD41 sensor.

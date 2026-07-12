@@ -93,10 +93,10 @@ namespace PiAlarm::hardware {
 
     public:
 
-        static constexpr int LOW = 0; ///< Constant for low value (0)
-        static constexpr int HIGH = 1; ///< Constant for high value (1)
+        static constexpr int LOW {0}; ///< Constant for low value (0)
+        static constexpr int HIGH {1}; ///< Constant for high value (1)
 
-        static constexpr auto CONSUMER = "PiAlarm"; ///< Constant for consumer name (used in GPIO requests)
+        static constexpr auto CONSUMER {"PiAlarm"}; ///< Constant for consumer name (used in GPIO requests)
 
         /**
          * Constructs a GPIO object for a specific chip and line number.

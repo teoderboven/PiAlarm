@@ -4,13 +4,6 @@
 #include "model/CurrentWeatherData.h"
 #include "provider/WeatherApiClient.h"
 
-#ifndef WEATHER_API_SERVICE_MAX_FAILURE_COUNT
-    #define WEATHER_API_SERVICE_MAX_FAILURE_COUNT 2
-#endif
-#ifndef WEATHER_API_SERVICE_MINUTE_ALIGNMENT
-    #define WEATHER_API_SERVICE_MINUTE_ALIGNMENT 5
-#endif
-
 namespace PiAlarm::service {
 
     /**
@@ -21,10 +14,13 @@ namespace PiAlarm::service {
      * and updates the CurrentWeatherData model with the fetched information.
      */
     class WeatherApiService final : public BaseService {
-        model::CurrentWeatherData &currentWeatherData_;         ///< Reference to the CurrentWeatherData model to update
-        const provider::WeatherApiClient weatherApiClient_;     ///< Client for fetching weather data
+        model::CurrentWeatherData &currentWeatherData_; ///< Reference to the CurrentWeatherData model to update
+        const provider::WeatherApiClient weatherApiClient_; ///< Client for fetching weather data
 
-        int failureCount_ = 0;      ///< Counter for consecutive failures in fetching weather data
+        static constexpr int MAX_FAILURE_COUNT {2}; ///< Maximum allowed consecutive failures before logging an error
+        static constexpr std::chrono::minutes MINUTE_ALIGNMENT {5}; ///< Minute alignment for periodic updates
+
+        int failureCount_ = 0; ///< Counter for consecutive failures in fetching weather data
 
     public:
 
@@ -57,7 +53,7 @@ namespace PiAlarm::service {
          * @return The duration until the next alignment in milliseconds.
          */
         std::chrono::milliseconds updateInterval() const override {
-            return getDurationUntilNextAlignment(WEATHER_API_SERVICE_MINUTE_ALIGNMENT);
+            return getDurationUntilNextAlignment(MINUTE_ALIGNMENT);
         }
 
     private:
@@ -88,9 +84,10 @@ namespace PiAlarm::service {
          * This method calculates the duration until the next alignment based on a specified minute alignment.
          * The service will update at regular intervals aligned to this minute.
          *
+         * @param minuteAlignment The minute alignment for periodic updates.
          * @return The duration until the next alignment in milliseconds.
          */
-        static std::chrono::milliseconds getDurationUntilNextAlignment(const int& minuteAlignment);
+        static std::chrono::milliseconds getDurationUntilNextAlignment(std::chrono::minutes minuteAlignment);
     };
 
 } // namespace PiAlarm::service

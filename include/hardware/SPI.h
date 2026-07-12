@@ -4,8 +4,6 @@
 
 #include <string>
 
-#define SPI_MAX_DATA_SIZE 4096 // Maximum data size for SPI transfer
-
 namespace PiAlarm::hardware {
 
     /**
@@ -22,6 +20,8 @@ namespace PiAlarm::hardware {
      */
     class SPI {
         int fd_ {-1}; ///< File descriptor for the SPI device
+
+        static constexpr size_t MAX_DATA_SIZE {4096}; ///< Maximum data size for SPI transfer
 
     public:
 

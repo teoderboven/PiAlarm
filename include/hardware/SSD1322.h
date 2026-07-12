@@ -3,44 +3,14 @@
 #ifdef RASPBERRY_PI
 
 #include <cstdint>
-#include <array>
 
 #include "hardware/GPIO.h"
 #include "hardware/SPI.h"
 
-// SSD1322 Command Definitions
-// copied from https://github.com/venice1200/SSD1322_for_Adafruit_GFX/blob/v0.1.2/SSD1322_for_Adafruit_GFX.h
-#define SSD1322_SETCOLUMN 0x15
-#define SSD1322_ENWRITEDATA 0x5C               // Enable Write Data
-#define SSD1322_SETROW 0x75
-#define SSD1322_SEGREMAP 0xA0
-#define SSD1322_SETSTARTLINE 0xA1
-#define SSD1322_SETDISPLAYOFFSET 0xA2
-#define SSD1322_DISPLAYALLOFF 0xA4              // All Pixel OFF in GS level 0
-#define SSD1322_DISPLAYALLON 0xA5               // All Pixel ON in GS level 15
-#define SSD1322_NORMALDISPLAY 0xA6
-#define SSD1322_INVERTDISPLAY 0xA7
-#define SSD1322_ENPARTDISPLAY 0xA8
-#define SSD1322_EXITPARTDISPLAY 0xA9
-#define SSD1322_SETMULTIPLEX 0xCA
-#define SSD1322_FUNCSEL 0xAB
-#define SSD1322_DISPLAYOFF 0xAE
-#define SSD1322_DISPLAYON 0xAF
-#define SSD1322_PHASELEN 0xB1
-#define SSD1322_DISPLAYCLK 0xB3
-#define SSD1322_DISPLAYENHA 0xB4
-#define SSD1322_SETGPIO 0xB5
-#define SSD1322_PRECHARGE2 0xB6
-#define SSD1322_GRAYTABLE 0xB8
-#define SSD1322_PRECHARGE 0xBB
-#define SSD1322_SETVCOM 0xBE
-#define SSD1322_SETCONTRAST 0xC1
-#define SSD1322_MASTERCONTRAST 0xC7
-#define SSD1322_DISPLAYENHB 0xD1
-#define SSD1322_FUNCSELB 0xD5
-#define SSD1322_CMDLOCK 0xFD
-
 namespace PiAlarm::hardware {
+
+    // SSD1322 Datasheet: https://www.hpinfotech.ro/SSD1322.pdf
+    // NHD-3.12-25664UCW2 Datasheet (the physical screen used): https://newhavendisplay.com/content/specs/NHD-3.12-25664UCW2.pdf
 
     // Not using the premade driver, causes it uses AdaFruit GFX library which is not compatible with the current project.
     /**
@@ -63,23 +33,11 @@ namespace PiAlarm::hardware {
         GPIO resetPin_; ///< Reset pin for the SSD1322 display
 
     public:
-        static constexpr size_t DISPLAY_WIDTH = 256; ///< Width of the SSD1322 display in pixels
-        static constexpr size_t DISPLAY_HEIGHT = 64; ///< Height of the SSD1322 display in pixels
-
-    private:
-        /*
-         * COLUMN note:
-         * The SSD1322 ram can contain more columns than the physical display,
-         * so the current column range is from 0x1C to 0x5B to be centered in the display.
-         */
-        static constexpr uint8_t COLUMN_START = 0x1C; ///< Start column for the display buffer (28 in decimal)
-        static constexpr uint8_t COLUMN_END = 0x5B; ///< End column for the display buffer (91 in decimal, 256 pixels / 4 bits per pixel = 64 columns, so 0x5B = 28 + 64 - 1 = 91)
-        static constexpr uint8_t ROW_START = 0x00; ///< Start row for the display buffer
-        static constexpr uint8_t ROW_END = 0x3F; ///< End row for the display buffer (63 in decimal)
-
-    public:
         using CommandByte = uint8_t; ///< Type alias for command byte
         using DataByte = uint8_t; ///< Type alias for data byte
+
+        static constexpr size_t DISPLAY_WIDTH {256}; ///< Width of the SSD1322 display in pixels
+        static constexpr size_t DISPLAY_HEIGHT {64}; ///< Height of the SSD1322 display in pixels
 
         /**
          * @brief Constructs an SSD1322 object, creating and taking ownership of SPI and GPIO resources.
@@ -185,6 +143,47 @@ namespace PiAlarm::hardware {
         void setNormalDisplay();
 
     private:
+        // SSD1322 Command Definitions
+        // Adapted from https://github.com/venice1200/SSD1322_for_Adafruit_GFX/blob/v0.1.2/SSD1322_for_Adafruit_GFX.h
+        static constexpr CommandByte        SETCOLUMN {0x15};
+        static constexpr CommandByte      ENWRITEDATA {0x5C}; // Enable Write Data
+        static constexpr CommandByte           SETROW {0x75};
+        static constexpr CommandByte         SEGREMAP {0xA0};
+        static constexpr CommandByte     SETSTARTLINE {0xA1};
+        static constexpr CommandByte SETDISPLAYOFFSET {0xA2};
+        static constexpr CommandByte    DISPLAYALLOFF {0xA4}; // All Pixel OFF in GS level 0
+        static constexpr CommandByte     DISPLAYALLON {0xA5}; // All Pixel ON in GS level 15
+        static constexpr CommandByte    NORMALDISPLAY {0xA6};
+        static constexpr CommandByte    INVERTDISPLAY {0xA7};
+        static constexpr CommandByte    ENPARTDISPLAY {0xA8};
+        static constexpr CommandByte  EXITPARTDISPLAY {0xA9};
+        static constexpr CommandByte     SETMULTIPLEX {0xCA};
+        static constexpr CommandByte          FUNCSEL {0xAB};
+        static constexpr CommandByte       DISPLAYOFF {0xAE};
+        static constexpr CommandByte        DISPLAYON {0xAF};
+        static constexpr CommandByte         PHASELEN {0xB1};
+        static constexpr CommandByte       DISPLAYCLK {0xB3};
+        static constexpr CommandByte      DISPLAYENHA {0xB4};
+        static constexpr CommandByte          SETGPIO {0xB5};
+        static constexpr CommandByte       PRECHARGE2 {0xB6};
+        static constexpr CommandByte        GRAYTABLE {0xB8};
+        static constexpr CommandByte        PRECHARGE {0xBB};
+        static constexpr CommandByte          SETVCOM {0xBE};
+        static constexpr CommandByte      SETCONTRAST {0xC1};
+        static constexpr CommandByte   MASTERCONTRAST {0xC7};
+        static constexpr CommandByte      DISPLAYENHB {0xD1};
+        static constexpr CommandByte         FUNCSELB {0xD5};
+        static constexpr CommandByte          CMDLOCK {0xFD};
+
+        /*
+         * COLUMN note:
+         * The SSD1322 ram can contain more columns than the physical display,
+         * so the current column range is from 0x1C to 0x5B to be centered in the display.
+         */
+        static constexpr uint8_t COLUMN_START {0x1C}; ///< Start column for the display buffer (28 in decimal)
+        static constexpr uint8_t COLUMN_END {0x5B}; ///< End column for the display buffer (91 in decimal, 256 pixels / 4 bits per pixel = 64 columns, so 0x5B = 28 + 64 - 1 = 91)
+        static constexpr uint8_t ROW_START {0x00}; ///< Start row for the display buffer
+        static constexpr uint8_t ROW_END {0x3F}; ///< End row for the display buffer (63 in decimal)
 
         /**
          * @brief Sets the DC pin to command mode.

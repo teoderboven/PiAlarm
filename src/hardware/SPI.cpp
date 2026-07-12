@@ -65,7 +65,7 @@ namespace PiAlarm::hardware {
         size_t totalWritten = 0;
 
         while (totalWritten < length) {
-            const size_t chunkSize = std::min(static_cast<size_t>(SPI_MAX_DATA_SIZE), length - totalWritten);
+            const size_t chunkSize = std::min(MAX_DATA_SIZE, length - totalWritten);
             const ssize_t bytesWritten = write(fd_, data + totalWritten, chunkSize);
 
             if (bytesWritten != static_cast<ssize_t>(chunkSize)) {

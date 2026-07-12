@@ -69,9 +69,9 @@ namespace PiAlarm::input {
                 : gpio{mapping.gpioLineNumber}, type{mapping.type}, generateRepeats{mapping.generateRepeats} {}
         };
 
-        static constexpr auto REPEAT_DELAY = std::chrono::milliseconds(500);    ///< Delay before auto-repeat starts
-        static constexpr auto REPEAT_INTERVAL = std::chrono::milliseconds(100); ///< Interval between auto-repeat events
-        static constexpr auto DEBOUNCE_DURATION = std::chrono::milliseconds(10); ///< Debounce duration for button presses
+        static constexpr auto REPEAT_DELAY {std::chrono::milliseconds(500)};    ///< Delay before auto-repeat starts
+        static constexpr auto REPEAT_INTERVAL {std::chrono::milliseconds(100)}; ///< Interval between auto-repeat events
+        static constexpr auto DEBOUNCE_DURATION {std::chrono::milliseconds(10)}; ///< Debounce duration for button presses
 
         using now_type = std::chrono::steady_clock::time_point; ///< Alias for the current time point type
 

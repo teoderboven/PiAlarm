@@ -50,16 +50,16 @@ namespace PiAlarm::hardware {
         assert(size == DISPLAY_HEIGHT * (DISPLAY_WIDTH/2)); // Ensure the buffer size matches the expected dimensions
 
         // Set the drawing area to the full display size
-        sendCommand(SSD1322_SETCOLUMN);
+        sendCommand(SETCOLUMN);
         sendData(COLUMN_START); // Start column
         sendData(COLUMN_END); // End column (256 pixels / 4 bits per pixel = 64 columns)
 
-        sendCommand(SSD1322_SETROW);
+        sendCommand(SETROW);
         sendData(ROW_START); // Start row
         sendData(ROW_END); // End row (63)
 
         // Enable graphic data write mode
-        sendCommand(SSD1322_ENWRITEDATA);
+        sendCommand(ENWRITEDATA);
 
         // Send the framebuffer data
         sendData(buffer, size);
@@ -75,80 +75,80 @@ namespace PiAlarm::hardware {
         reset();
 
         // commands documentation: https://www.crystalfontz.com/controllers/datasheet-viewer.php?id=427 (chapter 9 & 10)
-        sendCommand(SSD1322_CMDLOCK);          // 0xFD - Command Lock
+        sendCommand(CMDLOCK);                       // 0xFD - Command Lock
         sendData(0x12);                             // Unlock OLED driver IC
 
-        sendCommand(SSD1322_DISPLAYOFF);       // 0xAE - Display OFF
+        sendCommand(DISPLAYOFF);                    // 0xAE - Display OFF
 
-        sendCommand(SSD1322_DISPLAYCLK);       // 0xB3 - Set Display Clock Divide Ratio/Oscillator Frequency
+        sendCommand(DISPLAYCLK);                    // 0xB3 - Set Display Clock Divide Ratio/Oscillator Frequency
         sendData(0x91);                             // Divide by 2, ~80 FPS
 
-        sendCommand(SSD1322_SETMULTIPLEX);     // 0xCA - Set Multiplex Ratio
+        sendCommand(SETMULTIPLEX);                  // 0xCA - Set Multiplex Ratio
         sendData(0x3F);                             // 1/64
 
-        sendCommand(SSD1322_SETDISPLAYOFFSET); // 0xA2 - Set Display Offset
+        sendCommand(SETDISPLAYOFFSET);              // 0xA2 - Set Display Offset
         sendData(0x00);                             // No offset
 
-        sendCommand(SSD1322_SETSTARTLINE);     // 0xA1 - Set Display Start Line
+        sendCommand(SETSTARTLINE);                  // 0xA1 - Set Display Start Line
         sendData(0x00);                             // Line 0
 
-        sendCommand(SSD1322_SEGREMAP);         // 0xA0 - Set Remap and Dual COM Mode
+        sendCommand(SEGREMAP);                      // 0xA0 - Set Remap and Dual COM Mode
         sendData(0x14);                             // Horizontal increment, nibble remap
         sendData(0x11);                             // Dual COM mode
 
-        sendCommand(SSD1322_SETGPIO);          // 0xB5 - Set GPIO
+        sendCommand(SETGPIO);                       // 0xB5 - Set GPIO
         sendData(0x00);                             // Input disabled
 
-        sendCommand(SSD1322_FUNCSEL);          // 0xAB - Function Selection
+        sendCommand(FUNCSEL);                       // 0xAB - Function Selection
         sendData(0x01);                             // Enable internal VDD regulator
 
-        sendCommand(SSD1322_DISPLAYENHA);      // 0xB4 - Display Enhancement A
+        sendCommand(DISPLAYENHA);                   // 0xB4 - Display Enhancement A
         sendData(0xA0);                             // Enable external VSL
         sendData(0xFD);                             // Enhanced low GS display quality
 
-        sendCommand(SSD1322_MASTERCONTRAST);   // 0xC7 - Master Contrast
+        sendCommand(MASTERCONTRAST);                // 0xC7 - Master Contrast
         sendData(0x0F);                             // Maximum contrast
 
-        sendCommand(SSD1322_PHASELEN);         // 0xB1 - Set Phase Length
+        sendCommand(PHASELEN);                      // 0xB1 - Set Phase Length
         sendData(0xE2);                             // Phase 1: 5 DCLKs, Phase 2: 14 DCLKs
 
-        sendCommand(SSD1322_DISPLAYENHB);      // 0xD1 - Display Enhancement B
+        sendCommand(DISPLAYENHB);                   // 0xD1 - Display Enhancement B
         sendData(0xA2);
         sendData(0x20);
 
-        sendCommand(SSD1322_PRECHARGE);        // 0xBB - Precharge Voltage
+        sendCommand(PRECHARGE);                     // 0xBB - Precharge Voltage
         sendData(0x1F);                             // 0.6 x VCC
 
-        sendCommand(SSD1322_PRECHARGE2);       // 0xB6 - Second Precharge Period
+        sendCommand(PRECHARGE2);                    // 0xB6 - Second Precharge Period
         sendData(0x08);                             // 8 DCLKs
 
-        sendCommand(SSD1322_SETVCOM);          // 0xBE - VCOMH Voltage
+        sendCommand(SETVCOM);                       // 0xBE - VCOMH Voltage
         sendData(0x07);                             // 0.86 x VCC
 
         setNormalDisplay(); // Set normal display mode
 
-        sendCommand(SSD1322_EXITPARTDISPLAY);  // 0xA9 - Exit Partial Display mode
+        sendCommand(EXITPARTDISPLAY);               // 0xA9 - Exit Partial Display mode
 
         setContrast(0x50); // Set default contrast
 
-        sendCommand(SSD1322_DISPLAYON);        // 0xAF - Display ON
+        sendCommand(DISPLAYON);                     // 0xAF - Display ON
     }
 
     void SSD1322::setContrast(uint8_t contrast) {
-        sendCommand(SSD1322_SETCONTRAST);
+        sendCommand(SETCONTRAST);
         sendData(contrast);
     }
 
     void SSD1322::allPixelsOn() {
-        sendCommand(SSD1322_DISPLAYALLON);  // 0xA5
+        sendCommand(DISPLAYALLON);  // 0xA5
     }
 
     void SSD1322::allPixelsOff() {
-        sendCommand(SSD1322_DISPLAYALLOFF); // 0xA4
+        sendCommand(DISPLAYALLOFF); // 0xA4
     }
 
     void SSD1322::setNormalDisplay() {
-        sendCommand(SSD1322_NORMALDISPLAY); // 0xA6
+        sendCommand(NORMALDISPLAY); // 0xA6
     }
 
 } // namespace PiAlarm::hardware

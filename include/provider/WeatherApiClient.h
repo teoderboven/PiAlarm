@@ -10,10 +10,6 @@
 #include "common/WeatherCondition.h"
 #include "logging/HasLogger.h"
 
-
-#define WEATHER_API_BASE_URL "https://www.prevision-meteo.ch/services/json/"
-
-
 /**
  * @namespace PiAlarm::provider
  * @brief Namespace for providers in the PiAlarm application.
@@ -75,6 +71,8 @@ namespace PiAlarm::provider {
         using WeatherResult = std::variant<WeatherDTO, WeatherError>;
 
         const cpr::Url weatherApiUrl_; ///< URL of the weather API endpoint
+
+        static constexpr auto BASE_URL {"https://www.prevision-meteo.ch/services/json/"}; ///< Base URL for the weather API
 
     public:
 

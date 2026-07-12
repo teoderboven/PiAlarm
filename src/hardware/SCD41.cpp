@@ -47,22 +47,22 @@ namespace PiAlarm::hardware {
     }
 
     void SCD41::startPeriodicMeasurement() {
-        sendCommand(SCD41_START_PERIODIC_MEASUREMENT);
+        sendCommand(START_PERIODIC_MEASUREMENT);
         std::this_thread::sleep_for(std::chrono::milliseconds(5));
     }
 
     void SCD41::startLowPowerPeriodicMeasurement() {
-        sendCommand(SCD41_START_LOW_POWER_PERIODIC_MEASUREMENT);
+        sendCommand(START_LOW_POWER_PERIODIC_MEASUREMENT);
         std::this_thread::sleep_for(std::chrono::milliseconds(5));
     }
 
     void SCD41::stopPeriodicMeasurement() {
-        sendCommand(SCD41_STOP_PERIODIC_MEASUREMENT);
+        sendCommand(STOP_PERIODIC_MEASUREMENT);
         std::this_thread::sleep_for(std::chrono::milliseconds(500));
     }
 
     bool SCD41::dataReady() const {
-        sendCommand(SCD41_GET_DATA_READY_STATUS);
+        sendCommand(GET_DATA_READY_STATUS);
         std::this_thread::sleep_for(std::chrono::milliseconds(1));
 
         uint8_t buffer[3];
@@ -75,7 +75,7 @@ namespace PiAlarm::hardware {
     }
 
     SCD41::Measurement SCD41::readMeasurement() const {
-        sendCommand(SCD41_READ_MEASUREMENT);
+        sendCommand(READ_MEASUREMENT);
         std::this_thread::sleep_for(std::chrono::milliseconds(1));
 
         uint8_t buffer[9];
@@ -98,12 +98,12 @@ namespace PiAlarm::hardware {
 
     void SCD41::setTemperatureOffset(float offset_celsius) {
         const uint16_t data = convertTemperatureOffset(offset_celsius);
-        sendCommand(SCD41_SET_TEMPERATURE_OFFSET, data);
+        sendCommand(SET_TEMPERATURE_OFFSET, data);
         std::this_thread::sleep_for(std::chrono::milliseconds(1));
     }
 
     float SCD41::getTemperatureOffset() const {
-        sendCommand(SCD41_GET_TEMPERATURE_OFFSET);
+        sendCommand(GET_TEMPERATURE_OFFSET);
         std::this_thread::sleep_for(std::chrono::milliseconds(1));
 
         uint8_t buffer[3];
@@ -116,7 +116,7 @@ namespace PiAlarm::hardware {
     }
 
     void SCD41::setAmbientPressure(uint16_t pressure_hpa) {
-        sendCommand(SCD41_SET_AMBIENT_PRESSURE, pressure_hpa);
+        sendCommand(SET_AMBIENT_PRESSURE, pressure_hpa);
         std::this_thread::sleep_for(std::chrono::milliseconds(1));
     }
 

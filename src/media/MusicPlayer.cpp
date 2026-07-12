@@ -163,7 +163,7 @@ namespace PiAlarm::media {
     void MusicPlayer::fadeVolume(AudioChannel channel, float start, float end, float duration) {
         if (!channel) return;
 
-        constexpr int steps = 20;
+        constexpr int steps {20};
         for (int i = 0; i <= steps && running_.load(); ++i) {
 
             const float vol = start + (end - start) * (static_cast<float>(i) / steps);

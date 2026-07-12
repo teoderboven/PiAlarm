@@ -6,7 +6,7 @@
 namespace PiAlarm::provider {
 
     WeatherApiClient::WeatherApiClient(const std::string& cityName)
-        : HasLogger{"WeatherApiClient"}, weatherApiUrl_{WEATHER_API_BASE_URL + cityName} {
+        : HasLogger{"WeatherApiClient"}, weatherApiUrl_{std::string{BASE_URL} + cityName} {
     }
 
     WeatherApiClient::WeatherResult WeatherApiClient::fetchCurrentWeather() const {

@@ -15,8 +15,8 @@ namespace PiAlarm::gfx {
      */
     class SDD1322Buffer : public IBuffer {
     public:
-        static constexpr size_t BUFFER_PIXEL_WIDTH = 256; ///< Width of the buffer in pixels
-        static constexpr size_t BUFFER_PIXEL_HEIGHT = 64; ///< Height of the buffer in pixels
+        static constexpr size_t BUFFER_PIXEL_WIDTH {256}; ///< Width of the buffer in pixels
+        static constexpr size_t BUFFER_PIXEL_HEIGHT {64}; ///< Height of the buffer in pixels
 
     private:
         using PixelPairByte = uint8_t; ///< Type alias for a byte representing 2 pixels (4 bits per pixel)

@@ -12,15 +12,15 @@ namespace PiAlarm ::hardware {
     {}
 
     void BME280::reset() {
-        i2c_.writeRegister(BME280_REG_RESET, BME280_RESET_COMMAND);
+        i2c_.writeRegister(REG_RESET, RESET_COMMAND);
         std::this_thread::sleep_for(std::chrono::milliseconds(100));
     }
 
     void BME280::setMode(Mode mode) {
         uint8_t ctrl_meas;
-        i2c_.readRegister(BME280_REG_CTRL_MEAS, &ctrl_meas, 1); // read current reg value
+        i2c_.readRegister(REG_CTRL_MEAS, &ctrl_meas, 1); // read current reg value
         ctrl_meas = (ctrl_meas & 0b11111100) | static_cast<uint8_t>(mode);
-        i2c_.writeRegister(BME280_REG_CTRL_MEAS, ctrl_meas); // rewrite with new mode
+        i2c_.writeRegister(REG_CTRL_MEAS, ctrl_meas); // rewrite with new mode
     }
 
     void BME280::initialize() {
@@ -30,10 +30,10 @@ namespace PiAlarm ::hardware {
     }
 
     void BME280::setOversampling(Oversampling temp, Oversampling press, Oversampling hum) {
-        i2c_.writeRegister(BME280_REG_CTRL_HUM, static_cast<uint8_t>(hum));
+        i2c_.writeRegister(REG_CTRL_HUM, static_cast<uint8_t>(hum));
 
         uint8_t current_ctrl;
-        i2c_.readRegister(BME280_REG_CTRL_MEAS, &current_ctrl, 1);
+        i2c_.readRegister(REG_CTRL_MEAS, &current_ctrl, 1);
         uint8_t current_mode = current_ctrl & 0b00000011;
 
         uint8_t ctrl_meas =
@@ -41,7 +41,7 @@ namespace PiAlarm ::hardware {
             (static_cast<uint8_t>(press) << 2) |
             current_mode;
 
-        i2c_.writeRegister(BME280_REG_CTRL_MEAS, ctrl_meas);
+        i2c_.writeRegister(REG_CTRL_MEAS, ctrl_meas);
 
         currentTempOversampling_ = temp;
         currentPressOversampling_ = press;
@@ -49,8 +49,8 @@ namespace PiAlarm ::hardware {
     }
 
     BME280::Measurement BME280::readMeasurement() const {
-        uint8_t data[BME280_DATA_LENGTH];
-        i2c_.readRegister(BME280_DATA_START, data, BME280_DATA_LENGTH);
+        uint8_t data[DATA_LENGTH];
+        i2c_.readRegister(DATA_START, data, DATA_LENGTH);
 
         int32_t adc_P = (data[0] << 12) | (data[1] << 4) | (data[2] >> 4);
         int32_t adc_T = (data[3] << 12) | (data[4] << 4) | (data[5] >> 4);
@@ -89,8 +89,8 @@ namespace PiAlarm ::hardware {
     }
 
     void BME280::readCalibrationData() {
-        uint8_t buf[BME280_CALIB_DATA_LENGTH];
-        i2c_.readRegister(BME280_CALIB_DATA_START, buf, BME280_CALIB_DATA_LENGTH);
+        uint8_t buf[CALIB_DATA_LENGTH];
+        i2c_.readRegister(CALIB_DATA_START, buf, CALIB_DATA_LENGTH);
 
         calibration_.dig_T1 = buf[1] << 8 | buf[0];
         calibration_.dig_T2 = buf[3] << 8 | buf[2];
@@ -108,8 +108,8 @@ namespace PiAlarm ::hardware {
 
         calibration_.dig_H1 = buf[25];
 
-        uint8_t hbuf[BME280_CALIB_DATA_HUM_LENGTH];
-        i2c_.readRegister(BME280_CALIB_DATA_HUM_START, hbuf, BME280_CALIB_DATA_HUM_LENGTH);
+        uint8_t hbuf[CALIB_DATA_HUM_LENGTH];
+        i2c_.readRegister(CALIB_DATA_HUM_START, hbuf, CALIB_DATA_HUM_LENGTH);
 
         calibration_.dig_H2 = hbuf[1] << 8 | hbuf[0];
         calibration_.dig_H3 = hbuf[2];

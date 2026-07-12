@@ -7,19 +7,7 @@
 
 #include "hardware/I2C.h"
 
-// BME280 register and data definitions
-// https://www.bosch-sensortec.com/media/boschsensortec/downloads/datasheets/bst-bme280-ds002.pdf section 5.3
-#define BME280_CALIB_DATA_START 0x88
-#define BME280_CALIB_DATA_LENGTH 26
-#define BME280_CALIB_DATA_HUM_START 0xE1
-#define BME280_CALIB_DATA_HUM_LENGTH 7
-#define BME280_REG_RESET 0xE0
-#define BME280_RESET_COMMAND 0xB6
-#define BME280_REG_CTRL_HUM 0xF2
-#define BME280_REG_CTRL_MEAS 0xF4
-#define BME280_REG_CONFIG 0xF5
-#define BME280_DATA_START 0xF7 // Pressure MSB register
-#define BME280_DATA_LENGTH 8 // Pressure(3) + Temperature(3) + Humidity(2)
+// BME280 datasheet: https://www.bosch-sensortec.com/media/boschsensortec/downloads/datasheets/bst-bme280-ds002.pdf
 
 namespace PiAlarm::hardware {
 
@@ -34,7 +22,7 @@ namespace PiAlarm::hardware {
         I2C i2c_; ///< The I2C interface used for communication
 
     public:
-        static constexpr uint8_t I2C_ADDRESS = 0x76; ///< I2C address of the BME280 sensor
+        static constexpr uint8_t I2C_ADDRESS {0x76}; ///< I2C address of the BME280 sensor
 
         /**
          * @brief Operating modes for the BME280 sensor.
@@ -117,6 +105,20 @@ namespace PiAlarm::hardware {
         std::chrono::milliseconds getMeasurementDelay() const;
 
     private:
+        // BME280 register and data definitions
+        // datasheet section 5.3
+        static constexpr uint8_t CALIB_DATA_START {0x88};
+        static constexpr size_t  CALIB_DATA_LENGTH {26};
+        static constexpr uint8_t CALIB_DATA_HUM_START {0xE1};
+        static constexpr size_t  CALIB_DATA_HUM_LENGTH {7};
+        static constexpr uint8_t REG_RESET {0xE0};
+        static constexpr uint8_t RESET_COMMAND {0xB6};
+        static constexpr uint8_t REG_CTRL_HUM {0xF2};
+        static constexpr uint8_t REG_CTRL_MEAS {0xF4};
+        static constexpr uint8_t REG_CONFIG {0xF5};
+        static constexpr uint8_t DATA_START {0xF7}; // Pressure MSB register
+        static constexpr size_t  DATA_LENGTH {8}; // Pressure(3) + Temperature(3) + Humidity(2)
+
         Oversampling currentTempOversampling_ = Oversampling::Skipped;  ///< Current oversampling setting for temperature
         Oversampling currentPressOversampling_ = Oversampling::Skipped; ///< Current oversampling setting for pressure
         Oversampling currentHumOversampling_ = Oversampling::Skipped;   ///< Current oversampling setting for humidity
