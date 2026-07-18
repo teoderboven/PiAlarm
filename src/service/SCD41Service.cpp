@@ -14,6 +14,8 @@ namespace PiAlarm::service {
 
     bool SCD41Service::onStart() {
         try {
+            scd41_.setTemperatureOffset(0);
+
             scd41_.stopPeriodicMeasurement(); // Ensure the sensor is stopped before starting a new measurement mode
             scd41_.startLowPowerPeriodicMeasurement(); // 30s response time
 
