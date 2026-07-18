@@ -8,7 +8,7 @@
 #include <cstring>
 #include <cerrno>
 
-#include "hardware/SPI.h"
+#include "SPI.h"
 
 namespace PiAlarm::hardware {
 

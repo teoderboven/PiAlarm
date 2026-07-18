@@ -1,4 +1,4 @@
-#include "model/CurrentIndoorData.hpp"
+#include "CurrentIndoorData.hpp"
 
 namespace PiAlarm::model {
 

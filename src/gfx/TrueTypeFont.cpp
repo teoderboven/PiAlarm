@@ -1,7 +1,7 @@
 #include <stdexcept>
 #include "utf8.h"
 
-#include "gfx/TrueTypeFont.h"
+#include "TrueTypeFont.h"
 
 namespace PiAlarm::gfx {
 

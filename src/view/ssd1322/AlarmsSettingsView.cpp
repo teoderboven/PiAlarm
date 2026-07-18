@@ -1,4 +1,4 @@
-#include "view/ssd1322/AlarmsSettingsView.h"
+#include "AlarmsSettingsView.h"
 #include "gfx/TrueTypeFontCache.h"
 #include "utils/ViewFormatUtils.hpp"
 

@@ -1,6 +1,6 @@
 #ifdef SENSOR_SCD41
 
-#include "service/SCD41Service.h"
+#include "SCD41Service.h"
 
 namespace PiAlarm::service {
     SCD41Service::SCD41Service(

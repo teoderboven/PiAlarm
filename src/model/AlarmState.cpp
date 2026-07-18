@@ -1,4 +1,4 @@
-#include "model/AlarmState.hpp"
+#include "AlarmState.hpp"
 
 namespace PiAlarm::model {
 

@@ -1,4 +1,4 @@
-#include "model/CO2Data.hpp"
+#include "CO2Data.hpp"
 
 namespace PiAlarm::model {
 

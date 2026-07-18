@@ -1,4 +1,4 @@
-#include "trigger/AlarmSoundTrigger.h"
+#include "AlarmSoundTrigger.h"
 
 namespace PiAlarm::trigger {
 

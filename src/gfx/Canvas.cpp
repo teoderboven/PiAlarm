@@ -2,7 +2,7 @@
 #include <algorithm>
 #include "utf8.h"
 
-#include "gfx/Canvas.h"
+#include "Canvas.h"
 
 namespace PiAlarm::gfx {
 

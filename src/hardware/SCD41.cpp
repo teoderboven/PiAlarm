@@ -4,7 +4,7 @@
 #include <stdexcept>
 #include <thread>
 
-#include "hardware/SCD41.h"
+#include "SCD41.h"
 
 namespace PiAlarm::hardware {
 

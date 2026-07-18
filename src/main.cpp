@@ -12,7 +12,6 @@
  * @param argv unused.
  * @return Exit code (never returns except for help)
  */
-// [[noreturn]]
 int main(int argc, char *argv[]) {
     using namespace PiAlarm;
 

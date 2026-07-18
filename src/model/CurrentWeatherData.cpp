@@ -1,4 +1,4 @@
-#include "model/CurrentWeatherData.h"
+#include "CurrentWeatherData.h"
 
 namespace PiAlarm::model {
 

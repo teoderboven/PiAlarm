@@ -8,7 +8,7 @@
 #include <cstring>
 #include <cerrno>
 
-#include "hardware/I2C.h"
+#include "I2C.h"
 
 namespace PiAlarm::hardware {
 

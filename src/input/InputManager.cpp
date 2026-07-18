@@ -1,4 +1,4 @@
-#include "input/InputManager.h"
+#include "InputManager.h"
 
 namespace PiAlarm::input {
 

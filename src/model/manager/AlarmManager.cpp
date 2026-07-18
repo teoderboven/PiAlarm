@@ -1,7 +1,7 @@
 #include <stdexcept>
 #include <cassert>
 
-#include "model/manager/AlarmManager.h"
+#include "AlarmManager.h"
 
 namespace PiAlarm::model::manager {
 

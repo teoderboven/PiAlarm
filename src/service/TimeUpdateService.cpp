@@ -1,6 +1,6 @@
 #include <chrono>
 
-#include "service/TimeUpdateService.h"
+#include "TimeUpdateService.h"
 #include "model/Time.h"
 
 namespace PiAlarm::service {

@@ -86,7 +86,9 @@ else()
     add_compile_definitions(INPUT_NONE)
 endif()
 
+add_subdirectory(common)
 add_subdirectory(controller)
+add_subdirectory(display)
 add_subdirectory(gfx)
 add_subdirectory(hardware)
 add_subdirectory(input)
@@ -97,11 +99,13 @@ add_subdirectory(provider)
 add_subdirectory(service)
 add_subdirectory(system)
 add_subdirectory(trigger)
+add_subdirectory(utils)
 add_subdirectory(view)
 
 add_executable(${PROJECT_NAME}
         main.cpp
         Application.cpp
+        Application.h
 )
 
 set_target_properties(${PROJECT_NAME} PROPERTIES
@@ -120,6 +124,8 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
         PiAlarm_model
         PiAlarm_media
         PiAlarm_system
+        PiAlarm_display
+        PiAlarm_utils
 )
 
 if(DISPLAY_SSD1322)

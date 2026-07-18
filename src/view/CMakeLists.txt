@@ -10,12 +10,24 @@ add_subdirectory(manager)
 add_subdirectory(console)
 add_subdirectory(ssd1322)
 
+set(HEADERS
+        AbstractMainClockView.h
+        AbstractObserverView.h
+        IView.h
+)
+
 set(SOURCES
         AbstractMainClockView.cpp
 )
 
 add_library(${PROJECT_NAME} STATIC
         ${SOURCES}
+        ${HEADERS}
 )
 
-target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+target_link_libraries(${PROJECT_NAME} PRIVATE
+        PiAlarm_model
+        PiAlarm_common
+)
+
+target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/..)

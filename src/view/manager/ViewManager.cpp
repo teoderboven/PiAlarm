@@ -1,5 +1,5 @@
 #include <utility>
-#include "view/manager/ViewManager.h"
+#include "ViewManager.h"
 
 namespace PiAlarm::view {
 

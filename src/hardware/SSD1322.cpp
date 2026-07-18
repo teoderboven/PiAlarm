@@ -1,9 +1,10 @@
 #ifdef RASPBERRY_PI
 
-#include "hardware/SSD1322.h"
 #include <thread>
 #include <chrono>
 #include <cassert>
+
+#include "SSD1322.h"
 
 namespace PiAlarm::hardware {
 

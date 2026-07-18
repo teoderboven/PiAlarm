@@ -1,4 +1,4 @@
-#include "model/ClockData.hpp"
+#include "ClockData.hpp"
 
 namespace PiAlarm::model {
 

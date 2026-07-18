@@ -1,5 +1,5 @@
-#include "gfx/TrueTypeFontCache.h"
-#include "gfx/TrueTypeFont.h"
+#include "TrueTypeFontCache.h"
+#include "TrueTypeFont.h"
 
 namespace PiAlarm::gfx {
 

@@ -5,11 +5,16 @@ project(PiAlarm_logging LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+set(HEADERS
+        HasLogger.h
+)
+
 set(SOURCES
         HasLogger.cpp
 )
 
 add_library(${PROJECT_NAME} STATIC
+        ${HEADERS}
         ${SOURCES}
 )
 
@@ -18,4 +23,4 @@ target_link_libraries(${PROJECT_NAME} PUBLIC
         spdlog::spdlog
 )
 
-target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/..)

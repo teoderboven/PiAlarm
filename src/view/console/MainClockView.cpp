@@ -1,7 +1,7 @@
 #include <iomanip>
 #include <ranges>
 
-#include "view/console/MainClockView.h"
+#include "MainClockView.h"
 #include "utils/consoleDisplayUtils.hpp"
 #include "utils/WeatherUtils.hpp"
 #include "utils/ViewFormatUtils.hpp"

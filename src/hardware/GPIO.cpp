@@ -3,7 +3,8 @@
 #include <stdexcept>
 #include <cerrno>
 #include <cstring>
-#include "hardware/GPIO.h"
+
+#include "GPIO.h"
 
 namespace PiAlarm::hardware {
 

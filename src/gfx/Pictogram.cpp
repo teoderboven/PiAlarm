@@ -1,8 +1,8 @@
 #include <stdexcept>
 #include "lodepng.h"
 
-#include "gfx/Types.h"
-#include "gfx/Pictogram.h"
+#include "Types.h"
+#include "Pictogram.h"
 
 namespace PiAlarm::gfx {
 

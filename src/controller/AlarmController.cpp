@@ -1,4 +1,4 @@
-#include "controller/AlarmController.h"
+#include "AlarmController.h"
 
 namespace PiAlarm::controller {
 

@@ -1,6 +1,6 @@
 #ifdef SENSOR_BME280
 
-#include "service/BME280Service.h"
+#include "BME280Service.h"
 
 namespace PiAlarm::service {
 

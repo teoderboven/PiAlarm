@@ -8,7 +8,7 @@
 #include <spdlog/sinks/stdout_color_sinks.h>
 #include <spdlog/pattern_formatter.h>
 
-#include "logging/HasLogger.h"
+#include "HasLogger.h"
 
 namespace PiAlarm::logging {
 

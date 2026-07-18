@@ -5,12 +5,21 @@ project(PiAlarm_view_console LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+set(HEADERS
+        MainClockView.h
+)
+
 set(SOURCES
         MainClockView.cpp
 )
 
 add_library(${PROJECT_NAME} STATIC
         ${SOURCES}
+        ${HEADERS}
 )
 
-target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+target_link_libraries(${PROJECT_NAME} PRIVATE
+        PiAlarm_utils
+)
+
+target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../..)

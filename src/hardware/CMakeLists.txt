@@ -16,24 +16,36 @@ if (NOT GPIOD_FOUND)
     message(FATAL_ERROR "libgpiod not found. Please install it via 'apt install libgpiod-dev'")
 endif()
 
-set(SOURCES
-        GPIO.cpp
-        SPI.cpp
-        I2C.cpp
-        SSD1322.cpp
-        SCD41.cpp
-        BME280.cpp
+set(HEADERS
+        BME280.h
+        GPIO.h
+        I2C.h
+        SCD41.h
+        SPI.h
+        SSD1322.h
 )
 
-add_library(${PROJECT_NAME} STATIC ${SOURCES})
+set(SOURCES
+        BME280.cpp
+        GPIO.cpp
+        I2C.cpp
+        SCD41.cpp
+        SPI.cpp
+        SSD1322.cpp
+)
 
-target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+add_library(${PROJECT_NAME} STATIC
+        ${SOURCES}
+        ${HEADERS}
+)
+
+target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/..)
 
 # Link the gpiod library
-target_include_directories(${PROJECT_NAME} PUBLIC
+target_include_directories(${PROJECT_NAME} PRIVATE
         ${GPIOD_INCLUDE_DIRS}
 )
 link_directories(${GPIOD_LIBRARY_DIRS})
-target_link_libraries(${PROJECT_NAME} PUBLIC
+target_link_libraries(${PROJECT_NAME} PRIVATE
         ${GPIOD_LIBRARIES}
 )

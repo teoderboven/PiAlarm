@@ -1,6 +1,6 @@
 #include <chrono>
 
-#include "provider/WeatherApiClient.h"
+#include "WeatherApiClient.h"
 #include "utils/WeatherUtils.hpp"
 
 namespace PiAlarm::provider {

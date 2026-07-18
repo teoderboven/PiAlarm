@@ -2,7 +2,7 @@
 #include <random>
 #include <algorithm>
 
-#include "media/MusicPlayer.h"
+#include "MusicPlayer.h"
 
 namespace PiAlarm::media {
 

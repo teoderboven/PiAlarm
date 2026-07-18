@@ -1,4 +1,4 @@
-#include "gfx/SDD1322Buffer.h"
+#include "SDD1322Buffer.h"
 
 namespace PiAlarm::gfx {
 

@@ -1,6 +1,6 @@
 #ifdef RASPBERRY_PI
 
-#include "hardware/BME280.h"
+#include "BME280.h"
 
 #include <thread>
 #include <cmath>

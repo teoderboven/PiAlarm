@@ -1,7 +1,8 @@
-#include "system/TerminationService.h"
 #include <csignal>
 #include <iostream>
 #include <thread>
+
+#include "TerminationService.h"
 
 namespace PiAlarm::system {
 
