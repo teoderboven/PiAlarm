@@ -5,6 +5,7 @@
 #include <gpiod.h>
 #include <chrono>
 #include <string>
+#include <utility>
 
 /**
  * @namespace PiAlarm::hardware
@@ -38,6 +39,28 @@ namespace PiAlarm::hardware {
 
         Type type; ///< The type of edge detected (rising or falling)
         std::chrono::steady_clock::time_point timestamp; ///< The timestamp when the event occurred
+    };
+
+    /**
+     * @struct GPIOParams
+     * @brief Parameters for initializing a GPIO pin.
+     */
+    struct GPIOParams {
+        const std::string chipName; ///< The name of the GPIO chip (e.g., "gpiochip0")
+        unsigned int lineNumber; ///< The line number on the chip to interact with
+
+        /**
+         * @brief Constructs a GPIOPrams object for a specific line number on the default chip ("gpiochip0").
+         * @param lineNumber The line number to interact with.
+         */
+        explicit GPIOParams(unsigned int lineNumber) : chipName{"gpiochip0"}, lineNumber{lineNumber} {}
+
+        /**
+         * @brief Constructs a GPIOParams object with the specified chip name and line number.
+         * @param chipName The name of the GPIO chip (e.g., "gpiochip0").
+         * @param lineNumber The line number on the chip to interact with.
+         */
+        GPIOParams(std::string chipName, unsigned int lineNumber) : chipName{std::move(chipName)}, lineNumber{lineNumber} {}
     };
 
     /**
@@ -99,7 +122,7 @@ namespace PiAlarm::hardware {
         static constexpr auto CONSUMER {"PiAlarm"}; ///< Constant for consumer name (used in GPIO requests)
 
         /**
-         * Constructs a GPIO object for a specific chip and line number.
+         * @brief Constructs a GPIO object for a specific chip and line number.
          * @param chipName The name of the GPIO chip (e.g., "gpiochip0").
          * @param lineNumber The line number on the chip to interact with.
          * @throws std::runtime_error if the chip or line cannot be opened.
@@ -107,14 +130,21 @@ namespace PiAlarm::hardware {
         GPIO(const std::string& chipName, unsigned int lineNumber);
 
         /**
-         * Constructs a GPIO object for a specific line number on the default chip ("gpiochip0").
+         * @brief Constructs a GPIO object for a specific line number on the default chip ("gpiochip0").
          * @param lineNumber The line number to interact with.
          * @throws std::runtime_error if the default chip or line cannot be opened.
          */
-        inline explicit GPIO(unsigned int lineNumber);
+        explicit inline GPIO(unsigned int lineNumber);
 
         /**
-         * Default destructor for GPIO.
+         * @brief Constructs a GPIO object with the specified parameters.
+         * @param params The parameters for constructing the GPIO object.
+         * @throws std::runtime_error if the chip or line cannot be opened.
+         */
+        explicit inline GPIO(const GPIOParams& params);
+
+        /**
+         * @brief Default destructor for GPIO.
          * Cleans up the GPIO chip and line resources.
          */
         ~GPIO();
@@ -125,41 +155,41 @@ namespace PiAlarm::hardware {
         GPIO& operator=(GPIO&&) = delete; ///< No move assignment operator
 
         /**
-         * Gets the current mode of the GPIO line.
+         * @brief Gets the current mode of the GPIO line.
          * @return The current mode (GPIOMode::INPUT or GPIOMode::OUTPUT).
          */
         [[nodiscard]]
         inline GPIOMode getMode() const;
 
         /**
-         * Sets the GPIO line as an output with an initial value.
+         * @brief Sets the GPIO line as an output with an initial value.
          * @param initialValue The initial value to set for the output (0 or 1).
          * @throws std::runtime_error if the line cannot be set as output.
          */
         void setOutput(int initialValue = 0);
 
         /**
-         * Sets the GPIO line as an input.
+         * @brief Sets the GPIO line as an input.
          * @throws std::runtime_error if the line cannot be set as input.
          */
         void setInput();
 
         /**
-         * Sets the GPIO line as an input with edge detection.
+         * @brief Sets the GPIO line as an input with edge detection.
          * @param edge The type of edge detection to set (EdgeType).
          * @throws std::runtime_error if the line cannot be set with edge detection.
          */
         void setInputWithEdgeDetection(EdgeType edge);
 
         /**
-         * Sets the GPIO line to a specific value.
+         * @brief Sets the GPIO line to a specific value.
          * @param value The value to set (0 or 1).
          * @throws std::runtime_error if the line value cannot be set.
          */
         void set(int value);
 
         /**
-         * Gets the current value of the GPIO line.
+         * @brief Gets the current value of the GPIO line.
          * @return The current value of the line (0 or 1).
          * @throws std::runtime_error if the line value cannot be read.
          */
@@ -167,21 +197,21 @@ namespace PiAlarm::hardware {
         int get() const;
 
         /**
-         * Checks if the GPIO line is set to high (1).
+         * @brief Checks if the GPIO line is set to high (1).
          * @return true if the line is high, false otherwise.
          */
         [[nodiscard]]
         inline bool isHigh() const;
 
         /**
-         * Checks if the GPIO line is set to low (0).
+         * @brief Checks if the GPIO line is set to low (0).
          * @return true if the line is low, false otherwise.
          */
         [[nodiscard]]
         inline bool isLow() const;
 
         /**
-         * Waits for an event on the GPIO line.
+         * @brief Waits for an event on the GPIO line.
          * This method blocks until an event occurs or the timeout is reached.
          * @param timeoutMs The maximum time to wait for an event in milliseconds (default is 1000 ms).
          * @return true if an event occurred, false if the timeout was reached.
@@ -190,7 +220,7 @@ namespace PiAlarm::hardware {
         bool waitForEvent(int timeoutMs = 1000) const;
 
         /**
-         * Reads the last event that occurred on the GPIO line.
+         * @brief Reads the last event that occurred on the GPIO line.
          * @return A GPIOEvent struct containing the type of edge and timestamp of the event.
          * @throws std::runtime_error if no event has occurred or if the line is not set for edge detection.
          */
@@ -200,6 +230,9 @@ namespace PiAlarm::hardware {
     // Inline methods implementations
 
     GPIO::GPIO(unsigned int lineNumber) : GPIO{"gpiochip0", lineNumber}
+    {}
+
+    GPIO::GPIO(const GPIOParams& params) : GPIO{params.chipName, params.lineNumber}
     {}
 
     inline GPIO::GPIOMode GPIO::getMode() const {

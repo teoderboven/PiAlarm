@@ -50,7 +50,7 @@ namespace PiAlarm {
 
         // display
         renderer{std::make_unique<gfx::SDD1322Buffer>()},
-        screen{25, 24}, // SSD1322 OLED display
+        screen{hardware::GPIOParams{25}, hardware::GPIOParams{24}}, // SSD1322 OLED display
 
 #elif defined(DISPLAY_CONSOLE)
 
@@ -68,10 +68,10 @@ namespace PiAlarm {
         // input manager
         inputManager{
             {
-                {13, input::ButtonId::Main, false},
-                {12, input::ButtonId::Back, true},
-                {6, input::ButtonId::Next, true},
-                {5, input::ButtonId::Previous, true}
+                {hardware::GPIOParams{13}, input::ButtonId::Main, false},
+                {hardware::GPIOParams{12}, input::ButtonId::Back, true},
+                {hardware::GPIOParams{6}, input::ButtonId::Next, true},
+                {hardware::GPIOParams{5}, input::ButtonId::Previous, true}
             }
         },
 

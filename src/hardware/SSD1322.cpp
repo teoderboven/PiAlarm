@@ -8,13 +8,13 @@
 
 namespace PiAlarm::hardware {
 
-    SSD1322::SSD1322(unsigned int dcLineNumber,
-                     unsigned int resetLineNumber,
+    SSD1322::SSD1322(const GPIOParams& dcLineParams,
+                     const GPIOParams& resetLineParams,
                      uint32_t spiChipSelect,
                      uint32_t spiSpeed)
         : spi_{spiChipSelect, spiSpeed},
-          dcPin_{dcLineNumber},
-          resetPin_{resetLineNumber}
+          dcPin_{dcLineParams},
+          resetPin_{resetLineParams}
     {}
 
     void SSD1322::reset() {

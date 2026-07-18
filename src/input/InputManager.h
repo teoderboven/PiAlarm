@@ -33,12 +33,12 @@ namespace PiAlarm::input {
          * It is used to initialize buttons in the InputManager.
          */
         struct ButtonConfig {
-            unsigned int gpioLineNumber; ///< The GPIO line number for the button.
+            hardware::GPIOParams gpioParams; ///< The GPIO params for the button.
             ButtonId type; ///< The type of button (Main, Back, Left, Right). Used to identify the button in events.
             bool generateRepeats; ///< Whether to generate auto-repeat events for this button
 
-            ButtonConfig(unsigned int gpioLineNumber, ButtonId type, bool generateRepeats = false)
-                : gpioLineNumber{gpioLineNumber}, type{type}, generateRepeats{generateRepeats} {}
+            ButtonConfig(const hardware::GPIOParams& gpioParams, ButtonId type, bool generateRepeats = false)
+                : gpioParams{gpioParams}, type{type}, generateRepeats{generateRepeats} {}
         };
 
     private:
@@ -67,7 +67,7 @@ namespace PiAlarm::input {
              * @param mapping The ButtonMapping containing the GPIO and type for the button
              */
             explicit ManagedButton(const ButtonConfig& mapping)
-                : gpio{mapping.gpioLineNumber}, type{mapping.type}, generateRepeats{mapping.generateRepeats} {}
+                : gpio{mapping.gpioParams}, type{mapping.type}, generateRepeats{mapping.generateRepeats} {}
         };
 
         static constexpr auto REPEAT_DELAY {std::chrono::milliseconds(500)};    ///< Delay before auto-repeat starts
