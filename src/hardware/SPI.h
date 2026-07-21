@@ -7,6 +7,22 @@
 namespace PiAlarm::hardware {
 
     /**
+     * @struct SPIConfig
+     * @brief Configuration structure for SPI settings.
+     */
+    struct SPIConfig {
+        uint32_t chipSelect; ///< SPI chip select (0 or 1)
+        uint32_t speed;      ///< SPI communication speed in Hz
+
+        /**
+         * @brief Constructs an SPIConfig object.
+         * @param cs The SPI chip select (0 or 1, default is 0).
+         * @param spd The SPI communication speed in Hz (default is 10 MHz).
+         */
+        explicit SPIConfig(uint32_t cs = 0, uint32_t spd = 10'000'000) : chipSelect(cs), speed(spd) {}
+    };
+
+    /**
      * @class SPI
      * @brief Represents a Serial Peripheral Interface (SPI) device.
      *
@@ -32,6 +48,12 @@ namespace PiAlarm::hardware {
          * @throws std::runtime_error if the SPI device cannot be opened or configured.
          */
         explicit SPI(uint32_t chipSelect = 0, uint32_t speed = 10'000'000);
+
+        /**
+         * @brief Constructs an SPI object with the specified SPIConfig params.
+         * @param config The config used to instantiate the SPI interface.
+         */
+        explicit SPI(const SPIConfig& config): SPI(config.chipSelect, config.speed) {};
 
         /**
          * Destructor for the SPI class.

@@ -42,18 +42,16 @@ namespace PiAlarm::hardware {
         /**
          * @brief Constructs an SSD1322 object, creating and taking ownership of SPI and GPIO resources.
          *
-         * @param dcLineParams Configuration of the dcLine (data/command) GPIO pin.
-         * @param resetLineParams Configuration of the reset GPIO pin.
-         * @param spiChipSelect The SPI chip select (default is 0).
-         * @param spiSpeed The speed of the SPI communication in Hz (default is 10 MHz).
+         * @param dcLineConfig Configuration of the dcLine (data/command) GPIO pin.
+         * @param resetLineConfig Configuration of the reset GPIO pin.
+         * @param spiLineConfig Configuration of the SPI line.
          * @throws std::runtime_error if any hardware resource cannot be initialized.
-         * @note The GPIO pins are configured as output by this constructor.
          * @note After creating the SSD1322 object, the `initialize()` method should be called to set up the display.
          */
-        SSD1322(const GPIOConfig& dcLineParams,
-                const GPIOConfig& resetLineParams,
-                uint32_t spiChipSelect = 0,
-                uint32_t spiSpeed = 10'000'000);
+        SSD1322(const GPIOConfig& dcLineConfig,
+                const GPIOConfig& resetLineConfig,
+                const SPIConfig& spiLineConfig = SPIConfig{}
+        );
 
         /**
          * @brief Initializes the SSD1322 display.
