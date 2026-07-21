@@ -8,8 +8,8 @@
 
 namespace PiAlarm::hardware {
 
-    SSD1322::SSD1322(const GPIOParams& dcLineParams,
-                     const GPIOParams& resetLineParams,
+    SSD1322::SSD1322(const GPIOConfig& dcLineParams,
+                     const GPIOConfig& resetLineParams,
                      uint32_t spiChipSelect,
                      uint32_t spiSpeed)
         : spi_{spiChipSelect, spiSpeed},

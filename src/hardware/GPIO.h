@@ -42,25 +42,25 @@ namespace PiAlarm::hardware {
     };
 
     /**
-     * @struct GPIOParams
-     * @brief Parameters for initializing a GPIO pin.
+     * @struct GPIOConfig
+     * @brief Configuration for initializing a GPIO pin.
      */
-    struct GPIOParams {
+    struct GPIOConfig {
         const std::string chipName; ///< The name of the GPIO chip (e.g., "gpiochip0")
         unsigned int lineNumber; ///< The line number on the chip to interact with
 
         /**
-         * @brief Constructs a GPIOPrams object for a specific line number on the default chip ("gpiochip0").
+         * @brief Constructs a GPIOConfig object for a specific line number on the default chip ("gpiochip0").
          * @param lineNumber The line number to interact with.
          */
-        explicit GPIOParams(unsigned int lineNumber) : chipName{"gpiochip0"}, lineNumber{lineNumber} {}
+        explicit GPIOConfig(unsigned int lineNumber) : chipName{"gpiochip0"}, lineNumber{lineNumber} {}
 
         /**
-         * @brief Constructs a GPIOParams object with the specified chip name and line number.
+         * @brief Constructs a GPIOConfig object with the specified chip name and line number.
          * @param chipName The name of the GPIO chip (e.g., "gpiochip0").
          * @param lineNumber The line number on the chip to interact with.
          */
-        GPIOParams(std::string chipName, unsigned int lineNumber) : chipName{std::move(chipName)}, lineNumber{lineNumber} {}
+        GPIOConfig(std::string chipName, unsigned int lineNumber) : chipName{std::move(chipName)}, lineNumber{lineNumber} {}
     };
 
     /**
@@ -137,11 +137,11 @@ namespace PiAlarm::hardware {
         explicit inline GPIO(unsigned int lineNumber);
 
         /**
-         * @brief Constructs a GPIO object with the specified parameters.
-         * @param params The parameters for constructing the GPIO object.
+         * @brief Constructs a GPIO object with the specified config.
+         * @param config The configuration for constructing the GPIO object.
          * @throws std::runtime_error if the chip or line cannot be opened.
          */
-        explicit inline GPIO(const GPIOParams& params);
+        explicit inline GPIO(const GPIOConfig& config);
 
         /**
          * @brief Default destructor for GPIO.
@@ -224,6 +224,7 @@ namespace PiAlarm::hardware {
          * @return A GPIOEvent struct containing the type of edge and timestamp of the event.
          * @throws std::runtime_error if no event has occurred or if the line is not set for edge detection.
          */
+        [[nodiscard]]
         GPIOEvent readEvent() const;
     };
 
@@ -232,7 +233,7 @@ namespace PiAlarm::hardware {
     GPIO::GPIO(unsigned int lineNumber) : GPIO{"gpiochip0", lineNumber}
     {}
 
-    GPIO::GPIO(const GPIOParams& params) : GPIO{params.chipName, params.lineNumber}
+    GPIO::GPIO(const GPIOConfig& config) : GPIO{config.chipName, config.lineNumber}
     {}
 
     inline GPIO::GPIOMode GPIO::getMode() const {
