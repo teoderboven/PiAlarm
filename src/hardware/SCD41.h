@@ -34,9 +34,9 @@ namespace PiAlarm::hardware {
 
         /**
          * @brief Constructs an SCD41 object with the specified I2C address.
-         * @param address The address of the I2C device, default is the SCD41 I2C address (0x62).
+         * @param i2cConfig The I2C configuration for the SCD41 sensor. Defaults to the standard I2C address (0x62).
          */
-        explicit SCD41(uint8_t address = I2C_ADDRESS);
+        explicit SCD41(const I2CConfig& i2cConfig = I2CConfig{I2C_ADDRESS}) : i2c_{i2cConfig} {}
 
         /**
          * @brief Starts periodic measurement mode on the SCD41 sensor.

@@ -8,10 +8,6 @@
 
 namespace PiAlarm::hardware {
 
-    SCD41::SCD41(uint8_t address)
-        : i2c_{address} {
-    }
-
     void SCD41::sendCommand(uint16_t command) const {
         uint8_t buffer[3];
 

@@ -56,10 +56,10 @@ namespace PiAlarm::hardware {
 
         /**
          * @brief Constructs a BME280 object with the specified I2C address.
-         * @param address The address of the I2C device, default is the BME280 I2C address (0x76).
+         * @param i2cConfig The I2C configuration for the BME280 sensor. Defaults to the standard I2C address (0x76).
          * @note A call to initialize() must be done before using the sensor features.
          */
-        explicit BME280(uint8_t address = I2C_ADDRESS);
+        explicit BME280(const I2CConfig& i2cConfig = I2CConfig{I2C_ADDRESS}) : i2c_{i2cConfig} {}
 
         /**
          * @brief Initializes the BME280 sensor with default settings.

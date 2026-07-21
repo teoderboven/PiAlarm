@@ -7,10 +7,6 @@
 
 namespace PiAlarm ::hardware {
 
-    BME280::BME280(uint8_t address)
-        : i2c_{address}
-    {}
-
     void BME280::reset() {
         i2c_.writeRegister(REG_RESET, RESET_COMMAND);
         std::this_thread::sleep_for(std::chrono::milliseconds(100));
