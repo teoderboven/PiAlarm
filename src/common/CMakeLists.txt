@@ -1,16 +1,24 @@
+cmake_minimum_required(VERSION 3.27)
 
-set(LIB_NAME PiAlarm_common)
+project(PiAlarm_common LANGUAGES CXX)
 
-add_library(${LIB_NAME} INTERFACE)
+set(CMAKE_CXX_STANDARD 23)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(SOURCES
+        HasWorker.cpp
+        HasWorker.h
         Observable.hpp
         Observer.h
         WeatherCondition.h
 )
 
-target_sources(${LIB_NAME} INTERFACE
+add_library(${PROJECT_NAME} STATIC
         ${SOURCES}
 )
 
-target_include_directories(${LIB_NAME} INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/..)
+target_link_libraries(${PROJECT_NAME} PUBLIC
+        PiAlarm_logging
+)
+
+target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/..)

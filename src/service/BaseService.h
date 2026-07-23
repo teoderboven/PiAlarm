@@ -1,13 +1,7 @@
 #pragma once
 
-#include <atomic>
-#include <thread>
-#include <mutex>
-#include <condition_variable>
-#include <chrono>
-
 #include "IService.h"
-#include "logging/HasLogger.h"
+#include "common/HasWorker.h"
 
 namespace PiAlarm::service {
 
@@ -15,31 +9,18 @@ namespace PiAlarm::service {
      * @class BaseService
      * @brief Abstract base class for services in the PiAlarm application.
      *
-     * This class implements the basic functionality for running, stopping, pausing, and resuming services.
+     * This class adapts the lower-level thread management provided by common::HasWorker
+     * to the service architecture defined by IService.
      */
-    class BaseService : public IService, public logging::HasLogger {
-        std::atomic<bool> running_;  ///< Indicates if the service is currently running
-        std::atomic<bool> paused_;   ///< Indicates if the service is currently paused
-        std::thread workerThread_;   ///< Thread for running the service
-        std::mutex mutex_;           ///< Mutex for synchronizing access to the service state
-        std::condition_variable cv_; ///< Condition variable for managing pause/resume
-
+    class BaseService : public IService, protected common::HasWorker {
     public:
-
         /**
          * @brief Constructor for BaseService.
          *
          * Initializes the service with a given name and sets the initial state to not running and not paused.
          * @param serviceName The name of the service.
          */
-        BaseService(const std::string& serviceName);
-
-        /**
-         * @brief Destructor for BaseService.
-         *
-         * Stops the service if it is running.
-         */
-        virtual ~BaseService() override;
+        explicit BaseService(const std::string& serviceName) : HasWorker{serviceName} {}
 
     protected:
         /**
@@ -68,16 +49,18 @@ namespace PiAlarm::service {
          * @brief Waits before the next update cycle.
          *
          * This method is called after each call to process() and is responsible for introducing a delay
-         * between cycles. The default implementation uses interruptibleSleepFor with the value
-         * returned by updateInterval(). Derived classes may override this method to implement
-         * more precise or adaptive waiting strategies, such as using interruptibleSleepUntil()
+         * between cycles. The default implementation delegates to HasWorker::workerWaitNextCycle(), which uses
+         * interruptibleSleepFor with the value returned by updateInterval(). Derived classes may override this
+         * method to implement more precise or adaptive waiting strategies, such as using interruptibleSleepUntil()
          * or event-based synchronization.
          *
          * @note Override this method if you require custom control over the timing between update cycles.
          * @warning Please use the given methods interruptibleSleepFor() or interruptibleSleepUntil()
          * to ensure that the service can be stopped gracefully during the wait.
          */
-        virtual void waitNextCycle();
+        virtual void waitNextCycle() {
+            HasWorker::workerWaitNextCycle();
+        }
 
         /**
          * @brief Returns the update interval for the service.
@@ -92,7 +75,7 @@ namespace PiAlarm::service {
          * @return std::chrono::milliseconds Interval in milliseconds between update cycles. Default is 1000 ms (1 second).
          */
         [[nodiscard]]
-        virtual inline std::chrono::milliseconds updateInterval() const {
+        virtual std::chrono::milliseconds updateInterval() const {
             return std::chrono::milliseconds{1000};
         }
 
@@ -104,7 +87,7 @@ namespace PiAlarm::service {
          * @param duration The duration to wait for.
          * @return true if the wait completed (duration elapsed or notified), false if the service was stopped.
          */
-        bool interruptibleSleepFor(std::chrono::milliseconds duration);
+        using HasWorker::interruptibleSleepFor;
 
         /**
          * @brief Performs an interruptible sleep until a specified time point.
@@ -114,17 +97,16 @@ namespace PiAlarm::service {
          * @param time_point The time point to wait until.
          * @return true if the wait completed (time point reached or notified), false if the service was stopped.
          */
-        bool interruptibleSleepUntil(std::chrono::system_clock::time_point time_point);
+        using HasWorker::interruptibleSleepUntil;
 
     public:
-
         /**
          * @brief Starts the service.
          *
          * This method begins the service's operation in a separate thread.
          * If the service is already running, this method does nothing.
          */
-        void start() override;
+        void start() override { startWorker(); }
 
         /**
          * @brief Stops the service.
@@ -132,7 +114,7 @@ namespace PiAlarm::service {
          * This method stops the service and joins the worker thread.
          * If the service is not running, this method does nothing.
          */
-        void stop() override;
+        void stop() override { stopWorker(); }
 
         /**
          * @brief Pauses the service.
@@ -140,7 +122,7 @@ namespace PiAlarm::service {
          * This method pauses the service's operation. The service can be resumed later.
          * If the service is not running, this method does nothing.
          */
-        void pause() override;
+        void pause() override { pauseWorker(); }
 
         /**
          * @brief Resumes the service.
@@ -148,56 +130,50 @@ namespace PiAlarm::service {
          * This method resumes the service's operation if it is paused.
          * If the service is not running, this method does nothing.
          */
-        void resume() override;
+        void resume() override { resumeWorker(); }
 
         /**
          * @brief Checks if the service is currently running.
          * @return true if the service is running, false otherwise.
          */
         [[nodiscard]]
-        bool isRunning() const override;
+        bool isRunning() const override { return isWorkerRunning(); }
 
         /**
          * @brief Checks if the service is currently paused.
          * @return true if the service is paused, false otherwise.
          */
         [[nodiscard]]
-        bool isPaused() const override;
+        bool isPaused() const override { return isWorkerPaused(); }
 
     private:
         /**
-         * @brief The main execution loop of the service.
-         *
-         * This method runs in a dedicated thread and orchestrates the service life cycle
-         * by chaining the initialization, the process loop, and the cleanup.
-         */
-        void run();
-
-        /**
-         * @brief Executes the initialization phase of the service.
-         *
-         * This method wraps the call to onStart() within an exception handling block
-         * to prevent an application crash.
+         * @brief Bridges HasWorker initialization to BaseService::onStart().
          * @return true if initialization succeeded, false otherwise.
          */
-        bool executeStart();
+        bool onWorkerStart() final { return onStart(); }
 
         /**
-         * @brief Executes a single cycle of the update loop.
-         *
-         * This method handles passive waiting related to pause or stop states,
-         * calls the process() method, and applies the delay between cycles.
-         * @return true if the service should continue running, false if it should stop.
+         * @brief Bridges HasWorker cleanup to BaseService::onStop().
          */
-        bool executeCycle();
+        void onWorkerStop() final { onStop(); }
 
         /**
-         * @brief Executes the cleanup and stop phase of the service.
-         *
-         * This method calls onStop() safely by intercepting all potential exceptions
-         * to guarantee a clean termination of the worker thread.
+         * @brief Bridges HasWorker process execution to BaseService::process().
          */
-        void executeStop();
+        void workerProcess() final { process(); }
+
+        /**
+         * @brief Bridges HasWorker cycle waiting to BaseService::waitNextCycle().
+         */
+        void workerWaitNextCycle() final { waitNextCycle(); }
+
+        /**
+         * @brief Bridges HasWorker update interval retrieval to BaseService::updateInterval().
+         * @return The duration interval between worker cycles.
+         */
+        [[nodiscard]]
+        std::chrono::milliseconds workerUpdateInterval() const final { return updateInterval(); }
     };
 
 } // namespace PiAlarm::service

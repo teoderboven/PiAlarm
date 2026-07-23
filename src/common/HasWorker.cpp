@@ -1,49 +1,49 @@
-#include "BaseService.h"
+#include "HasWorker.h"
 
-namespace PiAlarm::service {
+namespace PiAlarm::common {
 
-    BaseService::BaseService(const std::string& serviceName)
-        : HasLogger{serviceName}, running_{false}, paused_{false}
+    HasWorker::HasWorker(const std::string& workerName)
+        : HasLogger{workerName}, running_{false}, paused_{false}
     {}
 
-    BaseService::~BaseService() {
-        stop();
+    HasWorker::~HasWorker() {
+        stopWorker();
     }
 
-    void BaseService::run() {
-        if (!executeStart()) {
+    void HasWorker::runWorker() {
+        if (!executeWorkerStart()) {
             running_ = false;
             return;
         }
 
         while (running_) {
-            if (!executeCycle()) {
+            if (!executeWorkerCycle()) {
                 break;
             }
         }
 
-        executeStop();
+        executeWorkerStop();
     }
 
-    bool BaseService::executeStart() {
+    bool HasWorker::executeWorkerStart() {
         try {
-            if (!onStart()) {
-                logger().error("Service initialization failed. Stopping service.");
+            if (!onWorkerStart()) {
+                logger().error("Worker initialization failed. Stopping worker.");
                 return false;
             }
             return true;
         }
         catch (const std::exception& e) {
-            logger().critical("Fatal exception during onStart: " + std::string(e.what()));
+            logger().critical("Fatal exception during onWorkerStart: " + std::string(e.what()));
             return false;
         }
         catch (...) {
-            logger().critical("Unknown fatal exception during onStart.");
+            logger().critical("Unknown fatal exception during onWorkerStart.");
             return false;
         }
     }
 
-    bool BaseService::executeCycle() {
+    bool HasWorker::executeWorkerCycle() {
         try {
             std::unique_lock lock{mutex_};
             cv_.wait(lock, [this]() { return !paused_ || !running_; });
@@ -53,65 +53,65 @@ namespace PiAlarm::service {
             }
             lock.unlock();
 
-            process();
+            workerProcess();
 
-            // Check running_ again in case stop() was called during process()
+            // Check running_ again in case stopWorker() was called during workerProcess()
             if (!running_) {
                 return false;
             }
 
-            waitNextCycle();
+            workerWaitNextCycle();
         }
         catch (const std::exception& e) {
-            logger().error("Exception caught during service process: " + std::string(e.what()));
+            logger().error("Exception caught during worker process: " + std::string(e.what()));
             std::this_thread::sleep_for(std::chrono::milliseconds{500});
         }
         catch (...) {
-            logger().error("Unknown exception caught during service process.");
+            logger().error("Unknown exception caught during worker process.");
             std::this_thread::sleep_for(std::chrono::milliseconds{500});
         }
 
         return true;
     }
 
-    void BaseService::executeStop() {
+    void HasWorker::executeWorkerStop() {
         try {
-            onStop();
+            onWorkerStop();
         }
         catch (const std::exception& e) {
-            logger().error("Exception caught during onStop: " + std::string(e.what()));
+            logger().error("Exception caught during onWorkerStop: " + std::string(e.what()));
         }
         catch (...) {
-            logger().error("Unknown exception caught during onStop.");
+            logger().error("Unknown exception caught during onWorkerStop.");
         }
     }
 
-    bool BaseService::interruptibleSleepFor(std::chrono::milliseconds duration) {
+    bool HasWorker::interruptibleSleepFor(std::chrono::milliseconds duration) {
         std::unique_lock lock{mutex_};
         cv_.wait_for(lock, duration, [this]() { return !running_; });
         return running_; // Return true if still running, false if stopped
     }
 
-    bool BaseService::interruptibleSleepUntil(std::chrono::system_clock::time_point time_point) {
+    bool HasWorker::interruptibleSleepUntil(std::chrono::system_clock::time_point time_point) {
         std::unique_lock lock{mutex_};
         cv_.wait_until(lock, time_point, [this]() { return !running_; });
         return running_; // Return true if still running, false if stopped
     }
 
-    void BaseService::waitNextCycle() {
-        interruptibleSleepFor(updateInterval());
+    void HasWorker::workerWaitNextCycle() {
+        interruptibleSleepFor(workerUpdateInterval());
     }
 
-    void BaseService::start() {
+    void HasWorker::startWorker() {
         if (running_) return;
 
         running_ = true;
-        workerThread_ = std::thread([this]() { run(); });
+        workerThread_ = std::thread([this]() { runWorker(); });
 
-        logger().info("Service started");
+        logger().info("Worker started");
     }
 
-    void BaseService::stop() {
+    void HasWorker::stopWorker() {
         bool previouslyRunning;
         {
             std::lock_guard lock{mutex_};
@@ -126,37 +126,37 @@ namespace PiAlarm::service {
         }
 
         if (previouslyRunning) {
-            logger().info("Service stopped");
+            logger().info("Worker stopped");
         } else {
-            logger().info("Service was already stopped");
+            logger().info("Worker was already stopped");
         }
     }
 
-    void BaseService::pause() {
+    void HasWorker::pauseWorker() {
         if (running_) {
             std::lock_guard lock{mutex_};
             paused_ = true;
         }
 
-        logger().info("Service paused");
+        logger().info("Worker paused");
     }
 
-    void BaseService::resume() {
+    void HasWorker::resumeWorker() {
         {
             std::lock_guard lock{mutex_};
             paused_ = false;
         }
         cv_.notify_all();
 
-        logger().info("Service resumed");
+        logger().info("Worker resumed");
     }
 
-    bool BaseService::isRunning() const {
+    bool HasWorker::isWorkerRunning() const {
         return running_.load();
     }
 
-    bool BaseService::isPaused() const {
+    bool HasWorker::isWorkerPaused() const {
         return paused_.load();
     }
 
-} // namespace PiAlarm::service
+} // namespace PiAlarm::common
