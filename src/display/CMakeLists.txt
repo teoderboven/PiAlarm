@@ -3,12 +3,12 @@ set(LIB_NAME PiAlarm_display)
 
 add_library(${LIB_NAME} INTERFACE)
 
-set(HEADERS
+set(SOURCES
         ViewOutputConfig.h
 )
 
 target_sources(${LIB_NAME} INTERFACE
-        ${HEADERS}
+        ${SOURCES}
 )
 if(DISPLAY_SSD1322)
     target_link_libraries(${LIB_NAME} INTERFACE

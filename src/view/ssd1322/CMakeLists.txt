@@ -5,19 +5,15 @@ project(PiAlarm_view_ssd1322 LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-set(HEADERS
-        AlarmsSettingsView.h
-        MainClockView.h
-)
-
 set(SOURCES
         AlarmsSettingsView.cpp
+        AlarmsSettingsView.h
         MainClockView.cpp
+        MainClockView.h
 )
 
 add_library(${PROJECT_NAME} STATIC
         ${SOURCES}
-        ${HEADERS}
 )
 
 target_link_libraries(${PROJECT_NAME} PRIVATE

@@ -5,17 +5,13 @@ project(PiAlarm_controller LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-set(HEADERS
-        AlarmController.h
-)
-
 set(SOURCES
         AlarmController.cpp
+        AlarmController.h
 )
 
 add_library(${PROJECT_NAME} STATIC
         ${SOURCES}
-        ${HEADERS}
 )
 
 target_link_libraries(${PROJECT_NAME} PRIVATE

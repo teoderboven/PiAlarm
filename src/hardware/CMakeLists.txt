@@ -16,27 +16,23 @@ if (NOT GPIOD_FOUND)
     message(FATAL_ERROR "libgpiod not found. Please install it via 'apt install libgpiod-dev'")
 endif()
 
-set(HEADERS
-        BME280.h
-        GPIO.h
-        I2C.h
-        SCD41.h
-        SPI.h
-        SSD1322.h
-)
-
 set(SOURCES
         BME280.cpp
+        BME280.h
         GPIO.cpp
+        GPIO.h
         I2C.cpp
+        I2C.h
         SCD41.cpp
+        SCD41.h
         SPI.cpp
+        SPI.h
         SSD1322.cpp
+        SSD1322.h
 )
 
 add_library(${PROJECT_NAME} STATIC
         ${SOURCES}
-        ${HEADERS}
 )
 
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/..)

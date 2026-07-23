@@ -5,19 +5,15 @@ project(PiAlarm_input LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-set(HEADERS
+set(SOURCES
         HasInputEventHandler.h
         InputEvent.h
-        InputManager.h
-)
-
-set(SOURCES
         InputManager.cpp
+        InputManager.h
 )
 
 add_library(${PROJECT_NAME} STATIC
         ${SOURCES}
-        ${HEADERS}
 )
 
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/..)

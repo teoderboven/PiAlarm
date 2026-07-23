@@ -3,7 +3,7 @@ set(LIB_NAME PiAlarm_utils)
 
 add_library(${LIB_NAME} INTERFACE)
 
-set(HEADERS
+set(SOURCES
         argsUtils.hpp
         consoleDisplayUtils.hpp
         consoleUtils.hpp
@@ -12,7 +12,7 @@ set(HEADERS
 )
 
 target_sources(${LIB_NAME} INTERFACE
-        ${HEADERS}
+        ${SOURCES}
 )
 
 target_link_libraries(${LIB_NAME} INTERFACE

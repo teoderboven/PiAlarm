@@ -5,26 +5,22 @@ project(PiAlarm_service LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-set(HEADERS
-        BaseService.h
-        BME280Service.h
-        IService.h
-        SCD41Service.h
-        TimeUpdateService.h
-        WeatherApiService.h
-)
-
 set(SOURCES
         BaseService.cpp
+        BaseService.h
         BME280Service.cpp
+        BME280Service.h
+        IService.h
         SCD41Service.cpp
+        SCD41Service.h
         TimeUpdateService.cpp
+        TimeUpdateService.h
         WeatherApiService.cpp
+        WeatherApiService.h
 )
 
 add_library(${PROJECT_NAME} STATIC
         ${SOURCES}
-        ${HEADERS}
 )
 
 # link needed project libraries

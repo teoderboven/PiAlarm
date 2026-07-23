@@ -5,21 +5,17 @@ project(PiAlarm_media LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-set(HEADERS
+set(SOURCES
         AudioTypes.h
         BassContext.hpp
-        MusicPlayer.h
-        MusicService.h
-)
-
-set(SOURCES
         MusicPlayer.cpp
+        MusicPlayer.h
         MusicService.cpp
+        MusicService.h
 )
 
 add_library(${PROJECT_NAME} STATIC
         ${SOURCES}
-        ${HEADERS}
 )
 
 # link needed project libraries

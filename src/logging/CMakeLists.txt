@@ -5,16 +5,12 @@ project(PiAlarm_logging LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-set(HEADERS
+set(SOURCES
+        HasLogger.cpp
         HasLogger.h
 )
 
-set(SOURCES
-        HasLogger.cpp
-)
-
 add_library(${PROJECT_NAME} STATIC
-        ${HEADERS}
         ${SOURCES}
 )
 

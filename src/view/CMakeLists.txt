@@ -10,19 +10,15 @@ add_subdirectory(manager)
 add_subdirectory(console)
 add_subdirectory(ssd1322)
 
-set(HEADERS
+set(SOURCES
+        AbstractMainClockView.cpp
         AbstractMainClockView.h
         AbstractObserverView.h
         IView.h
 )
 
-set(SOURCES
-        AbstractMainClockView.cpp
-)
-
 add_library(${PROJECT_NAME} STATIC
         ${SOURCES}
-        ${HEADERS}
 )
 
 target_link_libraries(${PROJECT_NAME} PRIVATE

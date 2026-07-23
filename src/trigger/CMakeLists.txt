@@ -5,17 +5,13 @@ project(PiAlarm_trigger LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-set(HEADERS
-        AlarmSoundTrigger.h
-)
-
 set(SOURCES
         AlarmSoundTrigger.cpp
+        AlarmSoundTrigger.h
 )
 
 add_library(${PROJECT_NAME} STATIC
         ${SOURCES}
-        ${HEADERS}
 )
 
 # link project libraries

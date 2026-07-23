@@ -5,17 +5,13 @@ project(PiAlarm_provider LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-set(HEADERS
-        WeatherApiClient.h
-)
-
 set(SOURCES
         WeatherApiClient.cpp
+        WeatherApiClient.h
 )
 
 add_library(${PROJECT_NAME} STATIC
         ${SOURCES}
-        ${HEADERS}
 )
 
 # link external libraries
