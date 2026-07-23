@@ -5,7 +5,7 @@
 #include <thread>
 #include <cmath>
 
-namespace PiAlarm ::hardware {
+namespace PiAlarm::hardware {
 
     void BME280::reset() {
         i2c_.writeRegister(REG_RESET, RESET_COMMAND);

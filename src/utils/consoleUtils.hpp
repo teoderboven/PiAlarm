@@ -5,7 +5,7 @@
 #endif
 
 /**
- * @file consoleUtils.h
+ * @file consoleUtils.hpp
  * @brief Utility functions for console output configuration.
  *
  * This header file provides functions to set up the console for UTF-8 output and enable virtual terminal processing on Windows.
